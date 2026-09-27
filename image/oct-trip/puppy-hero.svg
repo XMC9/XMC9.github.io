@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <g fill="none" stroke="#4A90D9" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 尾巴 -->
+    <path d="M76 164 Q44 164 52 138" stroke-width="7"/>
+    <!-- 身体 -->
+    <path d="M70 140 Q64 204 120 204 Q176 204 170 140 Q168 120 146 117 Q130 126 120 126 Q110 126 94 117 Q72 120 70 140 Z" stroke-width="4"/>
+    <!-- 前腿 -->
+    <path d="M95 198 L95 224" stroke-width="10"/>
+    <path d="M145 198 L145 224" stroke-width="10"/>
+    <!-- 爪爪 -->
+    <ellipse cx="95" cy="229" rx="9" ry="5.5" stroke-width="4"/>
+    <ellipse cx="145" cy="229" rx="9" ry="5.5" stroke-width="4"/>
+    <!-- 头 -->
+    <path d="M120 40 C162 40 174 68 174 90 C174 118 150 128 120 128 C90 128 66 118 66 90 C66 68 78 40 120 40 Z" stroke-width="4"/>
+    <!-- 耳朵 -->
+    <path d="M74 76 Q58 34 90 26 Q112 22 102 54 Q96 72 88 78" stroke-width="4"/>
+    <path d="M166 76 Q182 34 150 26 Q128 22 138 54 Q144 72 152 78" stroke-width="4"/>
+    <!-- 腮红 -->
+    <circle cx="82" cy="102" r="8" stroke-width="3.5" stroke="#7FB2E5"/>
+    <circle cx="158" cy="102" r="8" stroke-width="3.5" stroke="#7FB2E5"/>
+    <!-- 嘴巴 -->
+    <path d="M110 110 Q120 118 130 110" stroke-width="4"/>
+  </g>
+  <!-- 眼睛和鼻子 -->
+  <g fill="#4A90D9">
+    <circle cx="97" cy="88" r="5"/>
+    <circle cx="143" cy="88" r="5"/>
+    <ellipse cx="120" cy="100" rx="6.5" ry="5"/>
+  </g>
+</svg>
