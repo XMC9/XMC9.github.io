@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xm9.asia/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-09-27T14:50:00.000Z">
-<meta property="article:modified_time" content="2026-09-27T14:45:59.341Z">
+<meta property="article:modified_time" content="2026-09-27T15:04:47.879Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="❤">
 <meta property="article:tag" content="Record">
@@ -382,8 +382,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-09-27 22:45:59</span>
-            <span class="mobile">2026-09-27 22:45:59</span>
+            <span class="desktop">2026-09-27 23:04:47</span>
+            <span class="mobile">2026-09-27 23:04:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -447,9 +447,9 @@
 .trip-title { font-size: 1.55em; font-weight: 700; color: #2E75B6; margin: 8px 0 4px; letter-spacing: 2px; }
 .trip-sub { color: #7BA7D0; font-size: .9em; letter-spacing: 1px; }
 .trip-paws { color: #7FB2E5; font-size: 1.1em; letter-spacing: 10px; margin-top: 6px; }
-.trip-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 14px 0 20px; border: 1.5px solid #C5E3F8; border-radius: 14px; overflow: hidden; }
+.trip-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 14px 0 20px; border: 1.5px solid #C5E3F8; border-radius: 14px; overflow: hidden; background: #FFFFFF; }
 .trip-table th { background: #EAF4FD; color: #2E75B6; padding: 9px 12px; font-weight: 600; border-bottom: 1.5px solid #C5E3F8; }
-.trip-table td { padding: 9px 12px; border-bottom: 1px solid #E3F1FB; color: #33506B; }
+.trip-table td { background: #FFFFFF; padding: 9px 12px; border-bottom: 1px solid #E3F1FB; color: #33506B; }
 .trip-table tr:last-child td { border-bottom: none; }
 .trip-table tr:hover td { background: #F4FAFF; }
 .trip-day { background: #F4FAFF; border: 1.5px solid #C5E3F8; border-radius: 16px; padding: 14px 18px; margin: 14px 0; }
@@ -460,6 +460,22 @@
 .trip-tip { background: #E8F6FF; border-left: 4px solid #4A90D9; border-radius: 0 12px 12px 0; padding: 10px 16px; margin: 10px 0; color: #33506B; }
 .trip-end { text-align: center; margin: 26px 0 6px; color: #2E75B6; font-weight: 600; letter-spacing: 1px; }
 .trip-end img { display: block; margin: 0 auto 6px; }
+
+/* ===== 深色模式适配（主题在 html 上加 .dark 类）===== */
+html.dark .trip-hero { background: linear-gradient(180deg, #17293A 0%, #14202D 100%); border-color: #2E4A63; }
+html.dark .trip-title { color: #A9D1F2; }
+html.dark .trip-sub { color: #7FA8CC; }
+html.dark .trip-paws { color: #6E9CC4; }
+html.dark .trip-table { border-color: #2E4A63; background: #1A2836; }
+html.dark .trip-table th { background: #22384C; color: #A9D1F2; border-bottom-color: #2E4A63; }
+html.dark .trip-table td { background: #1A2836; color: #C5E3F8; border-bottom-color: #24384A; }
+html.dark .trip-table tr:hover td { background: #22384C; }
+html.dark .trip-day { background: #1A2836; border-color: #2E4A63; }
+html.dark .trip-day h3 { color: #A9D1F2; }
+html.dark .trip-day p { color: #C5E3F8; }
+html.dark .trip-hotel { background: #1A2836; border-color: #2E4A63; color: #C5E3F8; }
+html.dark .trip-tip { background: #17293A; border-left-color: #4A90D9; color: #C5E3F8; }
+html.dark .trip-end { color: #A9D1F2; }
 </style>
 
 <div class="trip-wrap">
@@ -533,7 +549,7 @@
                      data-src="../image/oct-trip/puppy-hero.svg"
                       width="110" alt="线条小狗"
                 >
-  <div>期待和毛的第一次双人旅行～ 拉呼油！🐾</div>
+  <div>期待和毛一起的十月旅行～ 拉呼油！🐾</div>
 </div>
 
 </div>
