@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xm9.asia/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-10-10T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-09T17:19:20.548Z">
+<meta property="article:modified_time" content="2026-10-10T02:11:10.348Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://xm9.asia/images/redefine-og.webp">
@@ -587,6 +587,15 @@ html.dark .hb-heartbtn { background: #1F2E55; border-color: #2E3F6E; color: #A3C
 html.dark .hb-end-note { color: #6F86C4; }
 html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10px 24px rgba(0, 0, 0, .5); }
 
+/* ============ 祝愿标签 ============ */
+.hb-wish { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 2px 0 22px; }
+.hb-wish-chip { display: inline-block; padding: 6px 15px; border-radius: 999px; background: #EAF4FD; border: 1px solid #C5E3F8; color: #2E75B6; font-size: .92em; }
+html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3C0F0; }
+
+/* ============ 点击后不残留焦点白框（键盘操作仍有虚线提示） ============ */
+.hb-cake:focus:not(:focus-visible), .hb-env:focus:not(:focus-visible), .hb-heartbtn:focus:not(:focus-visible), .hb-bgm:focus:not(:focus-visible) { outline: none; }
+.hb-heartbtn:focus-visible, .hb-bgm:focus-visible { outline: 3px dashed #7FB2E5; outline-offset: 6px; border-radius: 999px; }
+
 /* ============ 减少动画偏好 ============ */
 @media (prefers-reduced-motion: reduce) {
   .hb-cake, .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-tip, .hb-cf, .hb-flame, .hb-env, .hb-env-hint, .hb-hp, .hb-bgm { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -667,7 +676,7 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 </div>
 <h1 class="hb-title hb-d2">小鸡毛，<span class="hb-hl">生日快乐！</span></h1>
 <p class="hb-paws hb-d3">🐾 🐾 🐾</p>
-<p class="hb-sub hb-d3">今天的主角，请收下这片只属于你的小天地</p>
+<p class="hb-sub hb-d3">欢迎来到，小鸡毛的生日秘密基地 🎈</p>
 <div class="hb-photo-wrap hb-d4">
 <img  class="hb-photo" 
                      lazyload
@@ -676,19 +685,19 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
                       alt="嘿嘿今天是我的生日！" width="1080" height="1080"
                 >
 </div>
-<div class="hb-more hb-d5">🎬 下面有小片子、照片，还有一封悄悄写给你的信，往下滑滑看 <span class="hb-arrow">↓</span></div>
+<div class="hb-more hb-d5">🎬 往下滑滑看 <span class="hb-arrow">↓</span></div>
 </section>
 <section class="hb-sec">
-<div class="hb-sec-head"><span class="hb-sec-ico">🎬</span><span class="hb-sec-title">先看个小片子</span></div>
+<div class="hb-sec-head"><span class="hb-sec-ico">🎂</span><span class="hb-sec-title">生日特供</span></div>
 <div class="hb-video-frame">
 <video class="hb-video" controls playsinline preload="metadata">
 <source src="../image/2026Birthday/birthday.mp4" type="video/mp4"/>
 </video>
 </div>
-<p class="hb-sec-note">🎂 生日特供小片 · 声音可以开一点点哦</p>
 </section>
 <section class="hb-sec">
-<div class="hb-sec-head"><span class="hb-sec-ico">📸</span><span class="hb-sec-title">今天的小记录</span></div>
+<div class="hb-sec-head"><span class="hb-sec-ico">🍀</span><span class="hb-sec-title">祝愿小鸡毛</span></div>
+<p class="hb-wish"><span class="hb-wish-chip">身体健康</span><span class="hb-wish-chip">天天开心</span><span class="hb-wish-chip">愿望都实现</span><span class="hb-wish-chip">永远有小白</span></p>
 <div class="hb-wall">
 <figure class="hb-polaroid hb-rot-a"><img  
                      lazyload
@@ -703,7 +712,7 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 <p class="hb-sec-note">照片框已经留好啦，之后一张张填进去 ✨</p>
 </section>
 <section class="hb-sec">
-<div class="hb-sec-head"><span class="hb-sec-ico">💌</span><span class="hb-sec-title">写给小鸡毛的一封信</span></div>
+<div class="hb-sec-head"><span class="hb-sec-ico">💌</span><span class="hb-sec-title">还有一封信</span></div>
 <div class="hb-letter-card" id="hbLetterCard">
 <svg class="hb-env" id="hbEnv" viewBox="0 0 240 210" role="button" tabindex="0" aria-label="打开信封">
 <rect x="10" y="86" width="220" height="110" rx="14" class="hb-env-body"/>
@@ -714,8 +723,7 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 <p class="hb-env-hint">戳一下信封 ✨</p>
 <div class="hb-paper">
 <div class="hb-paper-in">
-<p class="hb-paper-ph">（这里会有一封写给你的信 · 内容还在悄悄准备中 —— 也许是几句话，也许是一张信纸图片）</p>
-<p class="hb-paper-ph">（到时候换成真正想说的话就好啦）</p>
+<p class="hb-paper-ph">（这里会有一封写给你的信 · 内容还在悄悄准备中……）</p>
 <p class="hb-paper-sign">—— 待落款</p>
 </div>
 </div>

@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xm9.asia/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-10-10T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-09T17:06:03.532Z">
+<meta property="article:modified_time" content="2026-10-10T02:11:13.518Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://xm9.asia/images/redefine-og.webp">
@@ -555,6 +555,10 @@ html.dark .hb-end-line { color: #A3C0F0; }
 html.dark .hb-end-note { color: #6F86C4; }
 html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10px 24px rgba(0, 0, 0, .5); }
 
+/* ============ 点击后不残留焦点白框（键盘操作仍有虚线提示） ============ */
+.hb-gift:focus:not(:focus-visible), .hb-bgm:focus:not(:focus-visible) { outline: none; }
+.hb-bgm:focus-visible { outline: 3px dashed #7FB2E5; outline-offset: 6px; border-radius: 999px; }
+
 /* ============ 减少动画偏好 ============ */
 @media (prefers-reduced-motion: reduce) {
   .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-gate-hint, .hb-cf, .hb-courier, .hb-courier *, .hb-step-now .hb-dot, .hb-bgm { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -622,7 +626,6 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 </div>
 <h1 class="hb-title hb-d2">小鸡毛，<span class="hb-hl">生日快乐！</span></h1>
 <p class="hb-paws hb-d3">🐾 🐾 🐾</p>
-<p class="hb-sub hb-d3">今天的主角，有人找你～</p>
 <div class="hb-photo-wrap hb-d4">
 <img  class="hb-photo" 
                      lazyload
@@ -636,11 +639,11 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 <section class="hb-sec">
 <div class="hb-sec-head"><span class="hb-sec-ico">💬</span><span class="hb-sec-title">有件小事想告诉你</span></div>
 <div class="hb-chat">
-<div class="hb-bubble hb-bub-left">嘘——先把声音放轻一点点 🤫</div>
-<div class="hb-bubble hb-bub-left">有一份礼物，已经悄悄出发啦 🎁</div>
+<div class="hb-bubble hb-bub-left">嘘——有件事想悄悄告诉你 🤫</div>
+<div class="hb-bubble hb-bub-left">有个东西，它好像还在路上诶 🎁</div>
 <div class="hb-bubble hb-bub-right">咦？真的假的</div>
-<div class="hb-bubble hb-bub-left">真的。它不一定会很快到</div>
-<div class="hb-bubble hb-bub-left">但它一定、一定在朝你走过去 🐾</div>
+<div class="hb-bubble hb-bub-left">真的！虚晃一枪——还没到呢 🤭</div>
+<div class="hb-bubble hb-bub-left">鸡毛再等等，晚点就会到啦 🐾</div>
 <div class="hb-bubble hb-bub-left hb-sticker"><img  
                      lazyload
                      src="/images/loading.svg"
@@ -652,12 +655,11 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 <section class="hb-sec">
 <div class="hb-sec-head"><span class="hb-sec-ico">📦</span><span class="hb-sec-title">礼物派送进度</span></div>
 <div class="hb-track-card">
-<div class="hb-step hb-step-done"><span class="hb-dot">✓</span><div><b>已下单</b><span>这个念头，其实早就有了</span></div></div>
-<div class="hb-step hb-step-done"><span class="hb-dot">✓</span><div><b>已打包</b><span>被裹成了小小一团，悄悄出发</span></div></div>
-<div class="hb-step hb-step-now"><span class="hb-dot">🚚</span><div><b>运输中</b><span>正在穿过一座座城市，脚下生风</span></div></div>
+<div class="hb-step hb-step-done"><span class="hb-dot">✓</span><div><b>已下单</b></div></div>
+<div class="hb-step hb-step-done"><span class="hb-dot">✓</span><div><b>已打包</b></div></div>
+<div class="hb-step hb-step-now"><span class="hb-dot">🚚</span><div><b>运输中</b></div></div>
 <div class="hb-step hb-step-wait"><span class="hb-dot">🏠</span><div><b>派送中</b><span>待解锁</span></div></div>
 <div class="hb-step hb-step-wait hb-step-last"><span class="hb-dot">🎁</span><div><b>惊喜签收</b><span>到时候你就知道啦</span></div></div>
-<div class="hb-track-foot">不告诉你什么时候到，才叫惊喜呀 🤫</div>
 </div>
 </section>
 <section class="hb-sec">
