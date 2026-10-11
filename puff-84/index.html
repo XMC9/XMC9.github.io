@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xm9.asia/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-10-10T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-10T02:11:13.518Z">
+<meta property="article:modified_time" content="2026-10-11T05:11:27.688Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://xm9.asia/images/redefine-og.webp">
@@ -54,6 +54,11 @@
 
 
     <!--- Inject Part-->
+    
+        
+            
+    
+            
     
 
     
@@ -362,6 +367,15 @@
 /* ============ 隐藏主题自动渲染的页面标题 ============ */
 .page-template-content > h1 { display: none; }
 
+/* ============ 手写字体（沐瑶随心手写体，按信里的字做了子集） ============ */
+@font-face {
+  font-family: 'MuyaoHand';
+  src: url('../media/2026Birthday/muyao-hand.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ============ 页面变量与容器 ============ */
 .hb-page {
   --hb-blue: #4A90D9;
@@ -476,6 +490,23 @@
 .hb-sec-title { color: #2E75B6; font-weight: 700; font-size: 1.06rem; letter-spacing: 2px; }
 .hb-sec-note { text-align: center; color: #7BA7D0; font-size: .84rem; letter-spacing: 1px; margin: 12px 0 0; }
 
+/* 区块之间的分隔条：小狗小跑着经过一条虚线（和页面末尾「派送小狗」同款思路，小一号） */
+.hb-div { position: relative; height: 96px; max-width: 620px; margin: 0 auto; overflow: hidden; }
+.hb-div-road { position: absolute; left: 24px; right: 24px; bottom: 23px; border-top: 2px dashed #DAECFA; }
+.hb-div-pet { position: absolute; bottom: 15px; left: -18%; width: 74px; animation: hbSlide 13s linear infinite; }
+.hb-div-pet img { display: block; width: 100%; height: auto; animation: hbBob .46s ease-in-out infinite alternate; }
+.hb-div-pet::after { content: '💨'; position: absolute; right: 90%; bottom: 14px; font-size: .9rem; opacity: .7; }
+.hb-div-b .hb-div-pet { width: 64px; animation-duration: 10.5s; animation-delay: -4.2s; }
+.hb-div-c .hb-div-pet { width: 80px; animation: hbSlideBack 12s linear infinite; animation-delay: -7.5s; }
+.hb-div-c .hb-div-pet::after { left: 90%; right: auto; }
+@keyframes hbSlideBack { 0% { left: 104%; } 100% { left: -18%; } }
+@media (max-width: 560px) {
+  .hb-div { height: 84px; }
+  .hb-div-pet { width: 62px; }
+  .hb-div-b .hb-div-pet { width: 54px; }
+  .hb-div-c .hb-div-pet { width: 68px; }
+}
+
 /* 悄悄话气泡 */
 .hb-chat { display: flex; flex-direction: column; gap: 12px; padding: 2px 0; }
 .hb-bubble { max-width: 84%; padding: 11px 16px; border-radius: 18px; font-size: .95rem; line-height: 1.75; letter-spacing: .5px; box-shadow: 0 8px 20px rgba(74, 144, 217, .12); }
@@ -483,6 +514,29 @@
 .hb-bub-right { align-self: flex-end; background: #FFF1F6; border: 2px solid #FFC9DD; color: #C96A93; border-bottom-right-radius: 7px; }
 .hb-sticker { padding: 8px; }
 .hb-sticker img { display: block; width: min(216px, 54vw); height: auto; border-radius: 12px; }
+
+/* 手写信（信纸 + 邮票 + 随信夹的一张照片） */
+.hb-letter { max-width: 560px; margin: 2px auto 0; }
+.hb-letter-paper { position: relative; padding: 26px 24px 22px; border-radius: 16px; background: linear-gradient(160deg, #FFFDF8 0%, #FFF7EC 100%); border: 1.5px solid #EADFC6; box-shadow: 0 16px 34px rgba(74, 144, 217, .16); transform: rotate(-.7deg); }
+.hb-letter-paper::after { content: '🐾'; position: absolute; left: 16px; bottom: 4px; font-size: 2.4rem; opacity: .12; }
+.hb-letter-stamp { position: absolute; top: -14px; right: 18px; width: 46px; height: 54px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: #FFF6E8; border: 2px dashed #E3B97E; border-radius: 6px; transform: rotate(7deg); box-shadow: 0 6px 14px rgba(74, 144, 217, .14); }
+.hb-letter-hi { margin: 6px 0 12px; color: #2E75B6; font-weight: 700; font-size: 1.08rem; letter-spacing: 2px; }
+.hb-letter-hi, .hb-letter-sign { font-family: "MuyaoHand", "Xingkai SC", "Kaiti SC", "STKaiti", "KaiTi", "楷体", "Songti SC", "SimSun", serif; }
+.hb-letter-p { margin: 0 0 13px; color: #4A6480; font-size: 1.02rem; line-height: 1.98; letter-spacing: .5px; text-indent: 2em; font-family: "MuyaoHand", "Xingkai SC", "Kaiti SC", "STKaiti", "KaiTi", "楷体", "Songti SC", "SimSun", serif; }
+.hb-letter-sign { margin: 2px 0 0; text-align: right; text-indent: 0; color: #7BA7D0; font-size: .98rem; letter-spacing: 1.5px; }
+.hb-letter-wish { clear: both; margin-top: 4px; color: #2E75B6; font-size: 1.18rem; letter-spacing: 1.5px; }
+.hb-nb { white-space: nowrap; }
+/* 信里随手贴的泰菲小贴纸：正文中用浮动，手机里变成居中一张 */
+.hb-ls { float: right; width: 108px; height: auto; margin: 6px 0 8px 15px; border-radius: 14px; box-shadow: 0 8px 18px rgba(74, 144, 217, .22); transform: rotate(3.5deg); }
+.hb-ls-alt { float: left; width: 92px; margin: 6px 15px 8px 0; transform: rotate(-3.5deg); }
+.hb-letter-photo { width: min(196px, 50vw); margin: -16px auto 0; padding: 8px 8px 0; background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 14px; box-shadow: 0 12px 26px rgba(74, 144, 217, .18); transform: rotate(2deg); }
+.hb-letter-photo img { display: block; width: 100%; height: auto; border-radius: 9px; }
+.hb-letter-photo figcaption { text-align: center; color: #7BA7D0; font-size: .78rem; letter-spacing: 1px; padding: 7px 2px 8px; }
+@media (max-width: 560px) {
+  .hb-ls, .hb-ls-alt { float: none; display: block; width: 124px; margin: 8px auto 16px; transform: rotate(2deg); }
+  .hb-letter-paper { padding: 22px 18px 18px; }
+  .hb-letter-wish { font-size: 1.04rem; letter-spacing: 1px; }
+}
 
 /* 派送进度 */
 .hb-track-card { background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 20px; padding: 20px 20px 14px; box-shadow: 0 14px 32px rgba(74, 144, 217, .16); }
@@ -499,17 +553,51 @@
 .hb-step-wait b, .hb-step-wait b + span { color: #A9D1F2; }
 .hb-track-foot { margin-top: 2px; text-align: center; color: #7BA7D0; font-size: .85rem; letter-spacing: 1px; border-top: 1.5px dashed #DAECFA; padding-top: 12px; }
 
-/* 派送小狗 */
-.hb-run-strip { position: relative; height: 116px; overflow: hidden; margin-top: 6px; }
+/* 派送小狗（GIF） */
+.hb-run-strip { position: relative; height: 122px; overflow: hidden; margin-top: 6px; }
 .hb-road { position: absolute; left: 0; right: 0; bottom: 24px; border-top: 3px dashed #C5E3F8; }
-.hb-courier { position: absolute; bottom: 30px; left: -18%; width: 72px; animation: hbSlide 8s linear infinite; }
-.hb-courier::after { content: '💨'; position: absolute; right: 96%; bottom: 8px; font-size: 1rem; opacity: .9; }
-.hb-courier .hb-pup { animation: hbBob .5s ease-in-out infinite alternate; }
+.hb-courier { position: absolute; bottom: 15px; left: -20%; width: 84px; animation: hbSlide 8s linear infinite; }
+.hb-courier::after { content: '💨'; position: absolute; right: 94%; bottom: 24px; font-size: 1rem; opacity: .9; }
+.hb-courier img { display: block; width: 100%; height: auto; animation: hbBob .5s ease-in-out infinite alternate; }
 @keyframes hbBob { from { transform: translateY(0); } to { transform: translateY(-4px); } }
-@keyframes hbSlide { 0% { left: -18%; } 100% { left: 104%; } }
+@keyframes hbSlide { 0% { left: -20%; } 100% { left: 104%; } }
+
+/* ============ 小狗一路走来（滚动弹幕：一路上经过的地方和小店，空隙用填空词填满） ============ */
+.hb-dmband { position: relative; max-width: 620px; margin: 0 auto 8px; border: 2px solid #C5E3F8; border-radius: 22px; background: linear-gradient(160deg, #F6FBFF 0%, #EAF4FD 58%, #FFF3E8 100%); box-shadow: 0 16px 36px rgba(74, 144, 217, .16); overflow: hidden; }
+.hb-dmzone { padding: 14px 0 16px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%); }
+.hb-dmrow { display: flex; align-items: center; height: 50px; }
+.hb-dmtrack { display: flex; width: max-content; will-change: transform; animation: hbDm 22s linear infinite; }
+@keyframes hbDm { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.hb-dmband:hover .hb-dmtrack { animation-play-state: paused; }
+.hb-dmseq { display: inline-flex; align-items: center; }
+.hb-dmitem { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; }
+.hb-dm { color: #2F7FD4; font-weight: 800; line-height: 1.12; letter-spacing: 2px; padding-left: 2px; }
+.hb-dm-s1 { font-size: clamp(1.4rem, 6vw, 1.86rem); letter-spacing: 3px; }
+.hb-dm-s2 { font-size: clamp(1.16rem, 5vw, 1.48rem); }
+.hb-dm-s3 { font-size: clamp(.98rem, 4.2vw, 1.2rem); }
+.hb-dmfill { font-weight: 600; font-size: clamp(.76rem, 3.1vw, .9rem); letter-spacing: 1.4px; color: #9DBEDF; }
+.hb-dmfill-fb { font-size: clamp(.86rem, 3.5vw, 1rem); color: #A9C9E6; }
+.hb-dmsep { font-style: normal; font-size: .74rem; color: #F2C24C; opacity: .9; }
+.hb-dmsep-s { font-size: .58rem; opacity: .7; }
+.hb-dm.c1 { color: #2F7FD4; }
+.hb-dm.c2 { color: #EA4C89; }
+.hb-dm.c3 { color: #EF8000; }
+.hb-dm.c4 { color: #7458E8; }
+html.dark .hb-dmband { background: linear-gradient(160deg, #1B2A4E 0%, #182544 58%, #241C47 100%); border-color: #2E3F6E; box-shadow: 0 16px 36px rgba(0, 0, 0, .5); }
+html.dark .hb-dmfill { color: #8496C4; }
+html.dark .hb-dmfill-fb { color: #93A7D6; }
+html.dark .hb-dm { color: #74B4FF; }
+html.dark .hb-dm.c1 { color: #74B4FF; }
+html.dark .hb-dm.c2 { color: #FF8FB8; }
+html.dark .hb-dm.c3 { color: #FFC04D; }
+html.dark .hb-dm.c4 { color: #AC9CFF; }
+.hb-dmband + .hb-sec-note { margin: 14px 0 26px; }
 
 /* 结尾 */
 .hb-end { text-align: center; padding: 30px 16px 60px; }
+.hb-party { max-width: 520px; margin: 0 auto 24px; background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 20px; padding: 10px 10px 0; box-shadow: 0 14px 32px rgba(74, 144, 217, .18); }
+.hb-party img { display: block; width: 100%; height: auto; border-radius: 13px; }
+.hb-party figcaption { text-align: center; color: #7BA7D0; font-size: .82rem; letter-spacing: 1.2px; padding: 9px 2px 9px; }
 .hb-end-line { color: #2E75B6; font-weight: 600; letter-spacing: 1.5px; line-height: 2; font-size: 1rem; }
 .hb-end-note { color: #7BA7D0; font-size: .88rem; letter-spacing: 1.5px; margin: 10px 0 0; }
 
@@ -543,6 +631,15 @@ html.dark .hb-sec-title { color: #A3C0F0; }
 html.dark .hb-sec-note { color: #8496C4; }
 html.dark .hb-bub-left { background: #182544; border-color: #2E3F6E; color: #C5D6F5; box-shadow: 0 8px 20px rgba(0, 0, 0, .4); }
 html.dark .hb-bub-right { background: #34213B; border-color: #7C4A63; color: #FFB8D0; box-shadow: 0 8px 20px rgba(0, 0, 0, .4); }
+html.dark .hb-div-road { border-top-color: #2E3F6E; }
+html.dark .hb-letter-paper { background: linear-gradient(160deg, #1B2A4E 0%, #18203C 100%); border-color: #2E3F6E; box-shadow: 0 16px 34px rgba(0, 0, 0, .5); }
+html.dark .hb-letter-paper::after { opacity: .1; }
+html.dark .hb-letter-stamp { background: #1F2E55; border-color: #6E5A34; }
+html.dark .hb-letter-hi { color: #A3C0F0; }
+html.dark .hb-letter-p { color: #C5D6F5; }
+html.dark .hb-letter-sign { color: #8496C4; }
+html.dark .hb-letter-photo { background: #182544; border-color: #2E3F6E; box-shadow: 0 12px 26px rgba(0, 0, 0, .45); }
+html.dark .hb-letter-photo figcaption { color: #8496C4; }
 html.dark .hb-track-card { background: #182544; border-color: #2E3F6E; box-shadow: 0 14px 32px rgba(0, 0, 0, .45); }
 html.dark .hb-step::before { background: #24325A; }
 html.dark .hb-step b { color: #A3C0F0; }
@@ -551,6 +648,8 @@ html.dark .hb-step-wait b, html.dark .hb-step-wait b + span { color: #56689B; }
 html.dark .hb-step-wait .hb-dot { background: #121B33; border-color: #2E3F6E; }
 html.dark .hb-track-foot { color: #8496C4; border-top-color: #24325A; }
 html.dark .hb-road { border-top-color: #2E3F6E; }
+html.dark .hb-party { background: #182544; border-color: #2E3F6E; box-shadow: 0 14px 32px rgba(0, 0, 0, .45); }
+html.dark .hb-party figcaption { color: #8496C4; }
 html.dark .hb-end-line { color: #A3C0F0; }
 html.dark .hb-end-note { color: #6F86C4; }
 html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10px 24px rgba(0, 0, 0, .5); }
@@ -561,7 +660,7 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 
 /* ============ 减少动画偏好 ============ */
 @media (prefers-reduced-motion: reduce) {
-  .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-gate-hint, .hb-cf, .hb-courier, .hb-courier *, .hb-step-now .hb-dot, .hb-bgm { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-gate-hint, .hb-cf, .hb-courier, .hb-courier *, .hb-div-pet, .hb-div-pet *, .hb-step-now .hb-dot, .hb-dmtrack, .hb-bgm { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   .hb-rev { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 </style>
@@ -634,8 +733,31 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
                       alt="嘿嘿今天是我的生日！" width="1080" height="1080"
                 >
 </div>
-<div class="hb-more hb-d5">🎈 悄悄话和礼物进度在下面哦，往下滑滑看 <span class="hb-arrow">↓</span></div>
+<div class="hb-more hb-d5">🎈 悄悄话、地上那张小纸条和礼物进度都在下面，往下滑滑看 <span class="hb-arrow">↓</span></div>
 </section>
+<section class="hb-sec">
+<div class="hb-sec-head"><span class="hb-sec-ico">🐾</span><span class="hb-sec-title">小狗一路走来</span></div>
+<div class="hb-dmband">
+<div class="hb-dmzone">
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+</div>
+</div>
+<p class="hb-sec-note">—— 走过的地方，都算数 🐾</p>
+</section>
+<div class="hb-div hb-div-a" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/puddles-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
+</div>
 <section class="hb-sec">
 <div class="hb-sec-head"><span class="hb-sec-ico">💬</span><span class="hb-sec-title">有件小事想告诉你</span></div>
 <div class="hb-chat">
@@ -652,6 +774,68 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
                 ></div>
 </div>
 </section>
+<div class="hb-div hb-div-b" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/highfive-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
+</div>
+<section class="hb-sec">
+<div class="hb-sec-head"><span class="hb-sec-ico">🔍</span><span class="hb-sec-title">咦？是谁掉了一张纸条</span></div>
+<div class="hb-letter">
+<div class="hb-letter-paper">
+<span class="hb-letter-stamp">🐭</span>
+<p class="hb-letter-hi">亲爱的小鸡毛：</p>
+<p class="hb-letter-p">展信佳呀！</p>
+<p class="hb-letter-p"><img  class="hb-ls" 
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/taifei1.jpg"
+                      alt="乖巧的泰菲" loading="lazy"
+                >小白现在是《猫和老鼠》里那只穿着小尿布、跑起来咻咻咻的灰色小老鼠泰菲哟。🐭</p>
+<p class="hb-letter-p">今天本来在杰瑞的奶酪里吭哧吭哧地搬砖打工，忽然小鼻子抽了抽——闻到了一股超级特别的奶酪香味！于是啪嗒啪嗒追着味道一路跑呀跑，小尿布都差点跑掉啦！</p>
+<p class="hb-letter-p"><img  class="hb-ls hb-ls-alt" 
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/taifei3-clean.jpg"
+                      alt="戴着 DUNCE 帽子的泰菲" loading="lazy"
+                >跑啊跑啊，泰菲也不知道自己跑到哪里去了，只觉得这条路有点眼熟眼熟……终于，香味越来越近啦！噢——！原来是一个收件人写着「鸡毛」的大蛋糕！好香好香！好馋好馋！泰菲先偷偷拦截下来啦！</p>
+<p class="hb-letter-p">大概一个小时之后，会有一个小包裹悄悄出现在狗狗窝门口噢。没错没错，就是那个蛋糕！</p>
+<p class="hb-letter-p"><img  class="hb-ls" 
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/taifei2.jpg"
+                      alt="委屈巴巴的泰菲" loading="lazy"
+                >拆的时候要轻轻轻轻的，记得要检查一下，看看有没有被哪只馋嘴的小老鼠偷吃一小口……泰菲才没有偷吃呢！</p>
+<p class="hb-letter-p">就让这块香香甜甜的蛋糕，替小白说出心里话吧！</p>
+<p class="hb-letter-p hb-letter-wish">生日快乐呀！<span class="hb-nb">我的鸡毛宝！🎂</span></p>
+<p class="hb-letter-p hb-letter-sign">泰菲·白</p>
+<p class="hb-letter-p hb-letter-sign">不知道现在在哪里</p>
+<p class="hb-letter-p hb-letter-sign">也不知道现在是几点</p>
+</div>
+<figure class="hb-letter-photo">
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/play_together.jpg"
+                      alt="那我能和你一起没干嘛吗" loading="lazy"
+                >
+<figcaption>—— 一起没干嘛，也很好 🐾</figcaption>
+</figure>
+</div>
+</section>
+<div class="hb-div hb-div-c" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/jumping-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
+</div>
 <section class="hb-sec">
 <div class="hb-sec-head"><span class="hb-sec-ico">📦</span><span class="hb-sec-title">礼物派送进度</span></div>
 <div class="hb-track-card">
@@ -666,31 +850,23 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
 <div class="hb-run-strip">
 <div class="hb-road"></div>
 <div class="hb-courier">
-<svg class="hb-pup" viewBox="0 0 240 240" aria-hidden="true">
-<g class="hb-pup-line">
-<g class="hb-pup-tail"><path d="M76 164 Q44 164 52 138" stroke-width="7"/></g>
-<path d="M70 140 Q64 204 120 204 Q176 204 170 140 Q168 120 146 117 Q130 126 120 126 Q110 126 94 117 Q72 120 70 140 Z" stroke-width="4"/>
-<path d="M95 198 L95 224" stroke-width="10"/>
-<path d="M145 198 L145 224" stroke-width="10"/>
-<ellipse cx="95" cy="229" rx="9" ry="5.5" stroke-width="4"/>
-<ellipse cx="145" cy="229" rx="9" ry="5.5" stroke-width="4"/>
-<path d="M120 40 C162 40 174 68 174 90 C174 118 150 128 120 128 C90 128 66 118 66 90 C66 68 78 40 120 40 Z" stroke-width="4"/>
-<path d="M74 76 Q58 34 90 26 Q112 22 102 54 Q96 72 88 78" stroke-width="4"/>
-<path d="M166 76 Q182 34 150 26 Q128 22 138 54 Q144 72 152 78" stroke-width="4"/>
-<circle cx="82" cy="102" r="8" stroke-width="3.5" class="hb-pup-cheek"/>
-<circle cx="158" cy="102" r="8" stroke-width="3.5" class="hb-pup-cheek"/>
-<path d="M110 110 Q120 118 130 110" stroke-width="4"/>
-</g>
-<g class="hb-pup-fill">
-<g class="hb-pup-eyes"><circle cx="97" cy="88" r="5"/><circle cx="143" cy="88" r="5"/></g>
-<ellipse cx="120" cy="100" rx="6.5" ry="5"/>
-</g>
-</svg>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/circle.gif"
+                      alt=""
+                >
 </div>
 </div>
 <p class="hb-sec-note">🐾 派送小狗正在全力赶来 💨</p>
 </section>
 <section class="hb-end">
+<figure class="hb-party"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/party.png"
+                      alt="小狗们和蛋糕"
+                ><figcaption>小狗们和蛋糕 🎂</figcaption></figure>
 <div class="hb-end-line">剩下的，就交给路上的它啦 ✨</div>
 <div class="hb-end-line">在那之前——生日快乐，小鸡毛 🎂</div>
 <p class="hb-end-note">偷偷准备的 · 拉呼油 ❤</p>
@@ -738,6 +914,39 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
   }
   function bgmPlay() { if (audio && audio.paused) bgmToggle(); }
   if (bgmBtn) bgmBtn.addEventListener('click', bgmToggle);
+
+  /* ============ 小音效（WebAudio，简单几个音符，不引外部音频） ============ */
+  var actx = null;
+  function tone(freqs, opt) {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!actx) actx = new AC();
+      if (actx.state === 'suspended') actx.resume();
+      var gain0 = (opt && opt.gain) || 0.07;
+      var dur = (opt && opt.dur) || 0.16;
+      var gap = (opt && opt.gap) || 0.065;
+      var t0 = actx.currentTime + ((opt && opt.delay) || 0);
+      for (var i = 0; i < freqs.length; i++) {
+        var st = t0 + i * gap;
+        var o = actx.createOscillator();
+        var g = actx.createGain();
+        o.type = (opt && opt.type) || 'sine';
+        o.frequency.setValueAtTime(freqs[i], st);
+        g.gain.setValueAtTime(0.0001, st);
+        g.gain.exponentialRampToValueAtTime(Math.max(gain0 * (1 - i * 0.16), 0.02), st + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, st + dur);
+        o.connect(g);
+        g.connect(actx.destination);
+        o.start(st);
+        o.stop(st + dur + 0.02);
+      }
+    } catch (err) {}
+  }
+  var SFX = {
+    open: function () { tone([659, 880], { gain: .07, dur: .15, gap: .08 }); },
+    yay: function () { tone([523, 659, 784], { gain: .07, dur: .13, gap: .06 }); }
+  };
 
   var COLORS = ['#4A90D9', '#7FB2E5', '#F7C948', '#FFA8C5', '#9B8BF4', '#63C7A8'];
   var falling = false;
@@ -789,6 +998,7 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
   function openGift() {
     if (gate.dataset.opened) return;
     gate.dataset.opened = '1';
+    SFX.open();
     bgmPlay();
     var r = gift.getBoundingClientRect();
     gift.classList.add('hb-gift-open');
@@ -810,17 +1020,30 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); }
   });
 
+  /* 测试参数：?intro=0 跳过开场礼盒，直接看页面内容 */
+  if (/[?&]intro=0/.test(location.search || '')) {
+    gate.dataset.opened = '1';
+    gate.classList.add('hb-gift-open', 'hb-gate-out');
+    gate.style.display = 'none';
+    main.classList.remove('hb-main-wait');
+    main.classList.add('hb-main-in');
+    startFall();
+    armReveal();
+  }
+
   function armReveal() {
-    var els = page.querySelectorAll('.hb-sec, .hb-end, .hb-bubble');
+    var els = page.querySelectorAll('.hb-sec, .hb-end, .hb-div, .hb-bubble, .hb-letter-p');
     var reduce = false;
     try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (err) { reduce = false; }
     for (var i = 0; i < els.length; i++) {
       var el = els[i];
       el.classList.add('hb-rev');
-      if (el.classList.contains('hb-bubble')) {
+      /* 气泡一句一句冒、信一行一行写：同组内按顺序延迟 */
+      var grp = el.classList.contains('hb-bubble') ? 'hb-bubble' : (el.classList.contains('hb-letter-p') ? 'hb-letter-p' : '');
+      if (grp) {
         var idx = 0, sib = el.previousElementSibling;
-        while (sib) { if (sib.classList && sib.classList.contains('hb-bubble')) idx++; sib = sib.previousElementSibling; }
-        el.style.transitionDelay = (idx * 0.22).toFixed(2) + 's';
+        while (sib) { if (sib.classList && sib.classList.contains(grp)) idx++; sib = sib.previousElementSibling; }
+        el.style.transitionDelay = (idx * (grp === 'hb-letter-p' ? 0.13 : 0.22)).toFixed(2) + 's';
       }
     }
     if (reduce || !('IntersectionObserver' in window)) {
@@ -836,6 +1059,92 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
       }
     }, { threshold: 0.2 });
     for (var k = 0; k < els.length; k++) io.observe(els[k]);
+  }
+
+  /* ============ 小狗一路走来：一路经过的地方和小店，随手散进六条轨道（空隙全用填空词填满） ============ */
+  var DMWORDS = ['香港', '牛奶冰室', '铭记清汤牛腩', '香江冰室', '南记粉面', '贵州米粉', '马六', '书湘门第', '石塘咀', '麦当劳', '炒金边粉', 'CPD', 'MW', 'LE', '管道', '坚尼地城', '中山纪念公园', '百佳', '惠康', 'U购', '金中华', '烤乳猪味薯片', '小熊饼干', '百奇百醇', '759阿信屋', '上海', '西岸', '汉堡大学', '成都你六姐', '山林野果', '沙县小吃', '安徽板面', '郑阿公', '半步颠'];
+  var DMFILLS = ['拉夫油小鸡毛', '拉呼油小鸡毛', '拉夫油小鸡丢', '拉呼油小鸡丢'];
+  var DMC = ['c1', 'c2', 'c3', 'c4'];
+  var DMSIZE = ['hb-dm-s1', 'hb-dm-s2', 'hb-dm-s2', 'hb-dm-s3'];
+
+  function dmRand(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function dmShuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  /* 上下浮动 + 微微歪一点 + 间距不一：破除"排排坐" */
+  function dmJitter(item, isFill) {
+    item.style.transform = 'translateY(' + (Math.random() * 18 - 9).toFixed(1) + 'px) rotate(' + (Math.random() * 7 - 3.5).toFixed(1) + 'deg)';
+    item.style.marginRight = Math.round(12 + Math.random() * 42) + 'px';
+    if (isFill) item.style.opacity = (0.6 + Math.random() * 0.4).toFixed(2);
+  }
+  function dmStar(item, rate) {
+    if (Math.random() > rate) return;
+    var st = document.createElement('i');
+    st.className = 'hb-dmsep' + (Math.random() < .45 ? ' hb-dmsep-s' : '');
+    st.textContent = '✦';
+    item.appendChild(st);
+  }
+  function dmFillItem() {
+    var it = document.createElement('span');
+    it.className = 'hb-dmitem';
+    var w = document.createElement('span');
+    w.className = 'hb-dmfill' + (Math.random() < .34 ? ' hb-dmfill-fb' : '');
+    w.textContent = dmRand(DMFILLS);
+    it.appendChild(w);
+    dmStar(it, .55);
+    dmJitter(it, true);
+    return it;
+  }
+  function dmWordItem(text, color) {
+    var it = document.createElement('span');
+    it.className = 'hb-dmitem';
+    var b = document.createElement('b');
+    b.className = 'hb-dm ' + color + ' ' + dmRand(DMSIZE);
+    b.textContent = text;
+    it.appendChild(b);
+    dmStar(it, .62);
+    dmJitter(it, false);
+    return it;
+  }
+  var dmLanes = page.querySelectorAll('.hb-dmrow');
+  var dmPool = dmShuffle(DMWORDS);                       /* 所有词先打散，再平均分摊给六条轨道 */
+  var dmPer = Math.ceil(dmPool.length / dmLanes.length);
+  var DMSPEED = dmShuffle([72, 84, 97, 110, 122, 132]);
+  for (var dli = 0; dli < dmLanes.length; dli++) {
+    var dtrack = dmLanes[dli].querySelector('.hb-dmtrack');
+    if (!dtrack || dtrack.children.length) continue;
+    var dmMine = dmPool.slice(dli * dmPer, dli * dmPer + dmPer);
+    if (!dmMine.length) continue;
+    var dItems = [];
+    var lastC = -1;
+    for (var w = 0; w < dmMine.length; w++) {
+      var pr = Math.random();
+      var pad = pr < 0.2 ? 0 : (pr < 0.75 ? 1 : 2);      /* 每个词前面塞 0~2 个填空（用户说空隙的点缀少一点） */
+      for (var p = 0; p < pad; p++) dItems.push(dmFillItem());
+      var ci = Math.floor(Math.random() * DMC.length);
+      if (ci === lastC) ci = (ci + 1 + Math.floor(Math.random() * (DMC.length - 1))) % DMC.length;
+      lastC = ci;
+      dItems.push(dmWordItem(dmMine[w], DMC[ci]));
+    }
+    var tail = Math.random() < 0.6 ? 1 : 2;
+    for (var q = 0; q < tail; q++) dItems.push(dmFillItem());
+    var dSeqA = document.createElement('span');
+    dSeqA.className = 'hb-dmseq';
+    for (var dni = 0; dni < dItems.length; dni++) dSeqA.appendChild(dItems[dni]);
+    var dSeqB = dSeqA.cloneNode(true);                   /* 一模一样再来一份 → 滚动无缝 */
+    dtrack.appendChild(dSeqA);
+    dtrack.appendChild(dSeqB);
+    var dHalf = dtrack.getBoundingClientRect().width / 2;
+    var dSpeed = DMSPEED[dli % DMSPEED.length] * (0.94 + Math.random() * 0.12);
+    var dDur = dHalf > 300 ? Math.round((dHalf / dSpeed) * 10) / 10 : 18 + Math.random() * 6;
+    dtrack.style.animationDuration = dDur + 's';
+    dtrack.style.animationDelay = (-Math.random() * dDur).toFixed(1) + 's';
+    dmLanes[dli].style.transform = 'translateY(' + (Math.random() * 12 - 6).toFixed(1) + 'px)';
   }
 
   var watcher = setInterval(function () {
@@ -930,6 +1239,17 @@ html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10
                 } catch (error) {}
             </script>
         
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script src="/js/float-pup.js"></script>
+                    
         
         
     </div>  

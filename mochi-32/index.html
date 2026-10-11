@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://xm9.asia/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-10-10T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-10T02:11:10.348Z">
+<meta property="article:modified_time" content="2026-10-11T09:33:20.148Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://xm9.asia/images/redefine-og.webp">
@@ -54,6 +54,11 @@
 
 
     <!--- Inject Part-->
+    
+        
+            
+    
+            
     
 
     
@@ -490,18 +495,60 @@
 .hb-sec-title { color: #2E75B6; font-weight: 700; font-size: 1.06rem; letter-spacing: 2px; }
 .hb-sec-note { text-align: center; color: #7BA7D0; font-size: .84rem; letter-spacing: 1px; margin: 12px 0 0; }
 
+/* 板块之间的分隔条：小狗小跑着经过一条虚线（和 B 页同款） */
+.hb-div { position: relative; height: 96px; max-width: 620px; margin: 0 auto; overflow: hidden; }
+.hb-div-road { position: absolute; left: 24px; right: 24px; bottom: 23px; border-top: 2px dashed #DAECFA; }
+.hb-div-pet { position: absolute; bottom: 15px; left: -18%; width: 74px; animation: hbSlide 13s linear infinite; }
+.hb-div-pet img { display: block; width: 100%; height: auto; animation: hbBob .46s ease-in-out infinite alternate; }
+.hb-div-pet::after { content: '💨'; position: absolute; right: 90%; bottom: 14px; font-size: .9rem; opacity: .7; }
+.hb-div-b .hb-div-pet { width: 64px; animation-duration: 10.5s; animation-delay: -4.2s; }
+.hb-div-c .hb-div-pet { width: 80px; animation: hbSlideBack 12s linear infinite; animation-delay: -7.5s; }
+.hb-div-c .hb-div-pet::after { left: 90%; right: auto; }
+@keyframes hbSlide { 0% { left: -18%; } 100% { left: 104%; } }
+@keyframes hbSlideBack { 0% { left: 104%; } 100% { left: -18%; } }
+@keyframes hbBob { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@media (max-width: 560px) {
+  .hb-div { height: 84px; }
+  .hb-div-pet { width: 62px; }
+  .hb-div-b .hb-div-pet { width: 54px; }
+  .hb-div-c .hb-div-pet { width: 68px; }
+}
+
 /* 视频 */
 .hb-video-frame { border-radius: 22px; padding: 10px; background: #FFFFFF; border: 2px solid #C5E3F8; box-shadow: 0 16px 38px rgba(74, 144, 217, .20); }
 .hb-video { display: block; width: 100%; border-radius: 14px; background: #0F1626; }
 
-/* 照片墙 */
-.hb-wall { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-.hb-polaroid { margin: 0; background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 14px; padding: 8px 8px 4px; box-shadow: 0 10px 24px rgba(74, 144, 217, .16); }
+/* 小狗的点滴（照片墙） */
+.hb-wall { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; align-items: center; }
+.hb-polaroid { margin: 0; background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 14px; padding: 8px; box-shadow: 0 10px 24px rgba(74, 144, 217, .16); }
 .hb-polaroid img { display: block; width: 100%; height: auto; border-radius: 9px; }
-.hb-polaroid figcaption { text-align: center; color: #7BA7D0; font-size: .8rem; letter-spacing: 1px; padding: 7px 2px 4px; }
+.hb-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.hb-wide { grid-column: 1 / -1; }
+/* 近乎正方 / 平面插画专用：占整行但只跟一列一样宽（= 半个内容宽度），居中 */
+.hb-narrow { grid-column: 1 / -1; justify-self: center; width: calc((100% - 14px) / 2); box-sizing: border-box; }
+@media (max-width: 560px) { .hb-span { grid-column: 1 / -1; } .hb-narrow { width: 100%; } }
+.hb-drop { margin-top: 7px; }
+.hb-wall-cap { grid-column: 1 / -1; margin: -6px 0 0; text-align: center; color: #7BA7D0; font-size: .86rem; letter-spacing: 1.8px; }
+.hb-polaroid figcaption { padding: 7px 2px 1px; text-align: center; color: #7BA7D0; font-size: .84rem; letter-spacing: 1.2px; }
 .hb-rot-a { transform: rotate(-1.6deg); }
 .hb-rot-b { transform: rotate(1.5deg); }
-.hb-slot-in { aspect-ratio: 1 / 1; border: 2px dashed #A9D1F2; border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #A9D1F2; font-size: 1.7rem; background: #F7FBFF; }
+
+/* 想和你一直这样：横向滑动组图 */
+.hb-wishwrap { margin: 6px 0 0; }
+.hb-wishstrip { display: flex; gap: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 0; border-radius: 16px; scrollbar-width: none; cursor: grab; }
+.hb-wishstrip::-webkit-scrollbar { display: none; }
+.hb-wishstrip.hb-dragging { cursor: grabbing; }
+.hb-wishstrip.hb-dragging img { pointer-events: none; }
+.hb-wishitem { flex: 0 0 auto; width: min(74%, 250px); margin: 0; scroll-snap-align: center; }
+.hb-wishitem img { display: block; width: 100%; height: auto; }
+.hb-dots { display: flex; justify-content: center; gap: 8px; margin: 2px 0 0; }
+.hb-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: #C5E3F8; cursor: pointer; transition: background .25s ease, transform .25s ease; -webkit-tap-highlight-color: transparent; }
+.hb-dot.on { background: #4A90D9; transform: scale(1.3); }
+
+/* 结尾那张大合照 */
+.hb-party { margin: 30px 0 0; background: #FFFFFF; border: 2px solid #C5E3F8; border-radius: 20px; padding: 10px 10px 0; box-shadow: 0 14px 32px rgba(74, 144, 217, .18); }
+.hb-party img { display: block; width: 100%; height: auto; border-radius: 13px; }
+.hb-party figcaption { text-align: center; color: #7BA7D0; font-size: .82rem; letter-spacing: 1.2px; padding: 9px 2px 9px; }
 
 /* 一封信 */
 .hb-letter-card { display: flex; flex-direction: column; align-items: center; }
@@ -535,11 +582,16 @@
 
 /* 结尾 */
 .hb-end { text-align: center; padding: 30px 16px 60px; }
+.hb-end-gif { display: block; width: min(174px, 46vw); height: auto; margin: 0 auto 12px; filter: drop-shadow(0 12px 22px rgba(74, 144, 217, .18)); animation: hbFloat 4.6s ease-in-out infinite; }
 .hb-end-line { color: #2E75B6; font-weight: 600; letter-spacing: 1.5px; line-height: 2; font-size: 1rem; }
 .hb-heartbtn { margin: 18px auto 4px; display: inline-block; border: 2px solid #C5E3F8; background: #FFFFFF; color: #2E75B6; border-radius: 999px; padding: 10px 28px; font-size: .95rem; letter-spacing: 2px; cursor: pointer; box-shadow: 0 8px 20px rgba(74, 144, 217, .16); transition: transform .18s ease, box-shadow .18s ease; -webkit-tap-highlight-color: transparent; }
 .hb-heartbtn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 12px 26px rgba(74, 144, 217, .24); }
 .hb-heartbtn:active { transform: scale(.94); }
 .hb-end-note { color: #7BA7D0; font-size: .88rem; letter-spacing: 1.5px; margin: 14px 0 0; }
+.hb-heart-hint { color: #9DBEDF; font-size: .78rem; letter-spacing: 1.4px; margin: 10px 0 0; }
+.hb-heart-hint.hb-hint-flash { color: #EA4C89; }
+.hb-heartbtn.hb-tap { animation: hbTap .34s ease; }
+@keyframes hbTap { 0% { transform: scale(1); } 45% { transform: scale(1.13) rotate(-2deg); } 100% { transform: scale(1); } }
 
 /* ============ 音乐开关 ============ */
 /* 藏掉主题自带的左下角固定播放器，这两页只留生日歌开关 */
@@ -569,10 +621,16 @@ html.dark .hb-more { color: #6F86C4; }
 html.dark .hb-photo { border-color: #24325A; background: #24325A; box-shadow: 0 16px 38px rgba(0, 0, 0, .5); }
 html.dark .hb-tbc { background: #182544; border-color: #2E3F6E; color: #6F86C4; }
 html.dark .hb-sec-title { color: #A3C0F0; }
+html.dark .hb-div-road { border-top-color: #2E3F6E; }
+html.dark .hb-wall-cap, html.dark .hb-polaroid figcaption { color: #8496C4; }
 html.dark .hb-sec-note { color: #8496C4; }
 html.dark .hb-video-frame { background: #182544; border-color: #2E3F6E; box-shadow: 0 16px 38px rgba(0, 0, 0, .5); }
 html.dark .hb-polaroid { background: #182544; border-color: #2E3F6E; box-shadow: 0 10px 24px rgba(0, 0, 0, .4); }
 html.dark .hb-polaroid figcaption { color: #8496C4; }
+html.dark .hb-dot { background: #2E3F6E; }
+html.dark .hb-dot.on { background: #5B9BE0; }
+html.dark .hb-party { background: #182544; border-color: #2E3F6E; box-shadow: 0 14px 32px rgba(0, 0, 0, .45); }
+html.dark .hb-party figcaption { color: #8496C4; }
 html.dark .hb-slot-in { background: #121B33; border-color: #2E3F6E; color: #43589B; }
 html.dark .hb-env-body { fill: #182544; stroke: #8FB8EE; }
 html.dark .hb-env-line { stroke: #8FB8EE; }
@@ -585,20 +643,57 @@ html.dark .hb-paper-sign { color: #8496C4 !important; }
 html.dark .hb-end-line { color: #A3C0F0; }
 html.dark .hb-heartbtn { background: #1F2E55; border-color: #2E3F6E; color: #A3C0F0; box-shadow: 0 8px 20px rgba(0, 0, 0, .45); }
 html.dark .hb-end-note { color: #6F86C4; }
+html.dark .hb-heart-hint { color: #8496C4; }
+html.dark .hb-heart-hint.hb-hint-flash { color: #FF8FB8; }
 html.dark .hb-bgm { background: #1F2E55; border-color: #2E3F6E; box-shadow: 0 10px 24px rgba(0, 0, 0, .5); }
 
-/* ============ 祝愿标签 ============ */
-.hb-wish { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 2px 0 22px; }
-.hb-wish-chip { display: inline-block; padding: 6px 15px; border-radius: 999px; background: #EAF4FD; border: 1px solid #C5E3F8; color: #2E75B6; font-size: .92em; }
-html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3C0F0; }
+/* ============ 祝愿弹幕（随机乱飞版：高低不一、大小不一，填空随机穿插） ============ */
+.hb-dmband { position: relative; max-width: 620px; margin: 0 auto 8px; border: 2px solid #C5E3F8; border-radius: 22px; background: linear-gradient(160deg, #F6FBFF 0%, #EAF4FD 58%, #FFF3E8 100%); box-shadow: 0 16px 36px rgba(74, 144, 217, .16); overflow: hidden; }
+.hb-dmzone { padding: 14px 0 16px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%); }
+.hb-dmrow { display: flex; align-items: center; height: 50px; }
+.hb-dmtrack { display: flex; width: max-content; will-change: transform; animation: hbDm 22s linear infinite; }
+@keyframes hbDm { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.hb-dmband:hover .hb-dmtrack { animation-play-state: paused; }
+.hb-dmseq { display: inline-flex; align-items: center; }
+.hb-dmitem { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; }
+.hb-dm { color: #2F7FD4; font-weight: 800; line-height: 1.12; letter-spacing: 2px; padding-left: 2px; }
+.hb-dm-s1 { font-size: clamp(1.4rem, 6vw, 1.86rem); letter-spacing: 3px; }
+.hb-dm-s2 { font-size: clamp(1.16rem, 5vw, 1.48rem); }
+.hb-dm-s3 { font-size: clamp(.98rem, 4.2vw, 1.2rem); }
+.hb-dmfill { font-weight: 600; font-size: clamp(.76rem, 3.1vw, .9rem); letter-spacing: 1.4px; color: #9DBEDF; }
+.hb-dmfill-fb { font-size: clamp(.86rem, 3.5vw, 1rem); color: #A9C9E6; }
+.hb-dmsep { font-style: normal; font-size: .74rem; color: #F2C24C; opacity: .9; }
+.hb-dmsep-s { font-size: .58rem; opacity: .7; }
+.hb-dm.c1 { color: #2F7FD4; }
+.hb-dm.c2 { color: #EA4C89; }
+.hb-dm.c3 { color: #EF8000; }
+.hb-dm.c4 { color: #7458E8; }
+html.dark .hb-dmband { background: linear-gradient(160deg, #1B2A4E 0%, #182544 58%, #241C47 100%); border-color: #2E3F6E; box-shadow: 0 16px 36px rgba(0, 0, 0, .5); }
+html.dark .hb-dmfill { color: #8496C4; }
+html.dark .hb-dmfill-fb { color: #93A7D6; }
+html.dark .hb-dm { color: #74B4FF; }
+html.dark .hb-dm.c1 { color: #74B4FF; }
+html.dark .hb-dm.c2 { color: #FF8FB8; }
+html.dark .hb-dm.c3 { color: #FFC04D; }
+html.dark .hb-dm.c4 { color: #AC9CFF; }
+.hb-dmband + .hb-sec-note { margin: 14px 0 26px; }
+
+/* ============ 满屏飞的小狗（时间锁：北京 10-15 20:00 出现，点它去 B 页） ============ */
+.hb-fly { display: none; position: fixed; left: 0; top: 0; z-index: 70; width: 118px; height: 118px; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hb-fly-show { display: block; animation: hbFlyIn .8s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes hbFlyIn { 0% { opacity: 0; transform: scale(.15) rotate(-16deg); } 64% { opacity: 1; transform: scale(1.12) rotate(6deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+.hb-fly img { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 18px rgba(74, 144, 217, .32)); animation: hbFlyBob 1.5s ease-in-out infinite; }
+@keyframes hbFlyBob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(5deg); } }
+@media (max-width: 480px) { .hb-fly { width: 92px; height: 92px; } }
 
 /* ============ 点击后不残留焦点白框（键盘操作仍有虚线提示） ============ */
-.hb-cake:focus:not(:focus-visible), .hb-env:focus:not(:focus-visible), .hb-heartbtn:focus:not(:focus-visible), .hb-bgm:focus:not(:focus-visible) { outline: none; }
+.hb-cake:focus:not(:focus-visible), .hb-env:focus:not(:focus-visible), .hb-heartbtn:focus:not(:focus-visible), .hb-bgm:focus:not(:focus-visible), .hb-fly:focus:not(:focus-visible) { outline: none; }
 .hb-heartbtn:focus-visible, .hb-bgm:focus-visible { outline: 3px dashed #7FB2E5; outline-offset: 6px; border-radius: 999px; }
+.hb-fly:focus-visible { outline: 3px dashed #7FB2E5; outline-offset: 6px; border-radius: 26px; }
 
 /* ============ 减少动画偏好 ============ */
 @media (prefers-reduced-motion: reduce) {
-  .hb-cake, .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-tip, .hb-cf, .hb-flame, .hb-env, .hb-env-hint, .hb-hp, .hb-bgm { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .hb-cake, .hb-pupwrap, .hb-pupwrap *, .hb-deco, .hb-arrow, .hb-tip, .hb-cf, .hb-flame, .hb-env, .hb-env-hint, .hb-hp, .hb-bgm, .hb-dmtrack, .hb-fly img, .hb-end-gif, .hb-heartbtn, .hb-div-pet, .hb-div-pet * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   .hb-rev { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 </style>
@@ -695,22 +790,160 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
 </video>
 </div>
 </section>
-<section class="hb-sec">
-<div class="hb-sec-head"><span class="hb-sec-ico">🍀</span><span class="hb-sec-title">祝愿小鸡毛</span></div>
-<p class="hb-wish"><span class="hb-wish-chip">身体健康</span><span class="hb-wish-chip">天天开心</span><span class="hb-wish-chip">愿望都实现</span><span class="hb-wish-chip">永远有小白</span></p>
-<div class="hb-wall">
-<figure class="hb-polaroid hb-rot-a"><img  
+<div class="hb-div hb-div-a" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="../image/2026Birthday/party.png"
-                      alt="小狗们和蛋糕"
-                ><figcaption>小狗们和蛋糕</figcaption></figure>
-<figure class="hb-polaroid hb-rot-b hb-slot"><div class="hb-slot-in">🧸</div><figcaption>待添加</figcaption></figure>
-<figure class="hb-polaroid hb-rot-b hb-slot"><div class="hb-slot-in">📷</div><figcaption>待添加</figcaption></figure>
-<figure class="hb-polaroid hb-rot-a hb-slot"><div class="hb-slot-in">🎈</div><figcaption>待添加</figcaption></figure>
+                     data-src="../image/2026Birthday/puddles-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
 </div>
-<p class="hb-sec-note">照片框已经留好啦，之后一张张填进去 ✨</p>
+<section class="hb-sec">
+<div class="hb-sec-head"><span class="hb-sec-ico">🍀</span><span class="hb-sec-title">祝愿小鸡毛</span></div>
+<div class="hb-dmband" id="hbDmb">
+<div class="hb-dmzone">
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+<div class="hb-dmrow"><div class="hb-dmtrack"></div></div>
+</div>
+</div>
+<p class="hb-sec-note">—— 小鸡毛专属 · 长期有效 🐾</p>
 </section>
+<section class="hb-sec">
+<div class="hb-sec-head"><span class="hb-sec-ico">🤍</span><span class="hb-sec-title">想和你一直这样</span></div>
+<div class="hb-wishwrap">
+<div class="hb-wishstrip" id="hbWishStrip">
+<figure class="hb-wishitem"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/wish1.jpg"
+                      alt="这样！"
+                ></figure>
+<figure class="hb-wishitem"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/wish2.jpg"
+                      alt="这样！"
+                ></figure>
+<figure class="hb-wishitem"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/wish3.jpg"
+                      alt="还有这样！"
+                ></figure>
+<figure class="hb-wishitem"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/wish4.jpg"
+                      alt="好啊~ 永远永远"
+                ></figure>
+</div>
+<div class="hb-dots" id="hbWishDots"></div>
+</div>
+<p class="hb-sec-note">← 左右滑滑看 🐾</p>
+</section>
+<div class="hb-div hb-div-b" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/highfive-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
+</div>
+<section class="hb-sec">
+<div class="hb-sec-head"><span class="hb-sec-ico">📷</span><span class="hb-sec-title">小狗的点滴</span></div>
+<div class="hb-wall">
+<figure class="hb-polaroid hb-rot-a hb-span"><div class="hb-pair"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/1_1.jpg"
+                      alt=""
+                ><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/1_2.jpg"
+                      alt=""
+                ></div></figure>
+<figure class="hb-polaroid hb-rot-b hb-span"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/3.jpg"
+                      alt=""
+                ></figure>
+<p class="hb-wall-cap">小狗和我们 🐾</p>
+<figure class="hb-polaroid hb-rot-a hb-span"><div class="hb-pair"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/2_1.jpg"
+                      alt=""
+                ><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/2_2.jpg"
+                      alt=""
+                ></div><figcaption>小狗上班时候</figcaption></figure>
+<figure class="hb-polaroid hb-rot-b hb-span hb-drop"><div class="hb-pair"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/cs_1.jpg"
+                      alt=""
+                ><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/cs_2.jpg"
+                      alt=""
+                ></div><figcaption>小狗下班时候</figcaption></figure>
+<figure class="hb-polaroid hb-rot-a hb-wide"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/4.jpg"
+                      alt=""
+                ></figure>
+<figure class="hb-polaroid hb-rot-b hb-wide"><div class="hb-pair"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/HHJ1-sq.jpg"
+                      alt=""
+                ><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/HHJ2-sq.jpg"
+                      alt=""
+                ></div></figure>
+<figure class="hb-polaroid hb-rot-a hb-wide"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/5.jpg"
+                      alt=""
+                ></figure>
+<figure class="hb-polaroid hb-rot-b hb-wide"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/6.jpg"
+                      alt=""
+                ></figure>
+<figure class="hb-polaroid hb-rot-a hb-narrow"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/7-clean.jpg"
+                      alt="把爱心送给小鸡毛"
+                ><figcaption>把爱心送给鸡毛 🐾</figcaption></figure>
+</div>
+</section>
+<div class="hb-div hb-div-c" aria-hidden="true">
+<div class="hb-div-road"></div>
+<div class="hb-div-pet"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/jumping-sm.gif"
+                      alt="" loading="lazy"
+                ></div>
+</div>
 <section class="hb-sec">
 <div class="hb-sec-head"><span class="hb-sec-ico">💌</span><span class="hb-sec-title">还有一封信</span></div>
 <div class="hb-letter-card" id="hbLetterCard">
@@ -729,18 +962,41 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
 </div>
 </div>
 </section>
-<section class="hb-end">
+<section class="hb-sec">
+<figure class="hb-party"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/party.png"
+                      alt="小狗们和蛋糕"
+                ><figcaption>小狗们和蛋糕 🎂</figcaption></figure>
+</section>
+<section class="hb-end" id="hbEnd">
+<img  class="hb-end-gif" 
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/youyou.gif"
+                      alt="抱抱"
+                >
 <div class="hb-end-line">愿新的一岁</div>
 <div class="hb-end-line">有人爱，有事做，有所期待</div>
 <button class="hb-heartbtn" id="hbHeartBtn" type="button">戳一下 🐾</button>
+<p class="hb-heart-hint" id="hbHeartHint">10.15 20:00 再来戳一戳有惊喜</p>
 <p class="hb-end-note">拉呼油 ❤</p>
 </section>
 </main>
+<button class="hb-fly" id="hbFly" type="button" aria-label="一只飞来飞去的抖动小狗">
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="../image/2026Birthday/shaking.gif"
+                      alt=""
+                >
+</button>
 </div>
 
 <script data-swup-reload-script>
 (function () {
-  var leftovers = document.querySelectorAll('body > .hb-gate, body > .hb-cf-layer');
+  var leftovers = document.querySelectorAll('body > .hb-gate, body > .hb-cf-layer, body > .hb-fly');
   for (var k = 0; k < leftovers.length; k++) leftovers[k].remove();
 
   var page = document.querySelector('.hb-page');
@@ -781,6 +1037,131 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
   var letterCard = document.getElementById('hbLetterCard');
   var env = document.getElementById('hbEnv');
   var heartBtn = document.getElementById('hbHeartBtn');
+
+  /* ============ 小音效（WebAudio，简单几个音符，不引外部音频） ============ */
+  var actx = null;
+  function tone(freqs, opt) {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!actx) actx = new AC();
+      if (actx.state === 'suspended') actx.resume();
+      var gain0 = (opt && opt.gain) || 0.07;
+      var dur = (opt && opt.dur) || 0.16;
+      var gap = (opt && opt.gap) || 0.065;
+      var t0 = actx.currentTime + ((opt && opt.delay) || 0);
+      for (var i = 0; i < freqs.length; i++) {
+        var st = t0 + i * gap;
+        var o = actx.createOscillator();
+        var g = actx.createGain();
+        o.type = (opt && opt.type) || 'sine';
+        o.frequency.setValueAtTime(freqs[i], st);
+        g.gain.setValueAtTime(0.0001, st);
+        g.gain.exponentialRampToValueAtTime(Math.max(gain0 * (1 - i * 0.16), 0.02), st + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, st + dur);
+        o.connect(g);
+        g.connect(actx.destination);
+        o.start(st);
+        o.stop(st + dur + 0.02);
+      }
+    } catch (err) {}
+  }
+  var SFX = {
+    spark: function () { tone([784], { gain: .06, dur: .13 }); },
+    blow: function () { tone([523, 392], { gain: .07, dur: .18, gap: .1 }); },
+    pop: function () { tone([880, 1175], { gain: .065, dur: .13, gap: .07 }); },
+    heart: function () { tone([660, 990], { gain: .065, dur: .15, gap: .075 }); },
+    yay: function () { tone([523, 659, 784], { gain: .07, dur: .13, gap: .06 }); }
+  };
+
+  /* ============ 祝愿弹幕：随机乱飞的弹幕（高低/大小不一，填空随机穿插在祝福之间） ============ */
+  var DMBLESS = ['身体健康', '天天开心', '愿望都实现', '永远有小白'];
+  var DMFILLS = ['拉夫油小鸡毛', '拉呼油小鸡毛', '拉夫油小鸡丢', '拉呼油小鸡丢'];
+  var DMC = ['c1', 'c2', 'c3', 'c4'];
+  var DMSIZE = ['hb-dm-s1', 'hb-dm-s2', 'hb-dm-s2', 'hb-dm-s3'];
+
+  function dmRand(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function dmShuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  /* 上下浮动 + 微微歪一点 + 间距不一：破除"排排坐" */
+  function dmJitter(item, isFill) {
+    item.style.transform = 'translateY(' + (Math.random() * 18 - 9).toFixed(1) + 'px) rotate(' + (Math.random() * 7 - 3.5).toFixed(1) + 'deg)';
+    item.style.marginRight = Math.round(12 + Math.random() * 42) + 'px';
+    if (isFill) item.style.opacity = (0.6 + Math.random() * 0.4).toFixed(2);
+  }
+  function dmStar(item, rate) {
+    if (Math.random() > rate) return;
+    var st = document.createElement('i');
+    st.className = 'hb-dmsep' + (Math.random() < .45 ? ' hb-dmsep-s' : '');
+    st.textContent = '✦';
+    item.appendChild(st);
+  }
+  function dmFillItem() {
+    var it = document.createElement('span');
+    it.className = 'hb-dmitem';
+    var w = document.createElement('span');
+    w.className = 'hb-dmfill' + (Math.random() < .34 ? ' hb-dmfill-fb' : '');
+    w.textContent = dmRand(DMFILLS);
+    it.appendChild(w);
+    dmStar(it, .55);
+    dmJitter(it, true);
+    return it;
+  }
+  function dmBlessItem(text, color) {
+    var it = document.createElement('span');
+    it.className = 'hb-dmitem';
+    var b = document.createElement('b');
+    b.className = 'hb-dm ' + color + ' ' + dmRand(DMSIZE);
+    b.textContent = text;
+    it.appendChild(b);
+    dmStar(it, .62);
+    dmJitter(it, false);
+    return it;
+  }
+  /* 一条弹幕轨道：四句祝福顺序随机，每条前后塞 1~3 个填空，空隙全用"拉夫油小鸡毛"填满 */
+  function dmLaneItems() {
+    var words = dmShuffle(DMBLESS);
+    var out = [];
+    var lastC = -1;
+    for (var w = 0; w < words.length; w++) {
+      var pad = 1 + Math.floor(Math.random() * 3);
+      for (var p = 0; p < pad; p++) out.push(dmFillItem());
+      var ci = Math.floor(Math.random() * DMC.length);
+      if (ci === lastC) ci = (ci + 1 + Math.floor(Math.random() * (DMC.length - 1))) % DMC.length;
+      lastC = ci;
+      out.push(dmBlessItem(words[w], DMC[ci]));
+    }
+    var tail = 2 + Math.floor(Math.random() * 2);
+    for (var q = 0; q < tail; q++) out.push(dmFillItem());
+    return out;
+  }
+  var dmLanes = page.querySelectorAll('.hb-dmrow');
+  /* 六行速度从这组里随机分（快慢都有，视觉上才像一锅乱飞的弹幕） */
+  var DMSPEED = dmShuffle([72, 84, 97, 110, 122, 132]);
+  for (var dli = 0; dli < dmLanes.length; dli++) {
+    var dtrack = dmLanes[dli].querySelector('.hb-dmtrack');
+    if (!dtrack || dtrack.children.length) continue;
+    var dItems = dmLaneItems();
+    var dSeqA = document.createElement('span');
+    dSeqA.className = 'hb-dmseq';
+    for (var dni = 0; dni < dItems.length; dni++) dSeqA.appendChild(dItems[dni]);
+    var dSeqB = dSeqA.cloneNode(true);       /* 一模一样再来一份 → 滚动无缝 */
+    dtrack.appendChild(dSeqA);
+    dtrack.appendChild(dSeqB);
+    /* 每行速度按实际长度折算（约 70~130 像素/秒），起始相位随机错开 */
+    var dHalf = dtrack.getBoundingClientRect().width / 2;
+    var dSpeed = DMSPEED[dli % DMSPEED.length] * (0.94 + Math.random() * 0.12);
+    var dDur = dHalf > 300 ? Math.round((dHalf / dSpeed) * 10) / 10 : 18 + Math.random() * 6;
+    dtrack.style.animationDuration = dDur + 's';
+    dtrack.style.animationDelay = (-Math.random() * dDur).toFixed(1) + 's';
+    dmLanes[dli].style.transform = 'translateY(' + (Math.random() * 12 - 6).toFixed(1) + 'px)';
+  }
 
   var COLORS = ['#4A90D9', '#7FB2E5', '#F7C948', '#FFA8C5', '#9B8BF4', '#63C7A8'];
   var falling = false;
@@ -833,9 +1214,11 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
   function tap() {
     if (stage === 0) {
       stage = 1;
+      SFX.spark();
       gate.classList.add('hb-lit');
     } else if (stage === 1) {
       stage = 2;
+      SFX.blow();
       bgmPlay();
       gate.classList.add('hb-blown');
       var r = cake.getBoundingClientRect();
@@ -882,6 +1265,7 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
   if (env && letterCard) {
     env.addEventListener('click', function () {
       if (letterCard.classList.contains('hb-letter-open')) return;
+      SFX.pop();
       letterCard.classList.add('hb-letter-open');
       var r = env.getBoundingClientRect();
       heartBurst(r.left + r.width / 2, r.top + r.height * 0.58);
@@ -891,15 +1275,156 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
     });
   }
 
+  /* ============ 页面尽头的"戳一戳"：戳够几下 → 爱心 + 彩带一起炸，把惊喜小狗放出来 ============ */
+  var heartHint = document.getElementById('hbHeartHint');
+  var HEART_HINT_0 = heartHint ? heartHint.textContent : '';
   if (heartBtn) {
+    var heartTaps = 0;
+    var HEART_TAPS = 3;          /* 要戳几下才放小狗出来：想改数量就改这个数 */
+    var heartDoorOpen = false;
+    var hintTimer = null;
+    var sayHint = function (txt, temp) {
+      if (!heartHint) return;
+      if (hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
+      heartHint.classList.remove('hb-hint-flash');
+      heartHint.textContent = txt;
+      if (temp) {
+        heartHint.classList.add('hb-hint-flash');
+        hintTimer = setTimeout(function () {
+          heartHint.classList.remove('hb-hint-flash');
+          heartHint.textContent = HEART_HINT_0;
+        }, 2600);
+      }
+    };
     heartBtn.addEventListener('click', function () {
       var r = heartBtn.getBoundingClientRect();
-      heartBurst(r.left + r.width / 2, r.top + r.height / 2);
+      var cx = r.left + r.width / 2;
+      var cy = r.top + r.height / 2;
+      SFX.heart();
+      heartBurst(cx, cy);
+      if (!flyReady()) { sayHint('还没到点哦，20:00 再来戳 🐾', true); return; }
+      if (heartDoorOpen) { if (Math.random() < .5) burst(cx, cy); return; }
+      heartTaps++;
+      heartBtn.classList.remove('hb-tap');
+      void heartBtn.offsetWidth;    /* 重排一下，让每一下都能重播小动画 */
+      heartBtn.classList.add('hb-tap');
+      if (heartTaps < HEART_TAPS) {
+        sayHint('还差 ' + (HEART_TAPS - heartTaps) + ' 下 🐾', false);
+        return;
+      }
+      heartDoorOpen = true;
+      heartBtn.textContent = '戳到啦 🎉';
+      burst(cx, cy);                /* 爱心 + 彩带一起炸 */
+      if (fly) flyOpen();           /* 小狗从按钮旁边蹦出来 → 点它去 B 页 */
+      sayHint('汪！戳戳飞过去的小狗 🐾', false);
     });
   }
 
+  /* 测试用：?door=1 → 打开页面就自动戳够几下，直接看"戳开门"的效果，不用手戳（时间锁也一并忽略，见下面 flyReady） */
+  if (heartBtn && /[?&]door=1/.test(location.search || '')) {
+    setTimeout(function () { for (var dq = 0; dq < HEART_TAPS; dq++) heartBtn.click(); }, 400);
+  }
+
+  /* ============ 惊喜小狗：戳够几下才飞出来，点它 → 悄悄去 B 页 ============ */
+  var fly = document.getElementById('hbFly');
+  var flyTimer = null;
+  var flyMove = null;
+  var FLY_AT = Date.UTC(2026, 9, 15, 12, 0, 0);   /* 定时锁：北京 2026-10-15 20:00 到点才戳得出来；想先关掉就改成 0 */
+  var flyTestAt = (location.search || '').match(/[?&]at=([^&]+)/);
+  if (flyTestAt) {
+    /* 例：?at=2026-10-11T12:40:00+08:00（或写成 04:40:00Z，同一时刻都行）
+       想"假装已经到点"来测效果 → ?at=2026-01-01T00:00:00+08:00（填个过去的时刻） */
+    var msAt = Date.parse(decodeURIComponent(flyTestAt[1]).replace(/ /g, '+'));
+    if (!isNaN(msAt)) FLY_AT = msAt;
+  }
+  var flyTestDoor = /[?&]door=1/.test(location.search || '');   /* ?door=1 是测试开关，忽略时间锁（除非同时给了 ?at=） */
+  function flyReady() { return (flyTestDoor && !flyTestAt) || !FLY_AT || Date.now() >= FLY_AT; }
+  if (fly) {
+    document.body.appendChild(fly);
+    /* 提前把 GIF 拉进缓存：戳出来那一刻就不会先闪一下"加载中" */
+    var flyPic = fly.querySelector('img');
+    var flyWarmed = false;
+    var flyWarm = function () {
+      if (flyWarmed || !flyPic) return;
+      flyWarmed = true;
+      window.removeEventListener('scroll', flyWarm);
+      var im = new Image();
+      im.src = flyPic.getAttribute('data-src') || flyPic.getAttribute('src');
+    };
+    window.addEventListener('scroll', flyWarm, { passive: true });
+    setTimeout(flyWarm, 4000);
+    var flyIn = (location.search || '').match(/[?&]showin=(\d+)/);
+    var flyReduce = false;
+    try { flyReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (eR) { flyReduce = false; }
+
+    var flyPut = function () {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var s = w < 481 ? 92 : 118;
+      var x = 10 + Math.random() * Math.max(20, w - s - 20);
+      var y = 70 + Math.random() * Math.max(20, h - s - 92);   /* 尽量铺满整屏（留出头栏和底部音乐键一点边） */
+      fly.style.left = Math.round(x) + 'px';
+      fly.style.top = Math.round(y) + 'px';
+    };
+    var flyHop = function () {
+      /* 匀速直线乱窜：不带缓动，起落点也不减速，比主页那只更快 —— 不太好点到 :P */
+      var d = (0.55 + Math.random() * 0.25).toFixed(2);
+      fly.style.transition = 'left ' + d + 's linear, top ' + d + 's linear';
+      flyPut();
+      if (!flyReduce) flyMove = setTimeout(flyHop, 120 + Math.random() * 260);
+    };
+    var flyOpen = function () {
+      if (fly.classList.contains('hb-fly-show')) return;
+      fly.style.transition = 'none';
+      /* 就从刚刚戳的那个按钮旁边蹦出来，然后开始满屏乱飞 */
+      if (heartBtn) {
+        var rb = heartBtn.getBoundingClientRect();
+        var fs = window.innerWidth < 481 ? 92 : 118;
+        var fx = rb.left + rb.width / 2 - fs / 2 + (Math.random() * 120 - 60);
+        var fy = rb.top - fs - 12 + (Math.random() * 40 - 20);
+        fx = Math.min(Math.max(8, fx), Math.max(8, window.innerWidth - fs - 8));
+        fy = Math.min(Math.max(70, fy), Math.max(70, window.innerHeight - fs - 12));
+        fly.style.left = Math.round(fx) + 'px';
+        fly.style.top = Math.round(fy) + 'px';
+      } else {
+        flyPut();
+      }
+      fly.classList.add('hb-fly-show');
+      fly.offsetWidth; /* 让入场动画从第一帧开始播 */
+      if (stage === 2) burst(window.innerWidth * 0.5, window.innerHeight * 0.46);
+      if (flyReduce) return;
+      flyMove = setTimeout(flyHop, 420);   /* 蹦出来之后几乎马上就开始乱窜 */
+    };
+    fly.addEventListener('click', function () {
+      SFX.yay();
+      setTimeout(function () { window.location.href = '/' + atob('cHVmZi04NA==') + '/'; }, 190);
+    });
+    window.addEventListener('resize', function () {
+      if (!fly.classList.contains('hb-fly-show')) return;
+      fly.style.transition = 'none';
+      flyPut();
+    });
+
+    if (flyIn) {
+      /* 测试用：?showin=5 → 打开 5 秒后小狗自己飞出来 */
+      flyTimer = setTimeout(flyOpen, Math.min(parseInt(flyIn[1], 10), 7200) * 1000);
+    }
+    /* 平时不自己冒出来：要戳一戳（戳够 HEART_TAPS 下）才放它出来 */
+  }
+
+  /* 测试参数：?intro=0 跳过开场蜡烛，直接看页面内容 */
+  if (/[?&]intro=0/.test(location.search || '')) {
+    stage = 2;
+    gate.classList.add('hb-blown', 'hb-gate-out');
+    gate.style.display = 'none';
+    main.classList.remove('hb-main-wait');
+    main.classList.add('hb-main-in');
+    startFall();
+    armReveal();
+  }
+
   function armReveal() {
-    var els = page.querySelectorAll('.hb-sec, .hb-end');
+    var els = page.querySelectorAll('.hb-sec, .hb-end, .hb-div');
     var reduce = false;
     try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (err) { reduce = false; }
     for (var i = 0; i < els.length; i++) els[i].classList.add('hb-rev');
@@ -918,12 +1443,84 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
     for (var k = 0; k < els.length; k++) io.observe(els[k]);
   }
 
+  /* 「想和你一直这样」：横滑 + 圆点（手机手指滑、电脑按住拖、点圆点也能翻） */
+  var wishStrip = document.getElementById('hbWishStrip');
+  var wishDots = document.getElementById('hbWishDots');
+  if (wishStrip && wishDots && !wishStrip.getAttribute('data-wish-init')) {
+    wishStrip.setAttribute('data-wish-init', '1');
+    var wishItems = wishStrip.querySelectorAll('.hb-wishitem');
+    var wishDotEls = [];
+    for (var wi = 0; wi < wishItems.length; wi++) {
+      var wb = document.createElement('button');
+      wb.type = 'button';
+      wb.className = 'hb-dot' + (wi === 0 ? ' on' : '');
+      wb.setAttribute('data-i', wi);
+      wb.setAttribute('aria-label', '第 ' + (wi + 1) + ' 张');
+      wishDots.appendChild(wb);
+      wishDotEls.push(wb);
+    }
+    var wishGo = function (i) {
+      var it = wishItems[i];
+      if (!it) return;
+      var left = it.offsetLeft - (wishStrip.clientWidth - it.offsetWidth) / 2;
+      if (wishStrip.scrollTo) wishStrip.scrollTo({ left: left, behavior: 'smooth' });
+      else wishStrip.scrollLeft = left;
+    };
+    wishDots.addEventListener('click', function (ev) {
+      var t = ev.target;
+      if (!t || !t.className || String(t.className).indexOf('hb-dot') !== 0) return;
+      wishGo(parseInt(t.getAttribute('data-i'), 10) || 0);
+    });
+    var wishSync = function () {
+      var maxScroll = wishStrip.scrollWidth - wishStrip.clientWidth;
+      var best = 0;
+      if (wishStrip.scrollLeft <= 1) {
+        best = 0;                                   /* 贴住最左：就是第一张 */
+      } else if (wishStrip.scrollLeft >= maxScroll - 1) {
+        best = wishItems.length - 1;                /* 贴住最右：就是最后一张 */
+      } else {
+        var mid = wishStrip.scrollLeft + wishStrip.clientWidth / 2;
+        var bestD = 1e9;
+        for (var i = 0; i < wishItems.length; i++) {
+          var c = wishItems[i].offsetLeft + wishItems[i].offsetWidth / 2;
+          var d = Math.abs(c - mid);
+          if (d < bestD) { bestD = d; best = i; }
+        }
+      }
+      for (var j = 0; j < wishDotEls.length; j++) wishDotEls[j].className = 'hb-dot' + (j === best ? ' on' : '');
+    };
+    var wishTick = false;
+    wishStrip.addEventListener('scroll', function () {
+      if (wishTick) return;
+      wishTick = true;
+      requestAnimationFrame(function () { wishTick = false; wishSync(); });
+    });
+    var wishDrag = null;
+    wishStrip.addEventListener('mousedown', function (ev) {
+      wishDrag = { x: ev.clientX, left: wishStrip.scrollLeft };
+      wishStrip.classList.add('hb-dragging');
+      if (ev.preventDefault) ev.preventDefault();
+    });
+    window.addEventListener('mousemove', function (ev) {
+      if (!wishDrag) return;
+      wishStrip.scrollLeft = wishDrag.left - (ev.clientX - wishDrag.x);
+    });
+    window.addEventListener('mouseup', function () {
+      if (!wishDrag) return;
+      wishDrag = null;
+      wishStrip.classList.remove('hb-dragging');
+    });
+  }
+
   var watcher = setInterval(function () {
     if (!document.body.contains(page)) {
       clearInterval(watcher);
       if (fallTimer) clearInterval(fallTimer);
+      if (flyTimer) { clearInterval(flyTimer); clearTimeout(flyTimer); }
+      if (flyMove) clearTimeout(flyMove);
       gate.remove();
       layer.remove();
+      if (fly) fly.remove();
     }
   }, 900);
 })();
@@ -1010,6 +1607,17 @@ html.dark .hb-wish-chip { background: #182544; border-color: #2E3F6E; color: #A3
                 } catch (error) {}
             </script>
         
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script src="/js/float-pup.js"></script>
+                    
         
         
     </div>  
