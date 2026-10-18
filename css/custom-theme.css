@@ -1,0 +1,1019 @@
+/* ============================================================
+ * 秘密基地 · 自定义首页 + 「我和我的小鸡毛~」线条小狗分类
+ * 只在本站覆盖，不改主题原有文章 / 说说 / 密码 / 评论逻辑。
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * 0. 全站配色（日间取海景背景的浅蓝，夜间用藏青 + 蓝光）
+ *    background.jpg 的主色是 #AECAE0 / #BAD1E3，这里减轻后
+ *    作为日间大底色，卡片仍是同一套主题的浅蓝层次。
+ * ---------------------------------------------------------- */
+:root,
+html.light,
+body.light-mode {
+  --background-color: #E8F1F8;
+  --background-color-transparent: rgba(232, 241, 248, 0.6);
+  --background-color-transparent-80: rgba(232, 241, 248, 0.8);
+  --background-color-transparent-40: rgba(232, 241, 248, 0.4);
+  --background-color-transparent-15: rgba(232, 241, 248, 0.15);
+  --second-background-color: #DEEAF4;
+  --third-background-color: #D3E2F0;
+  --third-background-color-transparent: rgba(211, 226, 240, 0.6);
+  --primary-color: #2E75B6;
+  --first-text-color: #1F2F40;
+  --second-text-color: #27384A;
+  --third-text-color: #5E768E;
+  --fourth-text-color: #B7C9D9;
+  --default-text-color: #2C3E50;
+  --invert-text-color: #E8F1F8;
+  --border-color: rgba(46, 117, 182, 0.16);
+  --selection-color: #BBD9F3;
+  --shadow-color-1: rgba(31, 75, 120, 0.10);
+  --shadow-color-2: rgba(31, 75, 120, 0.06);
+  --shadow-hover-color: rgba(31, 75, 120, 0.22);
+  --scrollbar-color: #AFC8DE;
+  --scrollbar-color-hover: #93B4D0;
+  --scroll-bar-bg-color: #EEF6FC;
+  --link-color: #255E8F;
+  --avatar-background-color: #2E75B6;
+}
+
+html.dark,
+body.dark-mode {
+  --background-color: #0B1726;
+  --background-color-transparent: rgba(11, 23, 38, 0.6);
+  --background-color-transparent-80: rgba(11, 23, 38, 0.8);
+  --background-color-transparent-40: rgba(11, 23, 38, 0.4);
+  --background-color-transparent-15: rgba(11, 23, 38, 0.15);
+  --second-background-color: #12233A;
+  --third-background-color: #18304C;
+  --third-background-color-transparent: rgba(18, 35, 58, 0.6);
+  --primary-color: #5B9BD5;
+  --first-text-color: #EDF5FD;
+  --second-text-color: #D6E5F4;
+  --third-text-color: #8BA5C0;
+  --fourth-text-color: #425A73;
+  --default-text-color: #C6D7E8;
+  --invert-text-color: #0B1726;
+  --border-color: rgba(127, 178, 229, 0.18);
+  --selection-color: rgba(91, 155, 213, 0.42);
+  --shadow-color-1: rgba(127, 178, 229, 0.12);
+  --shadow-color-2: rgba(3, 10, 20, 0.35);
+  --shadow-hover-color: rgba(91, 155, 213, 0.28);
+  --scrollbar-color: #34506E;
+  --scrollbar-color-hover: #4A6B8E;
+  --scroll-bar-bg-color: #0E1D2F;
+  --link-color: #A8CCF0;
+  --avatar-background-color: #2E75B6;
+}
+
+/* 大底色：日间从海面浅蓝轻轻过渡；夜间在顶部加一层蓝色光晕 */
+html:not(.dark) .page-container {
+  background:
+    radial-gradient(900px 520px at 50% -80px, rgba(174, 202, 224, 0.38) 0%, transparent 70%),
+    linear-gradient(180deg, #E9F2F9 0%, #E8F1F8 380px, #E8F1F8 100%);
+}
+
+html.dark .page-container {
+  background:
+    radial-gradient(1000px 560px at 50% -100px, rgba(46, 117, 182, 0.24) 0%, transparent 70%),
+    linear-gradient(180deg, #0C1A2B 0%, #0B1726 420px, #0A1523 100%);
+}
+
+/* 日间卡片比大底色再亮一点，蓝色底上仍有层次 */
+html:not(.dark) .article-content-container,
+html:not(.dark) .sidebar-content,
+html:not(.dark) body .home-content-container .home-article-list .home-article-item {
+  background-color: #F7FBFF;
+}
+
+/* 夜间卡片 / 侧栏 / 按钮的蓝色描边和光 */
+html.dark .article-content-container,
+html.dark .sidebar-content,
+html.dark .home-essay-section,
+html.dark .home-photo-section,
+html.dark body .home-content-container .home-article-list .home-article-item {
+  background-color: var(--second-background-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+html.dark body .home-content-container .home-article-list .home-article-item:hover,
+html.dark .home-essay-card:hover {
+  box-shadow: 0 8px 28px rgba(46, 117, 182, 0.18);
+}
+
+/* 夜间主按钮用更实的蓝，白字更清楚 */
+html.dark .home-hero-btn.is-primary {
+  background: #2E75B6;
+}
+
+/* 夜间引用块、分割线、标签等细节统一偏蓝 */
+html.dark blockquote {
+  border-left-color: var(--primary-color);
+  background: rgba(46, 117, 182, 0.08);
+}
+
+html.dark hr {
+  border-color: var(--border-color);
+}
+
+/* ------------------------------------------------------------
+ * 1. 自定义首页
+ * ---------------------------------------------------------- */
+.custom-home .home-hero {
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 100px 24px 76px;
+  color: #fff;
+}
+
+.custom-home .home-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.custom-home .home-hero-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+}
+
+.custom-home .home-hero-bg-dark {
+  display: none;
+}
+
+html.dark .custom-home .home-hero-bg-light {
+  display: none;
+}
+
+html.dark .custom-home .home-hero-bg-dark {
+  display: block;
+}
+
+.custom-home .home-hero-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(14, 33, 58, 0.02) 0%, rgba(9, 22, 42, 0.38) 66%, rgba(7, 18, 34, 0.58) 100%),
+    linear-gradient(180deg, rgba(7, 18, 34, 0.16) 0%, rgba(7, 18, 34, 0.34) 100%);
+}
+
+html.dark .custom-home .home-hero-veil {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(18, 44, 78, 0.16) 0%, rgba(6, 16, 31, 0.62) 64%, rgba(4, 12, 24, 0.86) 100%),
+    linear-gradient(180deg, rgba(4, 12, 24, 0.42) 0%, rgba(4, 12, 24, 0.68) 100%);
+}
+
+.custom-home .home-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.28);
+}
+
+.custom-home .home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 auto 22px;
+  padding: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+}
+
+.custom-home .home-hero-title {
+  margin: 0;
+  color: #fff;
+  font-family: 'Chillax-Variable', 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: clamp(3.1rem, 8vw, 6.2rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+}
+
+.custom-home .home-hero-subtitle {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.78rem, 1.5vw, 0.98rem);
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.custom-home .home-hero-typed {
+  min-height: 2.2em;
+  margin: 22px auto 0;
+  color: #e8f4ff;
+  font-size: clamp(0.98rem, 2vw, 1.22rem);
+  letter-spacing: 0.06em;
+}
+
+.custom-home .home-hero-typed i {
+  font-style: normal;
+}
+
+.custom-home .home-hero-typed .typed-cursor {
+  color: #a9d1f2;
+}
+
+.custom-home .home-hero-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 26px;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+}
+
+.custom-home .home-counter-number {
+  color: #fff;
+  font-family: 'Chillax-Variable', 'Geist Variable', sans-serif;
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-home .home-counter-unit {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.86rem;
+}
+
+.custom-home .home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.custom-home .home-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 126px;
+  padding: 10px 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, color 0.22s ease;
+}
+
+.custom-home .home-hero-btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.custom-home .home-hero-btn.is-primary {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+.custom-home .home-hero-btn.is-primary:hover {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+}
+
+.custom-home .home-hero-btn.is-ghost {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.custom-home .home-hero-btn.is-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.custom-home .home-hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-left: -19px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: homeScrollBob 2s ease-in-out infinite;
+}
+
+.custom-home .home-hero-scroll:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+@keyframes homeScrollBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* hero 底部柔和过渡到正文，日间模式不再“一刀切” */
+.custom-home .home-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: clamp(90px, 16vh, 170px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--background-color) 88%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+html.dark .custom-home .home-hero::after {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--background-color) 88%);
+}
+
+/* 日间模式下，滚动提示落在浅色渐变上，改成蓝色才看得见 */
+html:not(.dark) .custom-home .home-hero-scroll {
+  border-color: rgba(46, 117, 182, 0.35);
+  background: rgba(255, 255, 255, 0.72);
+  color: #2E75B6;
+}
+
+html:not(.dark) .custom-home .home-hero-scroll:hover {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2E75B6;
+}
+
+/* 全站导航：浅蓝玻璃 / 藏青玻璃，替代主题原来的橙→蓝渐变 */
+.navbar-container {
+  background: linear-gradient(90deg, rgba(234, 244, 253, 0.9) 0%, rgba(196, 226, 250, 0.8) 55%, rgba(169, 209, 242, 0.72) 100%);
+}
+
+html.dark .navbar-container {
+  background: linear-gradient(90deg, rgba(10, 20, 34, 0.92) 0%, rgba(18, 38, 62, 0.86) 55%, rgba(28, 58, 92, 0.78) 100%);
+}
+
+/* 滚动后导航栏变实色，避免正文按钮透出来 */
+body.navbar-shrink .navbar-container {
+  background: var(--background-color);
+  box-shadow: 0 1px 0 var(--border-color);
+}
+
+.custom-home .home-custom-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.custom-home .home-custom-top {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-bottom: 30px;
+}
+
+.custom-home .home-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.custom-home .home-section-title {
+  margin: 0;
+  color: var(--second-text-color);
+  font-family: 'Chillax-Variable', 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 1.42rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.custom-home .home-section-subtitle {
+  margin: 6px 0 0;
+  color: var(--third-text-color);
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+}
+
+.custom-home .home-section-more {
+  flex: 0 0 auto;
+  color: var(--third-text-color);
+  font-size: 0.82rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.custom-home .home-section-more:hover {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.custom-home .home-intro-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 28px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 94% 18%, rgba(127, 178, 229, 0.14) 0%, transparent 34%),
+    linear-gradient(135deg, var(--background-color) 0%, var(--second-background-color) 100%);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+.custom-home .home-intro-text {
+  max-width: 46em;
+  margin: 12px 0 0;
+  color: var(--default-text-color);
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+
+.custom-home .home-intro-paws {
+  position: absolute;
+  right: 18px;
+  bottom: 10px;
+  margin: 0;
+  color: var(--third-text-color);
+  font-size: 0.95rem;
+  letter-spacing: 6px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.custom-home .home-photo-section,
+.custom-home .home-essay-section {
+  padding: 22px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: var(--background-color);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+.custom-home .home-photo-section .home-section-head {
+  margin-bottom: 16px;
+}
+
+.custom-home .home-photo-nav {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.custom-home .home-photo-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: var(--second-background-color);
+  color: var(--second-text-color);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.custom-home .home-photo-nav-btn:hover {
+  background: var(--primary-color);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.custom-home .home-photo-nav-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+.custom-home .home-photo-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 2px 2px 10px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color) transparent;
+}
+
+.custom-home .home-photo-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.custom-home .home-photo-track::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--scrollbar-color);
+}
+
+.custom-home .home-photo-card {
+  position: relative;
+  flex: 0 0 clamp(210px, 31%, 300px);
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--second-background-color);
+  box-shadow: var(--redefine-box-shadow-flat);
+  scroll-snap-align: start;
+}
+
+.custom-home .home-photo-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease, filter 0.3s ease;
+}
+
+.custom-home .home-photo-card:hover img {
+  transform: scale(1.045);
+}
+
+html.dark .custom-home .home-photo-card img {
+  filter: brightness(0.84);
+}
+
+.custom-home .home-photo-card figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 24px 12px 10px;
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 16, 30, 0.72) 100%);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.custom-home .home-essay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.custom-home .home-essay-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: var(--second-background-color);
+  color: var(--second-text-color);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.custom-home .home-essay-card:hover {
+  border-color: var(--border-color);
+  background: var(--third-background-color);
+  transform: translateX(3px);
+  text-decoration: none;
+}
+
+.custom-home .home-essay-date {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background-color);
+  color: var(--third-text-color);
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-home .home-essay-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--default-text-color);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-home .home-essay-paw {
+  flex: 0 0 auto;
+  color: var(--third-text-color);
+  font-size: 0.82rem;
+  opacity: 0.55;
+}
+
+.custom-home .home-feed-section {
+  min-width: 0;
+}
+
+.custom-home .home-feed-head {
+  margin-bottom: 16px;
+}
+
+.custom-home .home-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.custom-home .home-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 769px) {
+  .home-sidebar-container + .home-custom-main .home-custom-top,
+  .home-sidebar-container + .home-custom-main .home-feed-head {
+    margin-right: 38px;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-home .home-hero {
+    min-height: 88vh;
+    padding: 88px 20px 70px;
+  }
+
+  .custom-home .home-hero-scroll {
+    display: none;
+  }
+
+  .custom-home .home-hero-subtitle {
+    letter-spacing: 0.24em;
+  }
+
+  .custom-home .home-custom-top {
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .custom-home .home-photo-section,
+  .custom-home .home-essay-section {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+
+  .custom-home .home-photo-nav {
+    display: none;
+  }
+
+  .custom-home .home-photo-card {
+    flex-basis: 74%;
+  }
+
+  .custom-home .home-essay-text {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .custom-home .home-section-head {
+    align-items: flex-start;
+  }
+
+  .custom-home .home-section-more {
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-home .home-hero-counter {
+    gap: 6px;
+    padding: 10px 16px;
+  }
+
+  .custom-home .home-hero-btn {
+    min-width: 112px;
+    padding: 9px 18px;
+  }
+
+  .custom-home .home-intro-card {
+    padding: 20px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-home .home-hero-scroll {
+    animation: none;
+  }
+
+  .custom-home .home-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .custom-home .home-photo-card img,
+  .custom-home .home-essay-card,
+  .custom-home .home-hero-btn {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 2. 「我和我的小鸡毛~」分类 · 线条小狗
+ * 深色模式用藏青 / 深蓝，不用偏青绿的蓝。
+ * ---------------------------------------------------------- */
+body.cat-love {
+  --love-blue: #4A90D9;
+  --love-blue-deep: #2E75B6;
+  --love-blue-soft: #EAF4FD;
+  --love-blue-line: #A9D1F2;
+  --love-pink: #F2B8CC;
+  --love-ink: #2F4A66;
+  --love-card: #FFFFFF;
+  --love-bg: linear-gradient(180deg, #F3F9FE 0%, #E8F1F8 360px);
+  background: var(--love-bg);
+}
+
+html.dark body.cat-love {
+  --love-blue: #7FB2E5;
+  --love-blue-deep: #A8CCF0;
+  --love-blue-soft: #122338;
+  --love-blue-line: #2C496B;
+  --love-pink: #D996AF;
+  --love-ink: #DDEBFA;
+  --love-card: #1A2A3D;
+  --love-bg: linear-gradient(180deg, #0C1A2B 0%, #0B1726 360px);
+}
+
+body.cat-love .page-container {
+  background: transparent;
+}
+
+body.cat-love .love-cat-hero {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin: 6px 0 28px;
+  padding: 30px 32px 26px;
+  border: 2px dashed var(--love-blue-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 26%),
+    linear-gradient(135deg, var(--love-blue-soft) 0%, var(--love-card) 100%);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+html.dark body.cat-love .love-cat-hero {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(47, 82, 122, 0.35) 0%, transparent 28%),
+    linear-gradient(135deg, #122338 0%, #182A40 100%);
+}
+
+body.cat-love .love-cat-hero::before,
+body.cat-love .love-cat-hero::after {
+  position: absolute;
+  z-index: 0;
+  color: var(--love-blue);
+  font-size: 1rem;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+body.cat-love .love-cat-hero::before {
+  content: '🐾';
+  top: 14px;
+  left: 20px;
+  transform: rotate(-18deg);
+}
+
+body.cat-love .love-cat-hero::after {
+  content: '🐾';
+  bottom: 16px;
+  left: 45%;
+  transform: rotate(14deg);
+}
+
+body.cat-love .love-cat-pup {
+  position: absolute;
+  right: 30px;
+  bottom: 4px;
+  z-index: 0;
+  width: 150px;
+  height: 150px;
+  opacity: 0.95;
+  pointer-events: none;
+  animation: lovePupFloat 4s ease-in-out infinite;
+}
+
+body.cat-love .love-cat-pup svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+body.cat-love .love-pup-line {
+  fill: none;
+  stroke: var(--love-blue);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.cat-love .love-pup-fill {
+  fill: var(--love-blue);
+}
+
+body.cat-love .love-pup-cheek {
+  stroke: var(--love-pink);
+}
+
+@keyframes lovePupFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-7px) rotate(1.5deg); }
+}
+
+body.cat-love .love-cat-kicker {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 8px;
+  color: var(--love-blue-deep);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+body.cat-love .love-cat-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--love-blue-deep);
+  font-family: 'Chillax-Variable', 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+
+body.cat-love .love-cat-sub {
+  position: relative;
+  z-index: 1;
+  max-width: 34em;
+  margin: 10px 0 0;
+  color: var(--love-ink);
+  font-size: 0.92rem;
+  line-height: 1.75;
+  opacity: 0.82;
+}
+
+body.cat-love .love-cat-paws {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  color: var(--love-blue);
+  font-size: 1rem;
+  letter-spacing: 12px;
+}
+
+/* 分类页文章时间线 */
+body.cat-love .archive-list-container .archive-year {
+  color: var(--love-blue-deep);
+}
+
+body.cat-love .archive-list-container .archive-year-post-count {
+  border-color: var(--love-blue-line);
+  background: var(--love-blue-soft);
+  color: var(--love-blue-deep);
+}
+
+body.cat-love .archive-list-container .article-item {
+  border-left-color: var(--love-blue-line);
+}
+
+body.cat-love .archive-list-container .article-item::before {
+  color: var(--love-blue);
+  opacity: 0.8;
+}
+
+body.cat-love .archive-list-container .article-item::after {
+  border-color: var(--love-blue);
+  background: var(--love-card);
+}
+
+body.cat-love .archive-list-container .article-title {
+  color: var(--love-ink);
+  transition: color 0.2s ease;
+}
+
+body.cat-love .archive-list-container a:hover .article-title {
+  color: var(--love-blue);
+}
+
+/* 分类内文章 */
+body.cat-love .article-content-container {
+  position: relative;
+  overflow: hidden;
+}
+
+body.cat-love .article-content-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: 5px;
+  background: linear-gradient(90deg, var(--love-blue) 0%, var(--love-blue-line) 52%, var(--love-pink) 100%);
+}
+
+body.cat-love .article-content-container::after {
+  content: '🐾';
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 2;
+  color: var(--love-blue);
+  font-size: 1rem;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+body.cat-love .article-content::after {
+  content: '🐾   🐾   🐾';
+  display: block;
+  margin-top: 30px;
+  color: var(--love-blue);
+  font-size: 0.95rem;
+  letter-spacing: 10px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+body.cat-love .article-date,
+body.cat-love .article-categories a,
+body.cat-love .article-tags a {
+  color: var(--love-blue-deep);
+}
+
+body.cat-love .article-categories a:hover,
+body.cat-love .article-tags a:hover {
+  color: var(--love-blue);
+}
+
+@media (max-width: 768px) {
+  body.cat-love .love-cat-hero {
+    padding: 24px 20px 22px;
+    border-radius: 18px;
+  }
+
+  body.cat-love .love-cat-pup {
+    right: 12px;
+    bottom: 4px;
+    width: 104px;
+    height: 104px;
+    opacity: 0.55;
+  }
+
+  body.cat-love .love-cat-title {
+    max-width: 78%;
+    font-size: 1.75rem;
+  }
+
+  body.cat-love .love-cat-sub {
+    max-width: 74%;
+    font-size: 0.86rem;
+  }
+
+  body.cat-love .article-content-container::after {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.cat-love .love-cat-pup {
+    animation: none;
+  }
+}
