@@ -1017,3 +1017,698 @@ body.cat-love .article-tags a:hover {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------
+ * 3. 「我和我的小鸡毛~」分类 · 章节式故事线（2026-10-19）
+ * 章节封面 + 中线时间轴 + 左右交替的 GIF/文字卡。
+ * ---------------------------------------------------------- */
+body.cat-love .love-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 34px;
+}
+
+body.cat-love .love-chapter-nav-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 15px;
+  border: 1.5px dashed var(--love-blue-line);
+  border-radius: 999px;
+  background: var(--love-card);
+  color: var(--love-blue-deep);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+body.cat-love .love-chapter-nav-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--love-blue);
+  background: var(--love-blue-soft);
+}
+
+body.cat-love .love-chapter-nav-year {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+body.cat-love .love-chapter-nav-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  opacity: 0.58;
+}
+
+body.cat-love .love-chapter {
+  position: relative;
+  margin: 0 0 52px;
+  scroll-margin-top: 96px;
+}
+
+body.cat-love .love-chapter-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 2px 0 18px;
+  border: 0;
+  border-bottom: 2px solid var(--love-blue-line);
+  border-radius: 0;
+  background: none;
+}
+
+html.dark body.cat-love .love-chapter-head {
+  border-bottom-color: #2E3F6E;
+}
+
+body.cat-love .love-chapter-copy {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+body.cat-love .love-chapter-kicker {
+  margin: 0 0 6px;
+  color: var(--love-blue-deep);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+body.cat-love .love-chapter-title {
+  margin: 0;
+  color: var(--love-ink);
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+body.cat-love .love-chapter-intro {
+  max-width: 34em;
+  margin: 8px 0 0;
+  color: var(--love-ink);
+  font-size: 0.86rem;
+  line-height: 1.75;
+  opacity: 0.72;
+}
+
+body.cat-love .love-chapter-gif {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 116px;
+}
+
+body.cat-love .love-chapter-gif img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 14px rgba(46, 117, 182, 0.16));
+  animation: loveStickerFloat 5s ease-in-out infinite;
+}
+
+body.cat-love .love-chapter-year {
+  position: static;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 96px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #3A86C8 0%, #1F4E7A 100%);
+  box-shadow: 0 8px 18px rgba(31, 78, 122, 0.22);
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+body.cat-love .love-chapter-year small {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  opacity: 0.72;
+}
+
+@keyframes loveStickerFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-6px) rotate(1.5deg); }
+}
+
+body.cat-love .love-story-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 26px 0 0;
+}
+
+body.cat-love .love-story-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 2px dashed var(--love-blue-line);
+  transform: translateX(-1px);
+  opacity: 0.75;
+}
+
+body.cat-love .love-story {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+body.cat-love .love-story::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--love-blue);
+  border-radius: 50%;
+  background: var(--love-card);
+  transform: translate(-50%, -50%);
+}
+
+body.cat-love .love-story-gif {
+  grid-column: 1;
+  justify-self: center;
+  width: min(190px, 82%);
+}
+
+body.cat-love .love-story.is-flipped .love-story-gif {
+  grid-column: 3;
+}
+
+body.cat-love .love-story-gif img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 16px rgba(46, 117, 182, 0.14));
+  transition: transform 0.25s ease;
+}
+
+body.cat-love .love-story:hover .love-story-gif img {
+  transform: translateY(-4px) rotate(-2deg);
+}
+
+body.cat-love .love-story-body {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1.5px dashed var(--love-blue-line);
+  border-radius: 18px;
+  background: var(--love-card);
+  box-shadow: var(--redefine-box-shadow-flat);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.cat-love .love-story.is-flipped .love-story-body {
+  grid-column: 1;
+}
+
+body.cat-love .love-story:hover .love-story-body {
+  transform: translateY(-3px);
+  border-color: var(--love-blue);
+  box-shadow: 0 10px 26px rgba(46, 117, 182, 0.14);
+}
+
+html.dark body.cat-love .love-story:hover .love-story-body {
+  box-shadow: 0 10px 26px rgba(46, 117, 182, 0.22);
+}
+
+body.cat-love .love-story-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--love-blue-deep);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+body.cat-love .love-story-lock {
+  padding: 2px 8px;
+  border: 1px solid var(--love-blue-line);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+body.cat-love .love-story-title {
+  color: var(--love-ink);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+body.cat-love .love-story-summary {
+  color: var(--love-ink);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  opacity: 0.72;
+}
+
+body.cat-love .love-story-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  color: var(--love-blue);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+}
+
+body.cat-love .love-story-more i {
+  transition: transform 0.2s ease;
+}
+
+body.cat-love .love-story:hover .love-story-more i {
+  transform: translateX(4px);
+}
+
+body.cat-love .love-chapter-more {
+  margin: 22px 0 0;
+  padding: 14px 18px;
+  border: 1.5px dashed var(--love-blue-line);
+  border-radius: 14px;
+  background: var(--love-blue-soft);
+  color: var(--love-blue-deep);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  body.cat-love .love-chapter-nav {
+    margin-bottom: 24px;
+  }
+
+  body.cat-love .love-chapter {
+    margin-bottom: 40px;
+    scroll-margin-top: 78px;
+  }
+
+  body.cat-love .love-chapter-head {
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 14px;
+  }
+
+  body.cat-love .love-chapter-gif {
+    width: 58px;
+  }
+
+  body.cat-love .love-chapter-year {
+    min-width: 74px;
+    padding: 10px 9px 9px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+  }
+
+  body.cat-love .love-chapter-year small {
+    font-size: 0.5rem;
+    letter-spacing: 0.16em;
+  }
+
+  body.cat-love .love-story-list {
+    gap: 16px;
+    padding-top: 18px;
+  }
+
+  body.cat-love .love-story-list::before,
+  body.cat-love .love-story::after {
+    display: none;
+  }
+
+  body.cat-love .love-story,
+  body.cat-love .love-story.is-flipped {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  body.cat-love .love-story-gif {
+    width: 112px;
+    margin: 0 auto;
+  }
+
+  body.cat-love .love-story-body {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.cat-love .love-chapter-gif img {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 4. 分类 / 标签总览页 · 编辑索引（2026-10-19）
+ *    `/categories/` 索引卡网格；`/tags/` 按文章数加权字号的索引墙。
+ *    两个页面共用页头与细线，不用虚线卡片。
+ * ---------------------------------------------------------- */
+.cat-index-page,
+.tag-index-page {
+  --idx-card: #F7FBFF;
+  --idx-card-hover: #EAF4FD;
+  --idx-line: rgba(46, 117, 182, 0.18);
+  --idx-ink: #1F2F40;
+  --idx-muted: #5E768E;
+  --idx-blue: #2E75B6;
+  --idx-blue-deep: #255E8F;
+  --idx-soft: #EAF4FD;
+  --idx-shadow: rgba(31, 75, 120, 0.10);
+  padding-bottom: 20px;
+}
+
+html.dark .cat-index-page,
+html.dark .tag-index-page {
+  --idx-card: #12233A;
+  --idx-card-hover: #18304C;
+  --idx-line: rgba(127, 178, 229, 0.18);
+  --idx-ink: #EDF5FD;
+  --idx-muted: #8BA5C0;
+  --idx-blue: #5B9BD5;
+  --idx-blue-deep: #A8CCF0;
+  --idx-soft: #18304C;
+  --idx-shadow: rgba(127, 178, 229, 0.12);
+}
+
+.cat-index-page .index-page-head,
+.tag-index-page .index-page-head {
+  margin: 0 0 30px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--idx-line);
+}
+
+.cat-index-page .index-page-kicker,
+.tag-index-page .index-page-kicker {
+  margin: 0 0 8px;
+  color: var(--idx-blue-deep);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.cat-index-page .index-page-title,
+.tag-index-page .index-page-title {
+  margin: 0;
+  color: var(--idx-ink);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.cat-index-page .index-page-sub,
+.tag-index-page .index-page-sub {
+  margin: 8px 0 0;
+  color: var(--idx-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.cat-index-page .index-page-meta,
+.tag-index-page .index-page-meta {
+  margin: 12px 0 0;
+  color: var(--idx-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-index-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.cat-index-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 236px;
+  padding: 22px;
+  border: 1px solid var(--idx-line);
+  border-radius: 18px;
+  background: var(--idx-card);
+  box-shadow: 0 2px 8px var(--idx-shadow);
+  color: var(--idx-ink);
+  text-decoration: none;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cat-index-card.is-love {
+  border-left: 3px solid var(--idx-blue);
+}
+
+.cat-index-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--idx-blue);
+  box-shadow: 0 12px 28px rgba(46, 117, 182, 0.14);
+}
+
+html.dark .cat-index-card:hover {
+  box-shadow: 0 12px 28px rgba(46, 117, 182, 0.22);
+}
+
+.cat-index-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.cat-index-no {
+  color: var(--idx-blue);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-index-slug {
+  overflow: hidden;
+  color: var(--idx-muted);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cat-index-name {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--idx-ink);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.cat-index-count {
+  color: var(--idx-blue-deep);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.cat-index-latest {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--idx-line);
+}
+
+.cat-index-latest-label {
+  color: var(--idx-muted);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.cat-index-latest-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--idx-ink);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.cat-index-latest-date {
+  color: var(--idx-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-index-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  color: var(--idx-blue);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.cat-index-more i {
+  transition: transform 0.2s ease;
+}
+
+.cat-index-card:hover .cat-index-more i {
+  transform: translateX(4px);
+}
+
+.tag-index-wall {
+  padding: 26px 26px 20px;
+  border: 1px solid var(--idx-line);
+  border-radius: 20px;
+  background: var(--idx-card);
+  box-shadow: 0 2px 8px var(--idx-shadow);
+}
+
+.tag-index-wall-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--idx-line);
+  color: var(--idx-muted);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.tag-index-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  min-height: 190px;
+  padding: 6px 0 14px;
+}
+
+.tag-index-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.5em 0.85em;
+  border: 1.5px solid var(--idx-line);
+  border-radius: 999px;
+  background: var(--idx-card);
+  color: var(--idx-ink);
+  font-size: var(--tag-size);
+  font-weight: 600;
+  line-height: 1.1;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.tag-index-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--idx-blue);
+  background: var(--idx-soft);
+}
+
+.tag-index-hash {
+  color: var(--idx-blue);
+  font-size: 0.55em;
+  font-weight: 700;
+}
+
+.tag-index-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.9em;
+  height: 1.9em;
+  padding: 0 0.45em;
+  border-radius: 999px;
+  background: var(--idx-soft);
+  color: var(--idx-blue-deep);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-index-item:hover .tag-index-count {
+  background: var(--idx-card);
+}
+
+.tag-index-note {
+  margin: 12px 0 0;
+  color: var(--idx-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .cat-index-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cat-index-page .index-page-title,
+  .tag-index-page .index-page-title {
+    font-size: 2rem;
+  }
+
+  .cat-index-card {
+    min-height: 0;
+    padding: 18px;
+  }
+
+  .tag-index-wall {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .tag-index-cloud {
+    gap: 12px;
+    min-height: 150px;
+  }
+
+  .tag-index-item {
+    font-size: calc(var(--tag-size) * 0.78);
+    padding: 0.5em 0.8em;
+  }
+
+  .tag-index-count {
+    font-size: 0.62rem;
+  }
+}
