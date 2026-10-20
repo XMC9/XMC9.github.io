@@ -8,6 +8,7 @@ function formatEssayDates() {
 
   dateElements.forEach(function (element) {
     const rawDate = element.getAttribute("data-date");
+    if (!rawDate) return;
     const locale = config.language || "en";
 
     const formattedDate = moment(rawDate).locale(locale).calendar();

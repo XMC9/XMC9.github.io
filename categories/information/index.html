@@ -120,7 +120,8 @@
 
 
 <body class="">
-	<div class="progress-bar-container">
+	
+<div class="progress-bar-container">
 	
 
 	
@@ -131,7 +132,7 @@
 	
 </div>
 
-<main class="page-container" id="swup">
+<main class="page-container" id="swup" data-body-class="">
 
 	
 
@@ -365,36 +366,46 @@
 	
 	
 
-<div class="category-name">
-    <i class="fa-solid fa-folder"></i>&nbsp;Information
-</div>
-<div class="category-post-list">
+
+<div class="category-cards category-cards--regular">
+    <header class="free-page-head">
+        <p class="free-page-kicker">ARCHIVE · CATEGORY</p>
+        <h1 class="free-page-title">Information</h1>
+        <p class="free-page-sub">这个分类下的全部文章，按发布时间归档。</p>
+        <p class="free-page-meta">1 POSTS · LAST UPDATED 2025.04.25</p>
+        <i class="fa-solid fa-paw free-page-paw" aria-hidden="true"></i>
+    </header>
+
     
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
+    <div class="info-card-grid">
+        
+        
+        <article class="info-card">
+            <div class="info-card-top">
+                <span class="info-card-dates">Post: 2025.04.24 23:37, Update: 2025.04.25 12:08</span>
             </div>
+            <h2 class="info-card-title"><a href="/Swire_int_record_2025/">STH about HireVue</a></h2>
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+            <p class="info-card-excerpt">123FIRST EDIT  : 2023/03SECOND EDIT : 2025/01/08THIRD EDIT  ：2025/04/24
+
+写在前面第三版说明：现在是2025年4月24日。学生时代只剩下最后几节课、几场考试还有答...</p>
+            
+            <div class="info-card-foot">
                 
+                <span class="info-card-tags">
                     
+                    <a href="/tags/record/">#Record</a>
                     
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-24'>
+                    <a href="/tags/interview/">#Interview</a>
                     
-                    <a href="/Swire_int_record_2025/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">STH about HireVue</span>
-                    </a>
-                    
+                </span>
                 
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
+                <a class="info-card-more" href="/Swire_int_record_2025/">阅读全文 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        
+    </div>
     
-</div>
 </div>
 
 
@@ -584,6 +595,17 @@
         ],
         containers: ["#swup"],
     });
+
+    // Swup 不替换 <body>，需要把新页面的 body class 同步过来。
+    // 目前只有「我和我的小鸡毛~」分类页和该分类文章需要 cat-love。
+    function syncPageBodyClass() {
+        const swupMain = document.querySelector('#swup');
+        const pageBodyClass = swupMain ? swupMain.getAttribute('data-body-class') : '';
+        document.body.classList.toggle('cat-love', pageBodyClass === 'cat-love');
+    }
+
+    swup.hooks.on('page:view', syncPageBodyClass);
+    syncPageBodyClass();
 </script>
 
 

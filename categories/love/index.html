@@ -120,7 +120,8 @@
 
 
 <body class="cat-love">
-	<div class="progress-bar-container">
+	
+<div class="progress-bar-container">
 	
 
 	
@@ -131,7 +132,7 @@
 	
 </div>
 
-<main class="page-container" id="swup">
+<main class="page-container" id="swup" data-body-class="cat-love">
 
 	
 
@@ -756,6 +757,17 @@
         ],
         containers: ["#swup"],
     });
+
+    // Swup 不替换 <body>，需要把新页面的 body class 同步过来。
+    // 目前只有「我和我的小鸡毛~」分类页和该分类文章需要 cat-love。
+    function syncPageBodyClass() {
+        const swupMain = document.querySelector('#swup');
+        const pageBodyClass = swupMain ? swupMain.getAttribute('data-body-class') : '';
+        document.body.classList.toggle('cat-love', pageBodyClass === 'cat-love');
+    }
+
+    swup.hooks.on('page:view', syncPageBodyClass);
+    syncPageBodyClass();
 </script>
 
 

@@ -120,7 +120,8 @@
 
 
 <body class="">
-	<div class="progress-bar-container">
+	
+<div class="progress-bar-container">
 	
 
 	
@@ -131,7 +132,7 @@
 	
 </div>
 
-<main class="page-container" id="swup">
+<main class="page-container" id="swup" data-body-class="">
 
 	
 
@@ -365,36 +366,42 @@
 	
 	
 
-<div class="category-name">
-    <i class="fa-solid fa-folder"></i>&nbsp;密码你知道的，一些没意义的碎碎念，暂时撤回 不给你看了
-</div>
-<div class="category-post-list">
+
+<div class="category-cards category-cards--regular">
+    <header class="free-page-head">
+        <p class="free-page-kicker">ARCHIVE · CATEGORY</p>
+        <h1 class="free-page-title">密码你知道的，一些没意义的碎碎念，暂时撤回 不给你看了</h1>
+        <p class="free-page-sub">这个分类下的全部文章，按发布时间归档。</p>
+        <p class="free-page-meta">1 POSTS · LAST UPDATED 2025.07.28</p>
+        <i class="fa-solid fa-paw free-page-paw" aria-hidden="true"></i>
+    </header>
+
     
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
+    <div class="info-card-grid">
+        
+        
+        <article class="info-card is-locked">
+            <div class="info-card-top">
+                <span class="info-card-dates">Post: 2025.06.17 00:00, Update: 2025.07.28 23:58</span>
             </div>
+            <h2 class="info-card-title"><a href="/missu0617/">好想你，但是不知道该发在哪里</a></h2>
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+            <p class="info-card-excerpt"><i class="fa-solid fa-lock"></i> 这篇需要密码才能打开。</p>
+            
+            <div class="info-card-foot">
                 
+                <span class="info-card-tags">
                     
+                    <a href="/tags/love/">#❤</a>
                     
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-17'>
-                    
-                    <a href="/missu0617/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">好想你，但是不知道该发在哪里</span>
-                    </a>
-                    
+                </span>
                 
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
+                <a class="info-card-more" href="/missu0617/">阅读全文 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        
+    </div>
     
-</div>
 </div>
 
 
@@ -584,6 +591,17 @@
         ],
         containers: ["#swup"],
     });
+
+    // Swup 不替换 <body>，需要把新页面的 body class 同步过来。
+    // 目前只有「我和我的小鸡毛~」分类页和该分类文章需要 cat-love。
+    function syncPageBodyClass() {
+        const swupMain = document.querySelector('#swup');
+        const pageBodyClass = swupMain ? swupMain.getAttribute('data-body-class') : '';
+        document.body.classList.toggle('cat-love', pageBodyClass === 'cat-love');
+    }
+
+    swup.hooks.on('page:view', syncPageBodyClass);
+    syncPageBodyClass();
 </script>
 
 
