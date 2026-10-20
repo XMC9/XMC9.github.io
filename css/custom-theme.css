@@ -2041,7 +2041,8 @@ html.dark .cat-island:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 22px 46px rgba(0, 0, 0, 0.45);
 }
 
-.cat-island-ghost {
+.cat-island::before {
+  content: attr(data-ghost);
   position: absolute;
   top: -10px;
   right: 14px;
@@ -2175,7 +2176,13 @@ html.dark .cat-island:hover {
 /* ---------- 5.3 标签：三条慢慢飘过的弹幕 ---------- */
 .tag-stream {
   position: relative;
-  padding: 22px 0 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 22px 26px;
+  min-height: 300px;
+  padding: 54px 30px;
   border-radius: 30px;
   background:
     radial-gradient(ellipse at 16% 10%, rgba(127, 178, 229, 0.22), transparent 58%),
@@ -2191,54 +2198,12 @@ html.dark .tag-stream {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 44px rgba(0, 0, 0, 0.45);
 }
 
-.tag-stream-lane {
-  overflow: hidden;
-  padding: 8px 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-}
-
-.tag-stream-lane + .tag-stream-lane {
-  margin-top: 2px;
-}
-
-.tag-stream-track {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: tagStreamDrift var(--lane-dur, 40s) linear infinite;
-}
-
-.tag-stream-lane--2 .tag-stream-track {
-  animation-direction: reverse;
-}
-
-.tag-stream:hover .tag-stream-track,
-.tag-stream:focus-within .tag-stream-track {
-  animation-play-state: paused;
-}
-
-@keyframes tagStreamDrift {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.tag-stream-seq {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-}
-
 .tag-stream-pill {
+  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   gap: 0.32em;
-  margin-right: var(--tag-gap, 18px);
   padding: 0.42em 0.9em;
   border: 1.5px solid var(--pill-line);
   border-radius: 999px;
@@ -2249,14 +2214,41 @@ html.dark .tag-stream {
   line-height: 1.1;
   white-space: nowrap;
   text-decoration: none;
-  transform: rotate(var(--tag-rot, 0deg)) translateY(var(--tag-y, 0));
+  transform: rotate(var(--tag-rot, 0deg));
   box-shadow: 0 6px 16px rgba(31, 75, 120, 0.08);
+  animation: tagFloat var(--tag-dur, 7s) ease-in-out infinite;
+  animation-delay: var(--tag-delay, 0s);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.tag-stream-pill:nth-child(3n+1) {
+  --tag-dur: 7.6s;
+  margin-top: -12px;
+}
+
+.tag-stream-pill:nth-child(3n+2) {
+  --tag-dur: 8.4s;
+  margin-top: 22px;
+}
+
+.tag-stream-pill:nth-child(3n+3) {
+  --tag-dur: 6.8s;
+  margin-top: -4px;
+}
+
 .tag-stream-pill:hover {
+  animation: none;
   transform: rotate(0deg) translateY(-3px) scale(1.04);
   box-shadow: 0 12px 24px rgba(46, 117, 182, 0.18);
+}
+
+@keyframes tagFloat {
+  0%, 100% {
+    transform: rotate(var(--tag-rot, 0deg)) translateY(0);
+  }
+  50% {
+    transform: rotate(calc(var(--tag-rot, 0deg) + 0.8deg)) translateY(-5px);
+  }
 }
 
 .tag-stream-pill.is-blue {
@@ -2706,17 +2698,19 @@ html.dark .tag-stream-pill.is-violet {
   }
 
   .tag-stream {
-    padding: 16px 0;
+    min-height: 240px;
+    padding: 34px 18px;
+    gap: 18px 16px;
     border-radius: 22px;
-  }
-
-  .tag-stream-lane {
-    padding: 6px 0;
   }
 
   .tag-stream-pill {
     font-size: calc(var(--tag-size) * 0.74);
     padding: 0.45em 0.78em;
+  }
+
+  .tag-stream-pill:nth-child(n) {
+    margin-top: 0;
   }
 
   .tag-stream-count {
@@ -2761,7 +2755,7 @@ html.dark .tag-stream-pill.is-violet {
     transform: translateY(-3px);
   }
 
-  .cat-island-ghost {
+  .cat-island::before {
     font-size: 4.6rem;
   }
 
@@ -2800,28 +2794,8 @@ html.dark .tag-stream-pill.is-violet {
     animation: none;
   }
 
-  .tag-stream-track {
-    width: 100%;
-    animation: none !important;
-  }
-
-  .tag-stream-seq[aria-hidden="true"] {
-    display: none;
-  }
-
-  .tag-stream-lane {
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  .tag-stream-seq {
-    flex-wrap: wrap;
-    row-gap: 10px;
-  }
-
   .tag-stream-pill {
-    margin-right: 10px;
+    animation: none;
   }
 }
 
