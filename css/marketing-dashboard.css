@@ -250,29 +250,89 @@ html.dark .marketing-dashboard {
   color: #A9C8E1 !important;
 }
 
-.marketing-dashboard .mkt-chips {
+.marketing-dashboard .mkt-pulse {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
   margin-top: 15px;
 }
 
-.marketing-dashboard .mkt-chips span {
-  padding: 5px 8px;
+.marketing-dashboard .mkt-pulse-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 7px;
+  border-radius: 9px;
   background: rgba(255, 255, 255, 0.05);
-  color: #D5E7F6;
-  font-size: 0.66rem;
+}
+
+.marketing-dashboard .mkt-pulse-name {
+  overflow: hidden;
+  color: #9FC6E8;
+  font-size: 0.61rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.marketing-dashboard .mkt-pulse-value {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  color: #F4F9FF;
   font-variant-numeric: tabular-nums;
 }
 
-.marketing-dashboard .mkt-chips b {
-  margin-right: 4px;
+.marketing-dashboard .mkt-pulse-value strong {
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.marketing-dashboard .mkt-pulse-value i {
+  overflow: hidden;
   color: #9FC6E8;
-  font-weight: 600;
+  font-size: 0.62rem;
+  font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.marketing-dashboard .mkt-pulse-value i.is-up {
+  color: #7FE0A8;
+}
+
+.marketing-dashboard .mkt-pulse-value i.is-down {
+  color: #FF9C9C;
+}
+
+.marketing-dashboard .mkt-pulse-state {
+  overflow: hidden;
+  font-size: 0.61rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.marketing-dashboard .mkt-pulse-state.is-ok {
+  color: #7FE0A8;
+}
+
+.marketing-dashboard .mkt-pulse-state.is-warn {
+  color: #F5D47A;
+}
+
+.marketing-dashboard .mkt-pulse-state.is-bad {
+  color: #FF9C9C;
+}
+
+.marketing-dashboard .mkt-pulse-state.is-muted {
+  color: #8FB4D4;
 }
 
 .marketing-dashboard .page-template-content {
@@ -379,6 +439,8 @@ html.dark .marketing-dashboard {
   color: var(--mkt-ink);
   font-size: 0.89rem;
   line-height: 1.7;
+  /* 主题会把 li 重置成 disc，和下面自定义的方块点叠成两个圆点。 */
+  list-style: none;
 }
 
 .marketing-dashboard .page-template-content li::before {
@@ -443,6 +505,23 @@ html.dark .marketing-dashboard .page-template-content > blockquote mark.mkt-mark
     border-radius: 18px;
   }
 
+  .marketing-dashboard .mkt-pulse {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .marketing-dashboard .mkt-pulse-item {
+    padding: 7px 9px;
+  }
+
+  .marketing-dashboard .mkt-pulse-name {
+    font-size: 0.58rem;
+  }
+
+  .marketing-dashboard .mkt-pulse-value strong {
+    font-size: 0.88rem;
+  }
+
   .marketing-dashboard .mkt-hero-head {
     flex-direction: column;
     gap: 14px;
@@ -485,7 +564,7 @@ html.dark .marketing-dashboard .page-template-content > blockquote mark.mkt-mark
     font-size: 0.7rem;
   }
 
-  .marketing-dashboard .mkt-chips {
+  .marketing-dashboard .mkt-pulse {
     margin-top: 12px;
   }
 

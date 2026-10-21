@@ -647,18 +647,20 @@ html.dark .custom-home .home-photo-card img {
   gap: 16px;
   margin-top: 16px;
   padding: 15px 18px;
-  border: 1px solid rgba(150, 198, 238, 0.22);
+  border: 1px solid rgba(46, 117, 182, 0.16);
   border-radius: 16px;
-  background: linear-gradient(135deg, #0D2540 0%, #163F63 58%, #1D4E7A 100%);
-  box-shadow: 0 12px 30px rgba(13, 37, 64, 0.18);
-  color: #F4F9FF;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(46, 117, 182, 0.08) 0%, transparent 46%),
+    linear-gradient(135deg, #F8FBFF 0%, #EAF3FC 58%, #DFEBF8 100%);
+  box-shadow: 0 10px 26px rgba(46, 88, 128, 0.1);
+  color: #12324F;
   text-decoration: none;
   transition: transform 0.24s ease, box-shadow 0.24s ease;
 }
 
 .custom-home .home-market-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(13, 37, 64, 0.26);
+  box-shadow: 0 16px 34px rgba(46, 88, 128, 0.16);
   text-decoration: none;
 }
 
@@ -668,11 +670,11 @@ html.dark .custom-home .home-photo-card img {
   justify-content: center;
   min-width: 0;
   padding-right: 16px;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(46, 117, 182, 0.16);
 }
 
 .custom-home .home-market-temp-label {
-  color: #9FC6E8;
+  color: #5A7FA3;
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -686,7 +688,7 @@ html.dark .custom-home .home-photo-card img {
 }
 
 .custom-home .home-market-temp-value strong {
-  color: #FFFFFF;
+  color: #0D2540;
   font-size: 2.15rem;
   font-weight: 700;
   line-height: 1.05;
@@ -695,10 +697,10 @@ html.dark .custom-home .home-photo-card img {
 
 .custom-home .home-market-temp-value em {
   padding: 2px 8px;
-  border: 1px solid rgba(246, 220, 168, 0.28);
+  border: 1px solid rgba(176, 132, 46, 0.22);
   border-radius: 999px;
-  background: rgba(246, 220, 168, 0.12);
-  color: #F6DCA8;
+  background: rgba(240, 198, 116, 0.18);
+  color: #8A6A2F;
   font-size: 0.64rem;
   font-style: normal;
   white-space: nowrap;
@@ -710,7 +712,7 @@ html.dark .custom-home .home-photo-card img {
   margin-top: 10px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(13, 37, 64, 0.1);
 }
 
 .custom-home .home-market-temp-track i {
@@ -722,7 +724,7 @@ html.dark .custom-home .home-photo-card img {
 
 .custom-home .home-market-temp-date {
   margin-top: 7px;
-  color: #9FC6E8;
+  color: #6B8CAB;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
@@ -741,9 +743,9 @@ html.dark .custom-home .home-photo-card img {
   justify-content: center;
   min-width: 0;
   padding: 7px 11px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(46, 117, 182, 0.12);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .custom-home .home-market-index-top {
@@ -756,7 +758,7 @@ html.dark .custom-home .home-photo-card img {
 
 .custom-home .home-market-index-name {
   overflow: hidden;
-  color: #D5E7F6;
+  color: #40607E;
   font-size: 0.7rem;
   line-height: 1.3;
   text-overflow: ellipsis;
@@ -765,23 +767,23 @@ html.dark .custom-home .home-photo-card img {
 
 .custom-home .home-market-index-change {
   flex: 0 0 auto;
-  color: #A9C8E1;
+  color: #5A7FA3;
   font-size: 0.64rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .custom-home .home-market-index-change.is-up {
-  color: #FFB4A8;
+  color: #C4573F;
 }
 
 .custom-home .home-market-index-change.is-down {
-  color: #8FBDE8;
+  color: #2E75B6;
 }
 
 .custom-home .home-market-index-change em {
   margin-left: 2px;
-  color: #9FC6E8;
+  color: #7B9BB8;
   font-size: 0.55rem;
   font-style: normal;
   font-weight: 500;
@@ -790,11 +792,78 @@ html.dark .custom-home .home-photo-card img {
 
 .custom-home .home-market-index-close {
   margin-top: 3px;
-  color: #FFFFFF;
+  color: #0D2540;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
   font-variant-numeric: tabular-nums;
+}
+
+/* 暗色模式：回到藏青渐变卡片，避免浅色底在深色页面上发灰。 */
+html.dark .custom-home .home-market-card {
+  border-color: rgba(150, 198, 238, 0.22);
+  background: linear-gradient(135deg, #0D2540 0%, #163F63 58%, #1D4E7A 100%);
+  box-shadow: 0 12px 30px rgba(13, 37, 64, 0.18);
+  color: #F4F9FF;
+}
+
+html.dark .custom-home .home-market-card:hover {
+  box-shadow: 0 16px 36px rgba(13, 37, 64, 0.26);
+}
+
+html.dark .custom-home .home-market-temp {
+  border-right-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark .custom-home .home-market-temp-label {
+  color: #9FC6E8;
+}
+
+html.dark .custom-home .home-market-temp-value strong {
+  color: #FFFFFF;
+}
+
+html.dark .custom-home .home-market-temp-value em {
+  border-color: rgba(246, 220, 168, 0.28);
+  background: rgba(246, 220, 168, 0.12);
+  color: #F6DCA8;
+}
+
+html.dark .custom-home .home-market-temp-track {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+html.dark .custom-home .home-market-temp-date {
+  color: #9FC6E8;
+}
+
+html.dark .custom-home .home-market-index {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+html.dark .custom-home .home-market-index-name {
+  color: #D5E7F6;
+}
+
+html.dark .custom-home .home-market-index-change {
+  color: #A9C8E1;
+}
+
+html.dark .custom-home .home-market-index-change.is-up {
+  color: #FFB4A8;
+}
+
+html.dark .custom-home .home-market-index-change.is-down {
+  color: #8FBDE8;
+}
+
+html.dark .custom-home .home-market-index-change em {
+  color: #9FC6E8;
+}
+
+html.dark .custom-home .home-market-index-close {
+  color: #FFFFFF;
 }
 
 .custom-home .home-feed-section {
