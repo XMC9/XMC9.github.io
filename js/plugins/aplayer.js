@@ -31,10 +31,6 @@
       audio: audioList,
     });
     document.querySelector(".aplayer-icon-lrc").click();
-    // 手机端默认展开成完整的音乐盒，避免只显示一个专辑封面
-    if (window.matchMedia("(max-width: 640px)").matches) {
-      const playerElement = document.getElementById("aplayer");
-      if (playerElement) playerElement.classList.remove("aplayer-narrow");
-    }
+    // 手机端保持 APlayer 默认的 aplayer-narrow 小方块，点右下角按钮再展开。
   }
 })();

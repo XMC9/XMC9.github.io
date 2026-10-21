@@ -1720,6 +1720,7 @@ html.dark .cat-index-card:hover {
 .essay-page,
 .cat-drift-page,
 .tag-stream-page,
+.tag-swipe-page,
 .category-cards {
   --free-ink: #1F2F40;
   --free-muted: #5E768E;
@@ -1736,6 +1737,7 @@ html.dark .cat-index-card:hover {
 html.dark .essay-page,
 html.dark .cat-drift-page,
 html.dark .tag-stream-page,
+html.dark .tag-swipe-page,
 html.dark .category-cards {
   --free-ink: #EDF5FD;
   --free-muted: #8BA5C0;
@@ -1752,6 +1754,8 @@ html.dark .category-cards {
 .cat-island,
 .tag-stream,
 .tag-stream-pill,
+.tag-swipe,
+.tag-swipe-card,
 .life-card,
 .info-card {
   box-sizing: border-box;
@@ -2391,35 +2395,21 @@ html.dark .tag-stream-pill.is-violet {
   border-color: var(--free-blue);
 }
 
-.life-card-year {
-  color: var(--free-blue-deep);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  font-variant-numeric: tabular-nums;
-}
-
-.life-card-day {
+.life-card-date-line {
   color: var(--free-ink);
-  font-size: 1.6rem;
+  font-size: 1.08rem;
   font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .life-card-clock {
-  color: var(--free-ink);
-  font-size: 0.8rem;
+  color: var(--free-muted);
+  font-size: 0.72rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-}
-
-.life-card-label {
-  margin-top: 4px;
-  color: var(--free-muted);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
 }
 
 .life-card-main {
@@ -2475,14 +2465,16 @@ html.dark .tag-stream-pill.is-violet {
 }
 
 .life-card-tags,
-.info-card-tags {
+.info-card-tags,
+.tag-swipe-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
 .life-card-tags a,
-.info-card-tags a {
+.info-card-tags a,
+.tag-swipe-tags a {
   display: inline-flex;
   align-items: center;
   padding: 0.18em 0.6em;
@@ -2497,13 +2489,15 @@ html.dark .tag-stream-pill.is-violet {
 }
 
 .life-card-tags a:hover,
-.info-card-tags a:hover {
+.info-card-tags a:hover,
+.tag-swipe-tags a:hover {
   border-color: var(--free-blue);
   color: var(--free-blue);
 }
 
 .life-card-more,
-.info-card-more {
+.info-card-more,
+.tag-swipe-more {
   margin-left: auto;
   color: var(--free-blue);
   font-size: 0.74rem;
@@ -2513,13 +2507,15 @@ html.dark .tag-stream-pill.is-violet {
 }
 
 .life-card-more i,
-.info-card-more i {
+.info-card-more i,
+.tag-swipe-more i {
   margin-left: 2px;
   transition: transform 0.24s ease;
 }
 
 .life-card-more:hover i,
-.info-card-more:hover i {
+.info-card-more:hover i,
+.tag-swipe-more:hover i {
   transform: translateX(3px);
 }
 
@@ -2560,9 +2556,9 @@ html.dark .tag-stream-pill.is-violet {
 
 .info-card-top {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
   margin-bottom: 14px;
 }
 
@@ -2570,6 +2566,7 @@ html.dark .tag-stream-pill.is-violet {
   color: var(--free-muted);
   font-size: 0.68rem;
   font-weight: 600;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
 }
 
@@ -2728,8 +2725,8 @@ html.dark .tag-stream-pill.is-violet {
     padding: 12px;
   }
 
-  .life-card-day {
-    font-size: 1.4rem;
+  .life-card-date-line {
+    font-size: 1.02rem;
   }
 
   .info-card {
@@ -2766,21 +2763,20 @@ html.dark .tag-stream-pill.is-violet {
   }
 
   .life-card-date {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     min-height: 0;
-    gap: 2px 10px;
+    gap: 2px;
     padding: 10px 14px;
   }
 
-  .life-card-day {
-    font-size: 1.35rem;
+  .life-card-date-line {
+    font-size: 1rem;
   }
 
-  .life-card-label {
-    margin: 0 0 0 auto;
+  .life-card-clock {
+    font-size: 0.7rem;
   }
 
   .life-card-more,
@@ -2799,10 +2795,289 @@ html.dark .tag-stream-pill.is-violet {
   }
 }
 
+/* ---------- 5.7 标签详情：一张一张左右滑的卡片 ---------- */
+.tag-swipe-page {
+  padding-bottom: 28px;
+}
+
+.tag-swipe-hash {
+  margin-right: 0.04em;
+  color: var(--free-blue);
+}
+
+.tag-swipe {
+  margin-top: 26px;
+}
+
+.tag-swipe-track {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding: 6px calc(16% + 18px) 18px 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tag-swipe-track::-webkit-scrollbar {
+  display: none;
+}
+
+.tag-swipe-track:focus-visible {
+  outline: 2px solid var(--free-blue);
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+.tag-swipe.is-single .tag-swipe-track {
+  padding-right: 0;
+}
+
+.tag-swipe.is-single .tag-swipe-card {
+  flex-basis: min(100%, 720px);
+}
+
+.tag-swipe-card {
+  display: flex;
+  flex: 0 0 min(84%, 720px);
+  flex-direction: column;
+  min-height: 330px;
+  padding: 28px 32px 22px;
+  border: 1px solid var(--free-line);
+  border-radius: 26px 8px 28px 10px;
+  background: var(--free-card);
+  box-shadow: 0 14px 34px var(--free-shadow);
+  color: var(--free-ink);
+  scroll-snap-align: start;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background-color 0.28s ease;
+}
+
+.tag-swipe-card:nth-child(2n) {
+  border-radius: 8px 26px 10px 28px;
+  background: var(--free-soft);
+}
+
+.tag-swipe-card.is-current {
+  border-color: var(--free-blue);
+}
+
+@media (hover: hover) {
+  .tag-swipe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px var(--free-shadow);
+  }
+}
+
+.tag-swipe-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tag-swipe-number {
+  color: var(--free-blue);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-swipe-total {
+  color: var(--free-muted);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.tag-swipe-date {
+  color: var(--free-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-swipe-title {
+  margin: 22px 0 12px;
+  font-size: 1.55rem;
+  line-height: 1.38;
+  letter-spacing: -0.015em;
+}
+
+.tag-swipe-title a {
+  color: var(--free-ink);
+  text-decoration: none;
+}
+
+.tag-swipe-title a:hover {
+  color: var(--free-blue);
+}
+
+.tag-swipe-excerpt {
+  display: -webkit-box;
+  margin: 0 0 22px;
+  overflow: hidden;
+  color: var(--free-muted);
+  font-size: 0.92rem;
+  line-height: 1.85;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.tag-swipe-excerpt i {
+  margin-right: 4px;
+  color: var(--free-blue-deep);
+}
+
+.tag-swipe-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed var(--free-line);
+}
+
+.tag-swipe-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.tag-swipe-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--free-line);
+  border-radius: 50%;
+  background: var(--free-card);
+  color: var(--free-blue-deep);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: border-color 0.24s ease, color 0.24s ease, background-color 0.24s ease, opacity 0.24s ease;
+}
+
+.tag-swipe-arrow:hover:not(:disabled) {
+  border-color: var(--free-blue);
+  background: var(--free-soft);
+  color: var(--free-blue);
+}
+
+.tag-swipe-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.tag-swipe-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tag-swipe-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--free-line);
+  cursor: pointer;
+  transition: width 0.24s ease, background-color 0.24s ease;
+}
+
+.tag-swipe-dot.is-active {
+  width: 22px;
+  background: var(--free-blue);
+}
+
+.tag-swipe-counter {
+  min-width: 54px;
+  color: var(--free-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-swipe-counter [data-tag-current] {
+  color: var(--free-blue-deep);
+}
+
+@media (max-width: 640px) {
+  .tag-swipe {
+    margin-top: 20px;
+  }
+
+  .tag-swipe-track {
+    gap: 12px;
+    padding: 4px 30px 16px 0;
+  }
+
+  .tag-swipe-card {
+    flex-basis: calc(100% - 30px);
+    min-height: 300px;
+    padding: 22px 20px 18px;
+    border-radius: 20px 8px 22px 10px;
+  }
+
+  .tag-swipe-card:nth-child(2n) {
+    border-radius: 8px 20px 10px 22px;
+  }
+
+  .tag-swipe-title {
+    margin-top: 18px;
+    font-size: 1.28rem;
+  }
+
+  .tag-swipe-excerpt {
+    margin-bottom: 18px;
+    font-size: 0.88rem;
+    -webkit-line-clamp: 5;
+  }
+
+  .tag-swipe-controls {
+    gap: 10px;
+  }
+
+  .tag-swipe-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tag-swipe-counter {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-swipe-track {
+    scroll-behavior: auto;
+  }
+
+  .tag-swipe-card,
+  .tag-swipe-arrow,
+  .tag-swipe-dot {
+    transition: none;
+  }
+}
+
 /* ------------------------------------------------------------
  * 6. 手机端音乐盒
  *    主题默认在 <=640px 把 .aplayer 整个 display:none；
- *    这里恢复成左下角一条紧凑的播放器，避免遮住整屏。
+ *    这里恢复成左下角 66px 小方块，点右下角按钮才展开。
+ *    12 秒不碰音乐盒后半透明；滚动主页时用透明度淡入淡出。
  * ---------------------------------------------------------- */
 @media (max-width: 640px) {
   .aplayer.aplayer-fixed {
@@ -2810,8 +3085,9 @@ html.dark .tag-stream-pill.is-violet {
     left: 10px;
     right: 10px;
     bottom: max(10px, env(safe-area-inset-bottom, 0px));
-    max-width: none;
-    transition: none;
+    max-width: min(400px, calc(100vw - 20px));
+    opacity: 1;
+    transition: opacity 0.45s ease;
   }
 
   .aplayer.aplayer-fixed:not(.hide) {
@@ -2819,12 +3095,55 @@ html.dark .tag-stream-pill.is-violet {
     pointer-events: auto;
   }
 
+  .aplayer.aplayer-fixed.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .aplayer.aplayer-fixed.is-idle:not(.hide) {
+    opacity: 0.42;
+  }
+
+  .aplayer.aplayer-fixed.aplayer-narrow {
+    right: auto;
+    width: 66px;
+    max-width: 66px;
+    border-radius: 18px;
+  }
+
   .aplayer.aplayer-fixed .aplayer-body {
     left: 10px;
     right: 10px;
     bottom: max(10px, env(safe-area-inset-bottom, 0px));
-    max-width: none;
+    width: auto;
+    max-width: min(400px, calc(100vw - 20px));
     padding-right: 0;
+    transition: width 0.3s ease, opacity 0.45s ease;
+  }
+
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+    right: auto;
+    width: 66px !important;
+    max-width: 66px;
+  }
+
+  /* 手机上没有 hover，展开按钮常显，否则小方块点不开。 */
+  .aplayer.aplayer-fixed .aplayer-miniswitcher {
+    opacity: 1;
+  }
+
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-miniswitcher {
+    width: 16px;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0 18px 18px 0;
+    background: rgba(8, 20, 36, 0.38);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+
+  .aplayer.aplayer-fixed.aplayer-narrow .aplayer-miniswitcher .aplayer-icon path {
+    fill: #FFFFFF;
   }
 
   .aplayer.aplayer-fixed .aplayer-lrc {
@@ -2834,6 +3153,7 @@ html.dark .tag-stream-pill.is-violet {
   .aplayer.aplayer-fixed .aplayer-pic {
     width: 66px;
     height: 66px;
+    border-radius: 18px;
   }
 
   .aplayer.aplayer-fixed .aplayer-info {
@@ -2848,5 +3168,12 @@ html.dark .tag-stream-pill.is-violet {
 
   .aplayer.aplayer-fixed .aplayer-music {
     width: calc(100% - 100px);
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+  .aplayer.aplayer-fixed,
+  .aplayer.aplayer-fixed .aplayer-body {
+    transition: none;
   }
 }
