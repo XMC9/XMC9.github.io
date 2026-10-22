@@ -1,0 +1,297 @@
+/* ------------------------------------------------------------
+ * News Dashboard 每日新闻简报（2026-10-22）
+ * 页面容器同时带 .marketing-dashboard，正文（blockquote / h2 / li）
+ * 直接复用财经简报那套排版；这里只补 hero、天气卡和 news 专属的细节。
+ * 深色配色统一走藏青 / 深蓝，不用偏青绿的蓝。
+ * ---------------------------------------------------------- */
+
+.news-dashboard {
+  --ntc-chip: rgba(255, 255, 255, 0.07);
+  --ntc-chip-line: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- hero ---------- */
+
+.news-dashboard .ntc-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 26px 30px 22px;
+  border: 1px solid rgba(150, 198, 238, 0.2);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0D2540 0%, #163F63 56%, #1D4E7A 100%);
+  box-shadow: 0 18px 45px var(--mkt-shadow);
+  color: #F4F9FF;
+}
+
+.news-dashboard .ntc-hero::after {
+  content: "";
+  position: absolute;
+  top: -110px;
+  right: -80px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 166, 220, 0.24) 0%, rgba(107, 166, 220, 0) 70%);
+  pointer-events: none;
+}
+
+.news-dashboard .ntc-hero-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 26px;
+}
+
+.news-dashboard .ntc-eyebrow {
+  margin: 0 0 8px;
+  color: #9FC6E8;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.news-dashboard .ntc-title {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: clamp(2rem, 4.6vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.news-dashboard .ntc-sub {
+  max-width: 560px;
+  margin: 10px 0 0;
+  color: #B7D4EC;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.news-dashboard .ntc-hero-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 0 0 auto;
+  color: #9FC6E8;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.news-dashboard .ntc-hero-meta strong {
+  color: #FFFFFF;
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- 天气 ---------- */
+
+.news-dashboard .ntc-weather {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.news-dashboard .ntc-weather-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--ntc-chip-line);
+  border-radius: 13px;
+  background: var(--ntc-chip);
+}
+
+.news-dashboard .ntc-weather-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.news-dashboard .ntc-weather-city {
+  color: #EAF4FF;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.news-dashboard .ntc-weather-now {
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.news-dashboard .ntc-weather-main {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.news-dashboard .ntc-weather-main strong {
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.news-dashboard .ntc-weather-range {
+  color: #B7D4EC;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.news-dashboard .ntc-weather-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 2px;
+  color: #9FC6E8;
+  font-size: 0.72rem;
+}
+
+/* ---------- 预警 / 统计 ---------- */
+
+.news-dashboard .ntc-alerts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.news-dashboard .ntc-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(245, 212, 122, 0.28);
+  border-radius: 10px;
+  background: rgba(245, 212, 122, 0.1);
+  color: #F5D47A;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.news-dashboard .ntc-alert i {
+  flex: 0 0 auto;
+  font-style: normal;
+  line-height: 1.65;
+}
+
+.news-dashboard .ntc-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: #9FC6E8;
+  font-size: 0.78rem;
+}
+
+.news-dashboard .ntc-stats b {
+  color: #FFFFFF;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.news-dashboard .ntc-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(159, 198, 232, 0.5);
+}
+
+/* ---------- 正文里的重点与来源链接 ---------- */
+
+.news-dashboard .page-template-content mark.ntc-mark,
+.news-dashboard .page-template-content > blockquote mark.ntc-mark {
+  padding: 0 3px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, transparent 62%, rgba(46, 117, 182, 0.28) 62%);
+  color: inherit;
+  font-weight: 700;
+}
+
+.news-dashboard .page-template-content li a {
+  color: var(--mkt-blue-deep);
+  text-decoration: none;
+  border-bottom: 1px solid var(--mkt-line);
+}
+
+.news-dashboard .page-template-content li a:hover {
+  color: var(--mkt-blue);
+  border-bottom-color: var(--mkt-blue);
+}
+
+.news-dashboard .page-template-content > p:last-child em {
+  color: var(--mkt-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+}
+
+/* ---------- 深色模式 ---------- */
+
+html.dark .news-dashboard .page-template-content mark.ntc-mark,
+html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
+  background: linear-gradient(180deg, transparent 62%, rgba(107, 166, 220, 0.34) 62%);
+  color: #EAF4FF;
+}
+
+/* ---------- 手机 ---------- */
+
+@media (max-width: 760px) {
+  .news-dashboard .ntc-hero {
+    padding: 20px 18px 18px;
+    border-radius: 18px;
+  }
+
+  .news-dashboard .ntc-hero-head {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .news-dashboard .ntc-sub {
+    font-size: 0.84rem;
+  }
+
+  .news-dashboard .ntc-hero-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3px 9px;
+    text-align: left;
+  }
+
+  .news-dashboard .ntc-hero-meta strong {
+    font-size: 1rem;
+  }
+
+  .news-dashboard .ntc-weather {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .news-dashboard .ntc-weather-card {
+    padding: 10px 11px;
+  }
+
+  .news-dashboard .ntc-weather-now {
+    font-size: 1.3rem;
+  }
+
+  .news-dashboard .ntc-weather-meta {
+    font-size: 0.68rem;
+  }
+}

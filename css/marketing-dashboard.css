@@ -254,7 +254,8 @@ html.dark .marketing-dashboard {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* 六项拆成三列两行，单格更宽，数值和状态文字都放得下。 */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-top: 15px;
 }
@@ -506,20 +507,21 @@ html.dark .marketing-dashboard .page-template-content > blockquote mark.mkt-mark
   }
 
   .marketing-dashboard .mkt-pulse {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* 手机上两列三行：一行三个时「美元兑人民币 6.6760」「中美国债 10Y」会被截断。 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 7px;
   }
 
   .marketing-dashboard .mkt-pulse-item {
-    padding: 7px 9px;
+    padding: 8px 10px;
   }
 
   .marketing-dashboard .mkt-pulse-name {
-    font-size: 0.58rem;
+    font-size: 0.6rem;
   }
 
   .marketing-dashboard .mkt-pulse-value strong {
-    font-size: 0.88rem;
+    font-size: 0.95rem;
   }
 
   .marketing-dashboard .mkt-hero-head {

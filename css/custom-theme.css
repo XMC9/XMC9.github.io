@@ -474,12 +474,147 @@ body.navbar-shrink .navbar-container {
 
 .custom-home .home-photo-section,
 .custom-home .home-essay-section,
-.custom-home .home-market-section {
+.custom-home .home-market-section,
+.custom-home .home-weather-section {
   padding: 22px 24px;
   border: 1px solid var(--border-color);
   border-radius: 20px;
   background: var(--background-color);
   box-shadow: var(--redefine-box-shadow-flat);
+}
+
+/* ---------- 主页天气板块（数据来自每日新闻日报） ---------- */
+
+.custom-home .home-weather-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.custom-home .home-weather-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  /* 显式背景色：只写文字色的话深色模式会和页面底色糊在一起。 */
+  border: 1px solid rgba(46, 117, 182, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #F8FBFF 0%, #EAF3FC 100%);
+}
+
+.custom-home .home-weather-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.custom-home .home-weather-city {
+  color: #12324F;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.custom-home .home-weather-now {
+  color: #0D2540;
+  font-size: 1.72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.custom-home .home-weather-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.custom-home .home-weather-main strong {
+  color: #0D2540;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.custom-home .home-weather-range {
+  color: #40607E;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-home .home-weather-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: #5E7E9C;
+  font-size: 0.76rem;
+}
+
+.custom-home .home-weather-stamp {
+  margin-top: 2px;
+  color: #8AA6BF;
+  font-size: 0.7rem;
+}
+
+.custom-home .home-weather-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 9px 13px;
+  border: 1px solid rgba(196, 87, 63, 0.24);
+  border-radius: 11px;
+  background: rgba(196, 87, 63, 0.08);
+  color: #B4503A;
+  font-size: 0.79rem;
+  line-height: 1.65;
+}
+
+html.dark .custom-home .home-weather-card {
+  border-color: rgba(127, 178, 229, 0.18);
+  background: linear-gradient(135deg, #16283F 0%, #1B3552 100%);
+}
+
+html.dark .custom-home .home-weather-city {
+  color: #D6E8FA;
+}
+
+html.dark .custom-home .home-weather-now,
+html.dark .custom-home .home-weather-main strong {
+  color: #FFFFFF;
+}
+
+html.dark .custom-home .home-weather-range {
+  color: #A6C3DE;
+}
+
+html.dark .custom-home .home-weather-meta {
+  color: #8FA9C4;
+}
+
+html.dark .custom-home .home-weather-stamp {
+  color: #7590AC;
+}
+
+html.dark .custom-home .home-weather-alert {
+  border-color: rgba(255, 156, 156, 0.24);
+  background: rgba(255, 156, 156, 0.1);
+  color: #FFB4A8;
+}
+
+@media (max-width: 760px) {
+  .custom-home .home-weather-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .custom-home .home-weather-card {
+    padding: 12px 13px;
+  }
+
+  .custom-home .home-weather-now {
+    font-size: 1.5rem;
+  }
 }
 
 .custom-home .home-photo-section .home-section-head {
