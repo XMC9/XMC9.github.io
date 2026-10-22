@@ -86,10 +86,58 @@
     }
   }
 
+  function initRandomGenerator() {
+    var sections = document.querySelectorAll('[data-random-section]');
+    for (var i = 0; i < sections.length; i++) {
+      (function (section) {
+        var slots = section.querySelectorAll('[data-random-slots] .home-random-slot');
+        var btn = section.querySelector('[data-random-btn]');
+        if (!slots.length || !btn || btn.getAttribute('data-bound')) return;
+        btn.setAttribute('data-bound', '1');
+
+        var reduceMotion = window.matchMedia
+          && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var randomDigit = function () { return String(Math.floor(Math.random() * 10)); };
+        var paint = function (values) {
+          for (var j = 0; j < slots.length; j++) slots[j].textContent = values[j];
+        };
+
+        // 进页面时先放一组随机数，别让三个 0 看起来像坏掉了。
+        var initial = [];
+        for (var k = 0; k < slots.length; k++) initial.push(randomDigit());
+        paint(initial);
+
+        btn.addEventListener('click', function () {
+          var finals = [];
+          for (var n = 0; n < slots.length; n++) finals.push(randomDigit());
+          if (reduceMotion) {
+            paint(finals);
+            return;
+          }
+
+          // 数字滚动 420ms 再定格，摇一摇要有摇的过程。
+          var started = Date.now();
+          btn.disabled = true;
+          for (var m = 0; m < slots.length; m++) slots[m].classList.add('is-rolling');
+          var timer = setInterval(function () {
+            for (var p = 0; p < slots.length; p++) slots[p].textContent = randomDigit();
+            if (Date.now() - started >= 420) {
+              clearInterval(timer);
+              paint(finals);
+              for (var q = 0; q < slots.length; q++) slots[q].classList.remove('is-rolling');
+              btn.disabled = false;
+            }
+          }, 55);
+        });
+      })(sections[i]);
+    }
+  }
+
   function init() {
     updateCounters();
     initPhotoWall();
     initReveal();
+    initRandomGenerator();
   }
 
   if (document.readyState === 'loading') {

@@ -83,7 +83,8 @@
 
 .news-dashboard .ntc-hero-meta strong {
   color: #FFFFFF;
-  font-size: 1.22rem;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -127,11 +128,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   line-height: 1;
 }
 
@@ -268,6 +269,18 @@
   font-weight: 800;
 }
 
+/* 民航动态 / 国内外时事 是页面骨架，比财经页的小节标题再大一号。 */
+.news-dashboard .page-template-content h2 {
+  margin: 32px 0 14px;
+  font-size: 1.32rem;
+}
+
+.news-dashboard .page-template-content h2::before {
+  width: 30px;
+  height: 27px;
+  font-size: 0.7rem;
+}
+
 /* ---------- 新闻卡片 ---------- */
 
 .news-dashboard .page-template-content .ntc-list {
@@ -296,11 +309,33 @@
   background: linear-gradient(180deg, var(--mkt-blue) 0%, var(--mkt-blue-deep) 100%);
 }
 
+.news-dashboard .page-template-content .ntc-item-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 5px;
+}
+
+/* 每条标题前的小图标，给扫读一个落点；用浅蓝底方块托住，不抢标题。 */
+.news-dashboard .page-template-content .ntc-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--mkt-soft);
+  box-shadow: inset 0 0 0 1px var(--mkt-line);
+  font-size: 0.82rem;
+  line-height: 1;
+}
+
 .news-dashboard .page-template-content .ntc-item-title {
-  margin: 0 0 5px;
+  margin: 0;
   color: var(--mkt-ink);
-  font-size: 0.98rem;
-  font-weight: 700;
+  font-size: 1.02rem;
+  font-weight: 800;
   line-height: 1.5;
   letter-spacing: 0.01em;
 }
@@ -308,8 +343,9 @@
 .news-dashboard .page-template-content .ntc-item-summary {
   margin: 0;
   color: var(--mkt-ink);
-  font-size: 0.87rem;
+  font-size: 0.86rem;
   line-height: 1.72;
+  opacity: 0.92;
 }
 
 .news-dashboard .page-template-content .ntc-item-foot {
@@ -318,8 +354,10 @@
 
 .news-dashboard .page-template-content .ntc-item-source {
   color: var(--mkt-muted);
-  font-size: 0.71rem;
+  font-size: 0.67rem;
   text-decoration: none;
+  opacity: 0.78;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .news-dashboard .page-template-content .ntc-item-source:hover {
@@ -400,10 +438,10 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   }
 
   .news-dashboard .ntc-weather-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    font-size: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 1.22rem;
   }
 
   .news-dashboard .ntc-weather-meta span {
