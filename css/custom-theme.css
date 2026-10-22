@@ -1114,6 +1114,21 @@ html.dark .custom-home .home-market-index-close {
   margin-bottom: 16px;
 }
 
+/* 首页第一页的「文章」也包成一张卡，宽度和上面的说说/天气保持一致；
+   内层改成带分隔线的行，不再每条套一张小卡。 */
+.custom-home .home-feed-card {
+  margin-bottom: 26px;
+  padding: 22px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: var(--background-color);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+.custom-home .home-feed-card .home-feed-head {
+  margin-bottom: 10px;
+}
+
 /* ---------- 首页「文章」：只放最新几篇 ---------- */
 
 .custom-home .home-latest-list {
@@ -1139,6 +1154,41 @@ html.dark .custom-home .home-market-index-close {
   border-color: rgba(74, 144, 217, 0.34);
   box-shadow: 0 8px 20px rgba(46, 117, 182, 0.1);
   text-decoration: none;
+}
+
+.custom-home .home-feed-card .home-latest-list {
+  gap: 0;
+}
+
+.custom-home .home-feed-card .home-latest-item {
+  position: relative;
+  padding: 12px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.custom-home .home-feed-card .home-latest-item + .home-latest-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 12px;
+  left: 12px;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.custom-home .home-feed-card .home-latest-item:hover {
+  transform: none;
+  border: 0;
+  background: rgba(46, 117, 182, 0.06);
+  box-shadow: none;
+}
+
+html.dark .custom-home .home-feed-card .home-latest-item:hover {
+  background: rgba(127, 178, 229, 0.08);
 }
 
 .custom-home .home-latest-date {
@@ -1201,7 +1251,18 @@ html.dark .custom-home .home-latest-cat {
   box-shadow: var(--redefine-box-shadow-flat);
 }
 
+/* 生成器本体也是一张浅蓝小卡，和外面的板块框区分开。 */
 .custom-home .home-random-card {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 18px 20px 16px;
+  border: 1px solid rgba(46, 117, 182, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #FBFDFF 0%, #EDF5FC 100%);
+}
+
+.custom-home .home-random-result {
   display: flex;
   align-items: center;
   gap: 18px;
@@ -1210,6 +1271,7 @@ html.dark .custom-home .home-latest-cat {
 
 .custom-home .home-random-slots {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -1217,18 +1279,24 @@ html.dark .custom-home .home-latest-cat {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 62px;
-  height: 76px;
+  width: 58px;
+  height: 70px;
   border: 1px solid rgba(46, 117, 182, 0.2);
-  border-radius: 16px;
+  border-radius: 15px;
   background: linear-gradient(160deg, #F7FBFF 0%, #E7F1FA 100%);
   box-shadow: inset 0 -3px 0 rgba(46, 117, 182, 0.08);
   color: #12324F;
-  font-size: 2.05rem;
+  font-size: 1.92rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   line-height: 1;
   transition: color 0.2s ease;
+}
+
+/* 三位数（最大 999）时把字号收一点，别把格子撑破。 */
+.custom-home .home-random-slot.is-wide {
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
 }
 
 .custom-home .home-random-slot.is-rolling {
@@ -1265,6 +1333,91 @@ html.dark .custom-home .home-latest-cat {
   opacity: 0.72;
   cursor: default;
   transform: none;
+}
+
+.custom-home .home-random-settings {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(46, 117, 182, 0.22);
+}
+
+.custom-home .home-random-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.custom-home .home-random-field span {
+  color: var(--third-text-color);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+.custom-home .home-random-field input {
+  width: 76px;
+  padding: 7px 9px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  background: var(--background-color);
+  color: var(--default-text-color);
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-home .home-random-field input:focus {
+  outline: none;
+  border-color: rgba(74, 144, 217, 0.6);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.12);
+}
+
+.custom-home .home-random-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 8px;
+  color: var(--second-text-color);
+  font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-home .home-random-check input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: #2E75B6;
+  cursor: pointer;
+}
+
+.custom-home .home-random-hint {
+  margin: -4px 0 0;
+  color: #B45309;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+html.dark .custom-home .home-random-card {
+  border-color: rgba(127, 178, 229, 0.18);
+  background: linear-gradient(160deg, #12233A 0%, #16283F 100%);
+  /* 让原生复选框/数字微调按钮也跟着变深色，不然一个白方块很扎眼。 */
+  color-scheme: dark;
+}
+
+html.dark .custom-home .home-random-settings {
+  border-top-color: rgba(127, 178, 229, 0.22);
+}
+
+html.dark .custom-home .home-random-field input {
+  border-color: rgba(127, 178, 229, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: #EAF4FF;
+}
+
+html.dark .custom-home .home-random-hint {
+  color: #F0B45B;
 }
 
 html.dark .custom-home .home-random-slot {
@@ -1339,7 +1492,8 @@ html.dark .home-sidebar-note p {
 
 @media (min-width: 769px) {
   .home-sidebar-container + .home-custom-main .home-custom-top,
-  .home-sidebar-container + .home-custom-main .home-feed-head {
+  .home-sidebar-container + .home-custom-main .home-feed-section,
+  .home-sidebar-container + .home-custom-main .home-random-section {
     margin-right: 38px;
   }
 }
@@ -1413,9 +1567,19 @@ html.dark .home-sidebar-note p {
     margin-top: 4px;
   }
 
+  .custom-home .home-feed-card {
+    margin-bottom: 20px;
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+
   .custom-home .home-random-section {
     padding: 18px 16px;
     border-radius: 16px;
+  }
+
+  .custom-home .home-random-card {
+    padding: 14px 14px 13px;
   }
 
   .custom-home .home-random-slots {
@@ -1423,10 +1587,23 @@ html.dark .home-sidebar-note p {
   }
 
   .custom-home .home-random-slot {
-    width: 52px;
-    height: 64px;
-    border-radius: 13px;
-    font-size: 1.7rem;
+    width: 48px;
+    height: 58px;
+    border-radius: 12px;
+    font-size: 1.55rem;
+  }
+
+  .custom-home .home-random-slot.is-wide {
+    font-size: 1.26rem;
+  }
+
+  .custom-home .home-random-settings {
+    gap: 10px 12px;
+  }
+
+  .custom-home .home-random-field input {
+    width: 68px;
+    padding: 6px 8px;
   }
 
   .custom-home .home-random-btn {
@@ -1437,6 +1614,10 @@ html.dark .home-sidebar-note p {
   .custom-home .home-latest-item {
     gap: 11px;
     padding: 12px 14px;
+  }
+
+  .custom-home .home-feed-card .home-latest-item {
+    padding: 11px 8px;
   }
 
   .custom-home .home-latest-cat {

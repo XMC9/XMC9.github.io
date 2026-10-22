@@ -352,16 +352,26 @@
   margin-top: 6px;
 }
 
+/* 来源链接。主题的 link-handle 过滤器会把 article 里的 <a> 改写成 a.link
+   （自带 1rem 字号和下划线），所以这里必须同时压 a.link，只写 .ntc-item-source
+   根本命中不了，线上就会看到来源比正文还大。 */
+.news-dashboard .page-template-content .ntc-item-foot a,
+.news-dashboard .page-template-content .ntc-item-foot .link,
 .news-dashboard .page-template-content .ntc-item-source {
+  padding-bottom: 0;
   color: var(--mkt-muted);
-  font-size: 0.67rem;
+  font-size: 0.82rem;
   text-decoration: none;
   opacity: 0.78;
   transition: opacity 0.2s ease, color 0.2s ease;
 }
 
+.news-dashboard .page-template-content .ntc-item-foot a:hover,
+.news-dashboard .page-template-content .ntc-item-foot .link:hover,
 .news-dashboard .page-template-content .ntc-item-source:hover {
   color: var(--mkt-blue);
+  opacity: 1;
+  text-decoration: none;
 }
 
 .news-dashboard .page-template-content li a {

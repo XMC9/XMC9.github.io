@@ -113,11 +113,11 @@
 
     <!--- Site custom styles (homepage / line-dog category) --->
     
-    <link rel="stylesheet" href="/css/custom-theme.css?v=2026-10-22.4">
+    <link rel="stylesheet" href="/css/custom-theme.css?v=2026-10-22.5">
     <!--- Marketing Dashboard bulletin --->
-    <link rel="stylesheet" href="/css/marketing-dashboard.css?v=2026-10-22.4">
+    <link rel="stylesheet" href="/css/marketing-dashboard.css?v=2026-10-22.5">
     <!--- News Dashboard daily briefing --->
-    <link rel="stylesheet" href="/css/notice.css?v=2026-10-22.4">
+    <link rel="stylesheet" href="/css/notice.css?v=2026-10-22.5">
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 
@@ -519,10 +519,9 @@
             
         
 
-        
         <div class="home-sidebar-note">
             <img src="/image/oct-trip/puppy-hero.svg" alt="" loading="lazy">
-            <p>记得喝水，也记得休息</p>
+            <p>好好吃饭，<br>好好睡觉，<br>记得想我。</p>
         </div>
 
     </div>
@@ -684,6 +683,13 @@
             <div class="home-essay-list">
               
               <a class="home-essay-card" href="/essays/">
+                <span class="home-essay-date">10-22</span>
+                <span class="home-essay-text">全新升级版秘密基地（基本）完工啦！拉夫油鸡毛宝！666天快乐噢！
+</span>
+                <i class="fa-solid fa-paw home-essay-paw" aria-hidden="true"></i>
+              </a>
+              
+              <a class="home-essay-card" href="/essays/">
                 <span class="home-essay-date">09-27</span>
                 <span class="home-essay-text">新域名+claude：test，拉呼油小鸡丢！
 </span>
@@ -697,20 +703,13 @@
                 <i class="fa-solid fa-paw home-essay-paw" aria-hidden="true"></i>
               </a>
               
-              <a class="home-essay-card" href="/essays/">
-                <span class="home-essay-date">07-24</span>
-                <span class="home-essay-text">好久没来更新啦！因为都在幸福生活！但是在重要的日子里，我需要说：祝我们毕业快乐！前程似锦！这一路有你很幸运，也希望一直有你！love you！
-</span>
-                <i class="fa-solid fa-paw home-essay-paw" aria-hidden="true"></i>
-              </a>
-              
             </div>
           </section>
           
         </div>
         
 
-        <section class="home-feed-section" id="home-latest">
+        <section class="home-feed-section home-feed-card" id="home-latest">
           
           <div class="home-section-head home-feed-head home-reveal">
             <div>
@@ -779,18 +778,40 @@
           <div class="home-section-head">
             <div>
               <h2 class="home-section-title">随机数生成器</h2>
-              <p class="home-section-subtitle">三位数字，0–9，可以重复。</p>
+              <p class="home-section-subtitle">想摇几个、多大范围、能不能重复，都听你的。</p>
             </div>
           </div>
           <div class="home-random-card">
-            <div class="home-random-slots" data-random-slots aria-live="polite">
-              <span class="home-random-slot">0</span>
-              <span class="home-random-slot">0</span>
-              <span class="home-random-slot">0</span>
+            <div class="home-random-result">
+              <div class="home-random-slots" data-random-slots aria-live="polite">
+                <span class="home-random-slot">0</span>
+                <span class="home-random-slot">0</span>
+                <span class="home-random-slot">0</span>
+              </div>
+              <button type="button" class="home-random-btn" data-random-btn>
+                <i class="fa-solid fa-dice" aria-hidden="true"></i>
+                <span data-random-label>小狗帮你摇一摇</span>
+              </button>
             </div>
-            <button type="button" class="home-random-btn" data-random-btn>
-              <i class="fa-solid fa-dice" aria-hidden="true"></i> 摇一摇
-            </button>
+            <div class="home-random-settings">
+              <label class="home-random-field">
+                <span>数字个数</span>
+                <input type="number" inputmode="numeric" min="1" max="8" step="1" value="3" data-random-count>
+              </label>
+              <label class="home-random-field">
+                <span>最小值</span>
+                <input type="number" inputmode="numeric" min="0" max="999" step="1" value="0" data-random-min>
+              </label>
+              <label class="home-random-field">
+                <span>最大值</span>
+                <input type="number" inputmode="numeric" min="0" max="999" step="1" value="9" data-random-max>
+              </label>
+              <label class="home-random-check">
+                <input type="checkbox" data-random-unique>
+                <span>数字不重复</span>
+              </label>
+            </div>
+            <p class="home-random-hint" data-random-hint hidden></p>
           </div>
         </section>
         
@@ -940,7 +961,7 @@
 
   
 
-  <script src="/js/home.js?v=2026-10-22.4" data-swup-reload-script></script>
+  <script src="/js/home.js?v=2026-10-22.5" data-swup-reload-script></script>
 </main>
 
 
