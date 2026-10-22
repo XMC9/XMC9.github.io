@@ -492,68 +492,132 @@ body.navbar-shrink .navbar-container {
 }
 
 .custom-home .home-weather-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 16px 18px 14px;
+  overflow: hidden;
   /* 显式背景色：只写文字色的话深色模式会和页面底色糊在一起。 */
-  border: 1px solid rgba(46, 117, 182, 0.16);
-  border-radius: 14px;
-  background: linear-gradient(135deg, #F8FBFF 0%, #EAF3FC 100%);
+  border: 1px solid rgba(46, 117, 182, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #FFFFFF 0%, #EDF5FD 100%);
+  box-shadow: 0 6px 18px rgba(46, 117, 182, 0.08);
 }
 
-.custom-home .home-weather-top {
+/* 右上角一团淡蓝光，让卡片看起来不是一块死白。 */
+.custom-home .home-weather-card::after {
+  content: "";
+  position: absolute;
+  top: -54px;
+  right: -46px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(120, 176, 226, 0.28) 0%, rgba(120, 176, 226, 0) 70%);
+  pointer-events: none;
+}
+
+.custom-home .home-weather-card-head {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
 .custom-home .home-weather-city {
   color: #12324F;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
 
-.custom-home .home-weather-now {
-  color: #0D2540;
-  font-size: 1.72rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+.custom-home .home-weather-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(214, 234, 250, 0.9);
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .custom-home .home-weather-main {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
+}
+
+.custom-home .home-weather-now {
+  color: #0D2540;
+  font-size: 2.1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.custom-home .home-weather-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
 .custom-home .home-weather-main strong {
-  color: #0D2540;
-  font-size: 1.02rem;
+  color: #1B4C77;
+  font-size: 0.98rem;
   font-weight: 700;
 }
 
 .custom-home .home-weather-range {
-  color: #40607E;
-  font-size: 0.8rem;
+  color: #4A6C88;
+  font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
 }
 
-.custom-home .home-weather-meta {
+.custom-home .home-weather-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 12px;
-  color: #5E7E9C;
+  gap: 6px;
+}
+
+.custom-home .home-weather-tag {
+  padding: 2px 9px;
+  border: 1px solid rgba(46, 117, 182, 0.14);
+  border-radius: 999px;
+  background: rgba(227, 240, 251, 0.9);
+  color: #2E5F8A;
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.custom-home .home-weather-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding-top: 9px;
+  border-top: 1px dashed rgba(46, 117, 182, 0.2);
+  color: #3E6485;
   font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.custom-home .home-weather-tip i {
+  flex: 0 0 auto;
+  font-style: normal;
 }
 
 .custom-home .home-weather-stamp {
-  margin-top: 2px;
-  color: #8AA6BF;
-  font-size: 0.7rem;
+  color: #92AEC6;
+  font-size: 0.68rem;
 }
 
 .custom-home .home-weather-alert {
@@ -572,11 +636,20 @@ body.navbar-shrink .navbar-container {
 
 html.dark .custom-home .home-weather-card {
   border-color: rgba(127, 178, 229, 0.18);
-  background: linear-gradient(135deg, #16283F 0%, #1B3552 100%);
+  background: linear-gradient(160deg, #16283F 0%, #1B3552 100%);
+  box-shadow: none;
+}
+
+html.dark .custom-home .home-weather-card::after {
+  background: radial-gradient(circle, rgba(107, 166, 220, 0.22) 0%, rgba(107, 166, 220, 0) 70%);
 }
 
 html.dark .custom-home .home-weather-city {
   color: #D6E8FA;
+}
+
+html.dark .custom-home .home-weather-icon {
+  background: rgba(127, 178, 229, 0.14);
 }
 
 html.dark .custom-home .home-weather-now,
@@ -588,8 +661,15 @@ html.dark .custom-home .home-weather-range {
   color: #A6C3DE;
 }
 
-html.dark .custom-home .home-weather-meta {
-  color: #8FA9C4;
+html.dark .custom-home .home-weather-tag {
+  border-color: rgba(127, 178, 229, 0.2);
+  background: rgba(127, 178, 229, 0.12);
+  color: #BFD8EE;
+}
+
+html.dark .custom-home .home-weather-tip {
+  border-top-color: rgba(127, 178, 229, 0.18);
+  color: #9FBBD6;
 }
 
 html.dark .custom-home .home-weather-stamp {
@@ -610,10 +690,35 @@ html.dark .custom-home .home-weather-alert {
 
   .custom-home .home-weather-card {
     padding: 12px 13px;
+    gap: 8px;
+  }
+
+  .custom-home .home-weather-main {
+    gap: 10px;
   }
 
   .custom-home .home-weather-now {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+  }
+
+  .custom-home .home-weather-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+  }
+
+  .custom-home .home-weather-tip {
+    padding-top: 7px;
+    font-size: 0.72rem;
+  }
+}
+
+/* 窄屏上两张卡并排只有 150px 宽，「明日 19°~22°」会被拆成两行，
+   干脆竖着排——一张卡占满整行，信息反而更清楚。 */
+@media (max-width: 560px) {
+  .custom-home .home-weather-grid {
+    grid-template-columns: 1fr;
   }
 }
 

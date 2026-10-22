@@ -282,8 +282,10 @@ html.dark .marketing-dashboard {
 
 .marketing-dashboard .mkt-pulse-value {
   display: flex;
+  /* 涨跌幅放不下时换到下一行，绝不截断成「-0.0…」。 */
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 5px;
+  gap: 2px 5px;
   min-width: 0;
   color: #F4F9FF;
   font-variant-numeric: tabular-nums;
@@ -297,12 +299,12 @@ html.dark .marketing-dashboard {
 }
 
 .marketing-dashboard .mkt-pulse-value i {
-  overflow: hidden;
+  /* 涨跌幅是重点信息，宁可换行也不省略。 */
+  flex: 0 0 auto;
   color: #9FC6E8;
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   font-style: normal;
   white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .marketing-dashboard .mkt-pulse-value i.is-up {
@@ -458,25 +460,27 @@ html.dark .marketing-dashboard {
 
 .marketing-dashboard .page-template-content li strong:first-child {
   display: inline-block;
-  margin-right: 4px;
-  padding: 1px 8px;
+  margin-right: 5px;
+  padding: 1px 9px;
   border-radius: 6px;
   background: var(--mkt-soft);
   box-shadow: inset 0 0 0 1px var(--mkt-line);
   color: var(--mkt-blue-deep);
-  font-size: 0.82em;
-  font-weight: 700;
+  /* 每条开头的小标题是扫读锚点，字号拉到和正文齐平，比原来 0.82em 更立得住。 */
+  font-size: 0.98em;
+  font-weight: 800;
   letter-spacing: 0.02em;
   vertical-align: 1px;
 }
 
 .marketing-dashboard .page-template-content mark.mkt-mark,
 .marketing-dashboard .page-template-content > blockquote mark.mkt-mark {
-  padding: 0 3px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, transparent 52%, rgba(240, 198, 116, 0.5) 52%);
+  padding: 0 4px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, transparent 52%, rgba(240, 198, 116, 0.55) 52%);
   color: inherit;
-  font-weight: 600;
+  font-size: 1.06em;
+  font-weight: 800;
 }
 
 html.dark .marketing-dashboard .page-template-content mark.mkt-mark,

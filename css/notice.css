@@ -102,60 +102,103 @@
 .news-dashboard .ntc-weather-card {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 14px;
+  gap: 9px;
+  padding: 13px 15px 12px;
   border: 1px solid var(--ntc-chip-line);
-  border-radius: 13px;
-  background: var(--ntc-chip);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.04) 100%);
 }
 
 .news-dashboard .ntc-weather-top {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
 }
 
 .news-dashboard .ntc-weather-city {
   color: #EAF4FF;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+}
+
+.news-dashboard .ntc-weather-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.news-dashboard .ntc-weather-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .news-dashboard .ntc-weather-now {
   color: #FFFFFF;
-  font-size: 1.5rem;
+  font-size: 1.9rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
-.news-dashboard .ntc-weather-main {
+.news-dashboard .ntc-weather-detail {
   display: flex;
-  align-items: baseline;
-  gap: 9px;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-.news-dashboard .ntc-weather-main strong {
+.news-dashboard .ntc-weather-detail strong {
   color: #FFFFFF;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
 .news-dashboard .ntc-weather-range {
   color: #B7D4EC;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-variant-numeric: tabular-nums;
 }
 
 .news-dashboard .ntc-weather-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 10px;
-  margin-top: 2px;
-  color: #9FC6E8;
-  font-size: 0.72rem;
+  gap: 6px;
+}
+
+.news-dashboard .ntc-weather-meta span {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #C9E0F3;
+  font-size: 0.7rem;
+  line-height: 1.7;
+}
+
+.news-dashboard .ntc-weather-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.14);
+  color: #C9E0F3;
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+
+.news-dashboard .ntc-weather-tip i {
+  flex: 0 0 auto;
+  font-style: normal;
 }
 
 /* ---------- 预警 / 统计 ---------- */
@@ -214,13 +257,73 @@
 
 /* ---------- 正文里的重点与来源链接 ---------- */
 
+/* 划重点用「荧光笔底色」而不是下划线：下划线在蓝色主题里太像链接了。 */
 .news-dashboard .page-template-content mark.ntc-mark,
 .news-dashboard .page-template-content > blockquote mark.ntc-mark {
-  padding: 0 3px;
-  border-radius: 4px;
-  background: linear-gradient(180deg, transparent 62%, rgba(46, 117, 182, 0.28) 62%);
-  color: inherit;
+  padding: 0 4px;
+  border-radius: 5px;
+  background: rgba(92, 158, 214, 0.2);
+  color: #0E3A61;
+  font-size: 1.08em;
+  font-weight: 800;
+}
+
+/* ---------- 新闻卡片 ---------- */
+
+.news-dashboard .page-template-content .ntc-list {
+  display: grid;
+  gap: 9px;
+}
+
+.news-dashboard .page-template-content .ntc-item {
+  position: relative;
+  padding: 13px 16px 11px 18px;
+  overflow: hidden;
+  border: 1px solid var(--mkt-line);
+  border-radius: 13px;
+  background: var(--mkt-card);
+}
+
+/* 左侧一道竖线，十几条卡片排下来也能一眼看出层级。 */
+.news-dashboard .page-template-content .ntc-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 13px;
+  bottom: 13px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, var(--mkt-blue) 0%, var(--mkt-blue-deep) 100%);
+}
+
+.news-dashboard .page-template-content .ntc-item-title {
+  margin: 0 0 5px;
+  color: var(--mkt-ink);
+  font-size: 0.98rem;
   font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+.news-dashboard .page-template-content .ntc-item-summary {
+  margin: 0;
+  color: var(--mkt-ink);
+  font-size: 0.87rem;
+  line-height: 1.72;
+}
+
+.news-dashboard .page-template-content .ntc-item-foot {
+  margin-top: 6px;
+}
+
+.news-dashboard .page-template-content .ntc-item-source {
+  color: var(--mkt-muted);
+  font-size: 0.71rem;
+  text-decoration: none;
+}
+
+.news-dashboard .page-template-content .ntc-item-source:hover {
+  color: var(--mkt-blue);
 }
 
 .news-dashboard .page-template-content li a {
@@ -244,7 +347,7 @@
 
 html.dark .news-dashboard .page-template-content mark.ntc-mark,
 html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
-  background: linear-gradient(180deg, transparent 62%, rgba(107, 166, 220, 0.34) 62%);
+  background: rgba(107, 166, 220, 0.26);
   color: #EAF4FF;
 }
 
@@ -284,14 +387,42 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   }
 
   .news-dashboard .ntc-weather-card {
-    padding: 10px 11px;
+    gap: 7px;
+    padding: 11px 12px 10px;
+  }
+
+  .news-dashboard .ntc-weather-body {
+    gap: 9px;
   }
 
   .news-dashboard .ntc-weather-now {
-    font-size: 1.3rem;
+    font-size: 1.55rem;
   }
 
-  .news-dashboard .ntc-weather-meta {
-    font-size: 0.68rem;
+  .news-dashboard .ntc-weather-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    font-size: 1rem;
+  }
+
+  .news-dashboard .ntc-weather-meta span {
+    font-size: 0.66rem;
+  }
+
+  .news-dashboard .ntc-weather-tip {
+    padding-top: 7px;
+    font-size: 0.7rem;
+  }
+
+  .news-dashboard .page-template-content .ntc-item {
+    padding: 12px 13px 10px 15px;
+  }
+}
+
+/* 窄屏上两张天气卡并排太挤，改成上下两张，一行能放下完整信息。 */
+@media (max-width: 560px) {
+  .news-dashboard .ntc-weather {
+    grid-template-columns: 1fr;
   }
 }
