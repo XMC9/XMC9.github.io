@@ -93,6 +93,7 @@ html.dark .sidebar-content,
 html.dark .home-essay-section,
 html.dark .home-photo-section,
 html.dark .home-market-section,
+html.dark .home-astro-section,
 html.dark body .home-content-container .home-article-list .home-article-item {
   background-color: var(--second-background-color);
   border: 1px solid var(--border-color);
@@ -475,6 +476,7 @@ body.navbar-shrink .navbar-container {
 .custom-home .home-photo-section,
 .custom-home .home-essay-section,
 .custom-home .home-market-section,
+.custom-home .home-astro-section,
 .custom-home .home-weather-section {
   padding: 22px 24px;
   border: 1px solid var(--border-color);
@@ -872,6 +874,104 @@ html.dark .custom-home .home-photo-card img {
   color: var(--third-text-color);
   font-size: 0.82rem;
   opacity: 0.55;
+}
+
+/* ---------- 首页今日星象（数据来自 /astrology/ 流水线） ---------- */
+
+.custom-home .home-astro-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* 显式写背景：深色模式下只改文字色会和页面底色糊在一起。 */
+.custom-home .home-astro-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px 17px 14px;
+  overflow: hidden;
+  border: 1px solid rgba(46, 117, 182, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #FFFFFF 0%, #EDF5FD 100%);
+  box-shadow: 0 6px 18px rgba(46, 117, 182, 0.08);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.custom-home .home-astro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(46, 117, 182, 0.16);
+}
+
+html.dark .custom-home .home-astro-card {
+  border-color: rgba(127, 178, 229, 0.18);
+  background: linear-gradient(160deg, #12233A 0%, #18304C 100%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+}
+
+html.dark .custom-home .home-astro-card:hover {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
+}
+
+.custom-home .home-astro-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-home .home-astro-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(46, 117, 182, 0.1);
+  color: #2E75B6;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+html.dark .custom-home .home-astro-glyph {
+  background: rgba(107, 166, 220, 0.16);
+  color: #A9CCEF;
+}
+
+.custom-home .home-astro-role {
+  color: #5E768E;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+html.dark .custom-home .home-astro-role {
+  color: #8FA9C4;
+}
+
+.custom-home .home-astro-name {
+  color: #12324F;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+html.dark .custom-home .home-astro-name {
+  color: #E8F2FC;
+}
+
+.custom-home .home-astro-text {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #44607A;
+  font-size: 0.86rem;
+  line-height: 1.75;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+html.dark .custom-home .home-astro-text {
+  color: #B9D2E8;
 }
 
 /* 首页 Market Dashboard 入口：和「最近的碎碎念」同尺寸，内里是一张深海军蓝卡片 */
@@ -1519,9 +1619,14 @@ html.dark .home-sidebar-note p {
 
   .custom-home .home-photo-section,
   .custom-home .home-essay-section,
-  .custom-home .home-market-section {
+  .custom-home .home-market-section,
+  .custom-home .home-astro-section {
     padding: 18px 16px;
     border-radius: 16px;
+  }
+
+  .custom-home .home-astro-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .custom-home .home-market-card {
@@ -1807,6 +1912,57 @@ body.cat-love .love-cat-sub {
   opacity: 0.82;
 }
 
+/* 素材库里的白+金两只小狗（透明底 GIF）。只在恋爱分类页和 ❤ 标签页出现，
+   其他页面保持干净。 */
+body.cat-love .love-cat-stickers,
+.tag-love-stickers {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+body.cat-love .love-cat-stickers img,
+.tag-love-stickers img {
+  display: block;
+  width: 150px;
+  height: auto;
+  opacity: 0.95;
+  transition: transform 0.2s ease;
+}
+
+body.cat-love .love-cat-stickers img:nth-child(1) {
+  width: 140px;
+}
+
+body.cat-love .love-cat-stickers img:nth-child(2) {
+  width: 170px;
+  transform: rotate(2deg);
+}
+
+body.cat-love .love-cat-stickers img:nth-child(3) {
+  transform: rotate(-3deg);
+}
+
+body.cat-love .love-cat-stickers img:hover,
+.tag-love-stickers img:hover {
+  transform: translateY(-4px) rotate(0deg);
+}
+
+.tag-love-stickers {
+  margin-top: 12px;
+}
+
+.tag-love-stickers img {
+  width: 120px;
+}
+
+.tag-love-stickers img:nth-child(2) {
+  transform: rotate(-3deg);
+}
+
 body.cat-love .love-cat-paws {
   position: relative;
   z-index: 1;
@@ -1923,6 +2079,17 @@ body.cat-love .article-tags a:hover {
   body.cat-love .love-cat-sub {
     max-width: 74%;
     font-size: 0.86rem;
+  }
+
+  /* 手机上三只小狗并排会顶到边，缩到能一起露脸的大小。 */
+  body.cat-love .love-cat-stickers img,
+  body.cat-love .love-cat-stickers img:nth-child(1),
+  body.cat-love .love-cat-stickers img:nth-child(2) {
+    width: 92px;
+  }
+
+  .tag-love-stickers img {
+    width: 88px;
   }
 
   body.cat-love .article-content-container::after {
@@ -4181,5 +4348,63 @@ html.dark .tag-switch-count {
   .aplayer.aplayer-fixed,
   .aplayer.aplayer-fixed .aplayer-body {
     transition: none;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 7. 密码文章的「解锁」按钮
+ *    主题的密码框只监听回车（keydown Enter），手机键盘不一定有
+ *    「前往」键，所以由 source/js/hbe-confirm.js 补一个看得见的按钮。
+ * ---------------------------------------------------------- */
+.hbe-unlock-btn {
+  display: block;
+  margin: 18px auto 0;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #5AA0E6 0%, #4A90D9 100%);
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(74, 144, 217, 0.28);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hbe-unlock-btn:hover {
+  background: linear-gradient(180deg, #4A90D9 0%, #2E75B6 100%);
+  box-shadow: 0 8px 20px rgba(46, 117, 182, 0.34);
+  transform: translateY(-1px);
+}
+
+.hbe-unlock-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 3px 10px rgba(46, 117, 182, 0.28);
+}
+
+.hbe-unlock-btn:focus-visible {
+  outline: 2px solid #2E75B6;
+  outline-offset: 3px;
+}
+
+html.dark .hbe-unlock-btn {
+  background: linear-gradient(180deg, #3B6FA8 0%, #2F5C8F 100%);
+  color: #EDF5FD;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+html.dark .hbe-unlock-btn:hover {
+  background: linear-gradient(180deg, #4680BF 0%, #3B6FA8 100%);
+}
+
+@media (max-width: 640px) {
+  .hbe-unlock-btn {
+    display: block;
+    width: 100%;
+    margin: 14px 0 0;
   }
 }

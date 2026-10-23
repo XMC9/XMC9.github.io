@@ -1,0 +1,645 @@
+/* ------------------------------------------------------------
+ * Daily Astrology 每日星象（2026-10-24）
+ * 与财经简报 / 新闻早报同一套蓝色骨架：深藏青 hero + 浅蓝卡片。
+ * 深色模式一律走藏青 / 深蓝（#0B1726 / #12233A / #18304C / #2F5C8F），
+ * 不用偏青绿的蓝；所有自定义卡片都显式写背景色，不靠继承。
+ * ---------------------------------------------------------- */
+
+.astro-dashboard {
+  --astro-ink: #16283F;
+  --astro-muted: #5E768E;
+  --astro-blue: #2E75B6;
+  --astro-blue-soft: #4A90D9;
+  --astro-line: rgba(46, 117, 182, 0.16);
+  --astro-card: #F7FBFF;
+  --astro-soft: #EAF4FD;
+  --astro-shadow: rgba(24, 62, 96, 0.12);
+}
+
+html.dark .astro-dashboard {
+  --astro-ink: #E8F2FC;
+  --astro-muted: #8FA9C4;
+  --astro-blue: #6BA6DC;
+  --astro-blue-soft: #8FC0EA;
+  --astro-line: rgba(127, 178, 229, 0.18);
+  --astro-card: #12233A;
+  --astro-soft: #18304C;
+  --astro-shadow: rgba(0, 0, 0, 0.36);
+}
+
+/* 正文留空，页面内容全部在 hero partial 里，不需要额外的排版留白。 */
+.astro-dashboard .page-template-content {
+  display: none;
+}
+
+.astro-dashboard [hidden] {
+  display: none !important;
+}
+
+/* ---------- hero ---------- */
+
+.astro-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 30px 24px;
+  border: 1px solid rgba(150, 198, 238, 0.2);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0D2540 0%, #163F63 56%, #1D4E7A 100%);
+  box-shadow: 0 18px 45px var(--astro-shadow);
+  color: #F4F9FF;
+}
+
+.astro-hero::after {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -70px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 166, 220, 0.26) 0%, rgba(107, 166, 220, 0) 70%);
+  pointer-events: none;
+}
+
+.astro-eyebrow {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 8px;
+  color: #9FC6E8;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.astro-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: clamp(2rem, 4.6vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.astro-date {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 0;
+  color: #C9E0F3;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.astro-weekday {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #E4F1FC;
+  font-size: 0.74rem;
+}
+
+/* ---------- 星座切换 ---------- */
+
+.astro-picker-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 18px 0 4px;
+}
+
+.astro-picker-label {
+  color: var(--astro-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.astro-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.astro-select {
+  min-width: 168px;
+  padding: 9px 40px 9px 16px;
+  border: 1px solid var(--astro-line);
+  border-radius: 12px;
+  background: var(--astro-card);
+  color: var(--astro-ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.astro-select:hover {
+  border-color: rgba(74, 144, 217, 0.45);
+}
+
+.astro-select:focus {
+  outline: none;
+  border-color: var(--astro-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.18);
+}
+
+html.dark .astro-select {
+  background: var(--astro-card);
+  color: var(--astro-ink);
+}
+
+/* 原生下拉列表在深色模式下由系统决定配色，这里至少把当前值那行对齐。 */
+html.dark .astro-select option {
+  background: #12233A;
+  color: #E4F1FC;
+}
+
+.astro-select-caret {
+  position: absolute;
+  right: 14px;
+  color: var(--astro-blue);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.astro-picker-hint {
+  color: var(--astro-muted);
+  font-size: 0.72rem;
+}
+
+/* ---------- 卡片 ---------- */
+
+.astro-card {
+  margin-top: 16px;
+  padding: 20px 22px 18px;
+  border: 1px solid var(--astro-line);
+  border-radius: 18px;
+  background: var(--astro-card);
+  box-shadow: 0 8px 24px rgba(24, 62, 96, 0.05);
+}
+
+html.dark .astro-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.astro-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--astro-line);
+}
+
+.astro-card-title {
+  margin: 0;
+  padding: 0;
+  border: none;
+  color: var(--astro-ink);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.astro-card-title::before,
+.astro-card-title::after {
+  content: none;
+}
+
+.astro-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--astro-muted);
+  font-size: 0.72rem;
+}
+
+.astro-source-date strong {
+  color: var(--astro-blue);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.astro-source-link {
+  color: var(--astro-blue);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(46, 117, 182, 0.35);
+}
+
+.astro-source-link:hover {
+  color: var(--astro-blue-soft);
+}
+
+/* ---------- 运势正文 ---------- */
+
+.astro-text {
+  margin-top: 14px;
+  color: var(--astro-ink);
+  font-size: 0.94rem;
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.astro-origin {
+  margin-top: 14px;
+  margin-bottom: 0;
+  border-top: 1px dashed var(--astro-line);
+  padding-top: 10px;
+}
+
+/* 主题给所有 summary 套了一层「折叠面板」样式（15px padding、边框、底色、
+   1.2rem 字号），这里必须整套重置，否则会变成一个空的大灰块。 */
+.astro-origin summary {
+  margin: 0;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--astro-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  cursor: pointer;
+  list-style: none;
+}
+
+.astro-origin summary:hover {
+  background: transparent;
+  color: var(--astro-blue);
+}
+
+.astro-origin summary::-webkit-details-marker {
+  display: none;
+}
+
+.astro-origin summary::marker {
+  display: none;
+}
+
+.astro-origin summary::before {
+  content: "▸ ";
+  color: var(--astro-blue);
+}
+
+.astro-origin[open] summary::before {
+  content: "▾ ";
+}
+
+.astro-origin-text {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--astro-soft);
+  color: var(--astro-muted);
+  font-size: 0.82rem;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* ---------- 月相 ---------- */
+
+.astro-moon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: var(--astro-soft);
+  color: var(--astro-ink);
+  font-size: 0.8rem;
+}
+
+.astro-moon-name {
+  font-weight: 700;
+}
+
+.astro-moon-bar {
+  position: relative;
+  flex: 1 1 120px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(46, 117, 182, 0.16);
+}
+
+.astro-moon-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4A90D9 0%, #2E75B6 100%);
+}
+
+.astro-moon-pct {
+  color: var(--astro-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 行星位置 ---------- */
+
+.astro-planets {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.astro-planet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  padding: 9px 11px;
+  border: 1px solid var(--astro-line);
+  border-radius: 11px;
+  background: var(--astro-soft);
+}
+
+.astro-planet-name {
+  color: var(--astro-muted);
+  font-size: 0.72rem;
+}
+
+.astro-planet-pos {
+  color: var(--astro-ink);
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.astro-retro {
+  color: #C98A3A;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+html.dark .astro-retro {
+  color: #E0B36A;
+}
+
+/* ---------- 相位 ---------- */
+
+.astro-aspects {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.astro-aspect {
+  padding: 10px 13px;
+  border-left: 3px solid var(--astro-blue);
+  border-radius: 4px 10px 10px 4px;
+  background: var(--astro-soft);
+  font-size: 0.8rem;
+}
+
+.astro-aspect-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.astro-aspect-type {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(46, 117, 182, 0.14);
+  color: var(--astro-blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+html.dark .astro-aspect-type {
+  background: rgba(107, 166, 220, 0.18);
+  color: #A9CCEF;
+}
+
+.astro-aspect-body {
+  color: var(--astro-ink);
+  font-weight: 600;
+}
+
+.astro-aspect-orb {
+  margin-left: auto;
+  color: var(--astro-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 相位展开：默认收起，点「展开解读」再看，行首是模型写的一句。 */
+.astro-aspect-more {
+  margin-top: 6px;
+  margin-bottom: 0; /* 主题给 details 默认 1rem 下边距，会把每条相位撑得很空 */
+  border-top: 1px dashed var(--astro-line);
+  padding-top: 5px;
+}
+
+/* 主题给所有 summary 套了折叠面板样式，这里整套重置成一行小字。 */
+.astro-aspect-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 2px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--astro-blue);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  list-style: none;
+}
+
+.astro-aspect-more summary:hover {
+  color: var(--astro-blue);
+  background: transparent;
+  text-decoration: underline;
+}
+
+.astro-aspect-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.astro-aspect-more summary::marker {
+  content: "";
+}
+
+.astro-aspect-more summary::before {
+  content: "›";
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: transform 0.16s ease;
+}
+
+.astro-aspect-more[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.astro-aspect-read {
+  margin: 6px 0 2px;
+  color: var(--astro-ink);
+  font-size: 0.82rem;
+  line-height: 1.85;
+}
+
+.astro-ai-stamp {
+  display: block;
+  margin-top: 5px;
+  color: var(--astro-muted);
+  font-size: 0.64rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  text-align: right;
+  opacity: 0.55;
+}
+
+/* ---------- 解读 ---------- */
+
+.astro-read {
+  margin-top: 18px;
+  padding: 15px 17px;
+  border: 1px solid var(--astro-line);
+  border-radius: 14px;
+  background: var(--astro-card);
+}
+
+.astro-read-title {
+  margin: 0 0 8px;
+  padding: 0;
+  border: none;
+  color: var(--astro-blue);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.astro-read-title::before,
+.astro-read-title::after {
+  content: none;
+}
+
+.astro-read p {
+  margin: 0;
+  color: var(--astro-ink);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.astro-read p + p {
+  margin-top: 10px;
+}
+
+/* 太阳 / 上升两张解读卡，桌面并排、手机叠起来。 */
+.astro-read-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.astro-read-grid .astro-read {
+  margin-top: 0;
+}
+
+/* ---------- 页脚 ---------- */
+
+.astro-footer {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--astro-line);
+  color: var(--astro-muted);
+  font-size: 0.72rem;
+  line-height: 1.8;
+}
+
+.astro-footer p {
+  margin: 0 0 6px;
+}
+
+/* 这一句说明哪些字是 AI 写的，刻意压到最浅，存在感低但不藏起来。 */
+.astro-footer-ai {
+  color: var(--astro-muted);
+  opacity: 0.72;
+}
+
+.astro-footer-meta {
+  color: var(--astro-muted);
+  opacity: 0.72;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 空状态 ---------- */
+
+.astro-empty {
+  margin-top: 16px;
+  padding: 26px 22px;
+  border: 1px dashed var(--astro-line);
+  border-radius: 16px;
+  background: var(--astro-card);
+  color: var(--astro-muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 1024px) {
+  .astro-planets {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .astro-picker-section {
+    gap: 8px 10px;
+  }
+
+  .astro-select {
+    min-width: 150px;
+    font-size: 0.86rem;
+  }
+
+  .astro-hero {
+    padding: 22px 18px 20px;
+    border-radius: 18px;
+  }
+
+  .astro-card {
+    padding: 16px 15px 14px;
+    border-radius: 15px;
+  }
+
+  .astro-planets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .astro-read-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .astro-text {
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+
+  .astro-aspect-orb {
+    margin-left: 0;
+  }
+}
