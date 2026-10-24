@@ -489,6 +489,17 @@
     els.leaderboard.appendChild(p);
   }
 
+  // Worker 还没部署或网络卡住时，别让「正在读取排行榜…」一直转。
+  function fetchWithTimeout(url, options, timeoutMs) {
+    if (typeof AbortController === "undefined") return fetch(url, options);
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, timeoutMs || 8000);
+    var opts = {};
+    Object.keys(options || {}).forEach(function (key) { opts[key] = options[key]; });
+    opts.signal = controller.signal;
+    return fetch(url, opts).finally(function () { clearTimeout(timer); });
+  }
+
   function loadLeaderboard(silent) {
     var base = resolveApiBase();
     if (!base) {
@@ -497,7 +508,7 @@
       return;
     }
     if (!silent) els.refresh.disabled = true;
-    fetch(base + "/leaderboard?limit=20", { cache: "no-store" })
+    fetchWithTimeout(base + "/leaderboard?limit=20", { cache: "no-store" }, 8000)
       .then(function (response) {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -531,11 +542,11 @@
     button.disabled = true;
     showFormMessage("正在上传…", false);
 
-    fetch(base + "/score", {
+    fetchWithTimeout(base + "/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: state.playerId, name: name, score: state.score })
-    })
+    }, 10000)
       .then(function (response) {
         return response.json().then(function (data) {
           if (!response.ok || !data.ok) throw new Error(data && data.error ? data.error : "提交失败");
