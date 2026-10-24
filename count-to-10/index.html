@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <!-- 全服排行榜地址：Worker 部署好以后，把这里换成实际的 workers.dev 地址。 -->
+  <meta name="ct10-api" content="https://count-to-10.curiosity-chen.workers.dev">
+  <title>COUNT TO 10 · 秘密基地</title>
+  <script>
+    // 先于页面渲染读取博客的深浅色设置，避免闪一下白底。
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下读不到就跟随系统 */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="/count-to-10/game.css?v=2026-10-24.10">
+</head>
+<body>
+  <div class="ct10-bg" aria-hidden="true"></div>
+
+  <header class="ct10-top">
+    <a class="ct10-back" href="/"><span aria-hidden="true">←</span> 秘密基地</a>
+    <button class="ct10-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+      <svg data-theme-icon viewBox="0 0 24 24" width="18" height="18" fill="none"
+        stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+        <path class="ct10-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+        <g class="ct10-icon-sun">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+        </g>
+      </svg>
+    </button>
+  </header>
+
+  <main class="ct10-main">
+    <section class="ct10-intro">
+      <p class="ct10-eyebrow">MINI GAME · 60 SECONDS</p>
+      <h1>COUNT <span>TO</span> 10</h1>
+      <p class="ct10-sub">按住并拖出一个矩形，让框里的数字加起来正好是 10。消掉的方块越多，分数越高。</p>
+    </section>
+
+    <section class="ct10-shell" aria-label="COUNT TO 10 游戏">
+      <div class="ct10-hud">
+        <div class="ct10-stat">
+          <span>得分</span>
+          <strong data-score>0</strong>
+        </div>
+        <div class="ct10-stat">
+          <span>剩余</span>
+          <strong data-time>60</strong><em>秒</em>
+        </div>
+        <div class="ct10-stat">
+          <span>个人最佳</span>
+          <strong data-best>0</strong>
+        </div>
+      </div>
+
+      <p class="ct10-status" data-status>拖出一块矩形，和等于 10 就能消除</p>
+
+      <div class="ct10-board-wrap">
+        <div class="ct10-board" data-board role="grid" aria-label="数字棋盘"></div>
+        <div class="ct10-cover" data-cover>
+          <p class="ct10-cover-title">准备好了吗？</p>
+          <button type="button" class="ct10-btn is-primary is-large" data-start>开始游戏</button>
+          <small>60 秒 · 框选相邻方块 · 和为 10</small>
+        </div>
+      </div>
+
+      <div class="ct10-actions">
+        <button type="button" class="ct10-btn" data-restart hidden>重新开始</button>
+        <p class="ct10-tip">矩形里可以有空格；分数只算有数字的格子。</p>
+      </div>
+    </section>
+
+    <section class="ct10-lb-section" aria-label="全服排行榜">
+      <div class="ct10-lb-head">
+        <div>
+          <p class="ct10-eyebrow">GLOBAL LEADERBOARD</p>
+          <h2>全服排行榜</h2>
+        </div>
+        <button type="button" class="ct10-refresh" data-refresh>刷新</button>
+      </div>
+      <div class="ct10-leaderboard" data-leaderboard aria-live="polite">
+        <p class="ct10-lb-empty">正在读取排行榜…</p>
+      </div>
+      <p class="ct10-lb-note" data-lb-note>昵称只用于排行榜展示，不需要注册。</p>
+    </section>
+  </main>
+
+  <footer class="ct10-footer">
+    <a href="/">← 回到秘密基地</a>
+    <span>COUNT TO 10</span>
+  </footer>
+
+  <div class="ct10-modal" data-modal hidden>
+    <div class="ct10-modal-card" role="dialog" aria-modal="true" aria-labelledby="ct10-modal-title">
+      <p class="ct10-eyebrow">TIME'S UP</p>
+      <h2 id="ct10-modal-title" data-modal-title>本局结束</h2>
+      <p class="ct10-modal-score"><strong data-final-score>0</strong><span>分</span></p>
+      <p class="ct10-modal-best" data-modal-best></p>
+
+      <form class="ct10-submit" data-submit-form hidden>
+        <label for="ct10-name">留下昵称，登上全服榜</label>
+        <div class="ct10-submit-row">
+          <input id="ct10-name" name="name" maxlength="12" autocomplete="nickname" placeholder="例如：小狗" required>
+          <button type="submit" class="ct10-btn is-primary">上榜</button>
+        </div>
+        <p class="ct10-form-msg" data-form-msg></p>
+      </form>
+
+      <div class="ct10-modal-actions">
+        <button type="button" class="ct10-btn is-primary" data-again>再来一局</button>
+        <button type="button" class="ct10-btn" data-close-modal>先不玩了</button>
+      </div>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="ct10-noscript">这个小游戏需要 JavaScript 才能运行。</p>
+  </noscript>
+
+  <script src="/count-to-10/game.js?v=2026-10-24.10"></script>
+</body>
+</html>
