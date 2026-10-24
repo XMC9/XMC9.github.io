@@ -538,15 +538,18 @@ html.dark .marketing-dashboard .page-template-content > blockquote mark.mkt-mark
   }
 
   .marketing-dashboard .mkt-hero-meta {
-    align-items: flex-start;
+    align-items: baseline;
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 3px 9px;
+    flex-wrap: nowrap;
+    gap: 6px;
     text-align: left;
+    line-height: 1.4;
+    white-space: nowrap;
   }
 
   .marketing-dashboard .mkt-hero-meta strong {
-    font-size: 1rem;
+    font-size: 0.82rem;
+    line-height: inherit;
   }
 
   .marketing-dashboard .mkt-overview {
