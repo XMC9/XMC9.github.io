@@ -1,16 +1,16 @@
 /* ============================================================
  * COUNT TO 10 · 游戏逻辑
- * 原生 JS，无依赖。棋盘固定 8 行 × 10 列，拖矩形求和 = 10 消除。
+ * 原生 JS，无依赖。棋盘固定 16 行 × 10 列，拖矩形求和 = 10 消除。
  * ============================================================ */
 
 (function () {
   "use strict";
 
-  var ROWS = 8;
+  var ROWS = 16;
   var COLS = 10;
   var DURATION = 60;
   var TARGET = 10;
-  var MAX_SCORE = ROWS * COLS; // 最多消掉 80 个方块
+  var MAX_SCORE = ROWS * COLS; // 最多消掉 160 个方块
   var BEST_KEY = "ct10-best";
   var ID_KEY = "ct10-player-id";
   var NAME_KEY = "ct10-player-name";
@@ -126,7 +126,7 @@
     return { sum: sum, count: count, top: top, bottom: bottom, left: left, right: right };
   }
 
-  // 棋盘上是否还至少存在一个和为 10 的矩形。8×10 最多约 2000 个矩形，很快。
+  // 棋盘上是否还至少存在一个和为 10 的矩形。16×10 最多约 7500 个矩形，很快。
   function hasMove(board) {
     for (var r1 = 0; r1 < ROWS; r1++) {
       for (var r2 = r1; r2 < ROWS; r2++) {

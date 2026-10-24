@@ -1547,108 +1547,226 @@ html.dark .custom-home .home-random-slot.is-rolling {
   color: #7FB2E5;
 }
 
-/* ---------- 首页 COUNT TO 10 入口 ---------- */
+/* ---------- 首页 PLAY NOOK 小游戏入口 ---------- */
 
-.custom-home .home-game-section {
+.custom-home .home-games-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 26px;
   margin-top: 24px;
+  padding: 22px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: var(--background-color);
+  box-shadow: var(--redefine-box-shadow-flat);
 }
 
-.custom-home .home-game-card {
+.custom-home .home-games-head { min-width: 0; }
+
+.custom-home .home-games-eyebrow {
+  margin: 0 0 5px;
+  color: #2E75B6;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.custom-home .home-games-title {
+  margin: 0;
+  color: #16283F;
+  font-size: 1.42rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.custom-home .home-games-desc {
+  max-width: 320px;
+  margin: 8px 0 0;
+  color: #5E768E;
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.custom-home .home-games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 190px);
+  gap: 14px;
+}
+
+.custom-home .home-game-tile {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 22px;
+  gap: 10px;
   overflow: hidden;
-  padding: 24px 28px;
-  border: 1px solid rgba(150, 198, 238, 0.2);
-  border-radius: 20px;
-  background: linear-gradient(135deg, #0D2540 0%, #163F63 56%, #1D4E7A 100%);
-  box-shadow: 0 16px 38px rgba(24, 62, 96, 0.16);
+  width: 190px;
+  aspect-ratio: 1;
+  padding: 16px;
+  border: 1px solid rgba(46, 117, 182, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(155deg, #FBFDFF 0%, #E8F2FB 100%);
+  box-shadow: 0 8px 22px rgba(24, 62, 96, 0.08);
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 角落里一个半透明的 10，作为小游戏的记号，不抢文字。 */
-.custom-home .home-game-card::after {
-  content: "10";
+/* 右下角一团很淡的蓝，让方块不显得平。 */
+.custom-home .home-game-tile::after {
+  content: "";
   position: absolute;
-  right: 128px;
-  bottom: -34px;
-  color: rgba(255, 255, 255, 0.07);
-  font-size: 8.4rem;
-  font-weight: 900;
-  letter-spacing: -0.08em;
-  line-height: 1;
+  right: -32px;
+  bottom: -44px;
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46, 117, 182, 0.14), transparent 70%);
   pointer-events: none;
 }
 
-.custom-home .home-game-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 46px rgba(24, 62, 96, 0.24);
+.custom-home .home-game-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(24, 62, 96, 0.16);
 }
 
-.custom-home .home-game-copy {
+.custom-home .home-game-mini {
   position: relative;
   z-index: 1;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 92px;
+  padding: 7px;
+  border-radius: 12px;
+  background: #0D2540;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.custom-home .home-game-eyebrow {
-  margin: 0 0 6px;
-  color: #9FC6E8;
-  font-size: 0.64rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+.custom-home .home-game-mini i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: #16283F;
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1;
 }
 
-.custom-home .home-game-title {
-  margin: 0;
-  color: #FFFFFF;
-  font-size: 1.58rem;
+.custom-home .home-game-mini i.is-picked {
+  background: #FFD76A;
+  color: #3A2A00;
+}
+
+.custom-home .home-game-tile-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.custom-home .home-game-tile-copy strong {
+  color: #16283F;
+  font-size: 0.98rem;
   font-weight: 900;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
 }
 
-.custom-home .home-game-desc {
-  max-width: 520px;
-  margin: 9px 0 0;
-  color: #B7D4EC;
-  font-size: 0.82rem;
-  line-height: 1.65;
+.custom-home .home-game-tile-copy small {
+  color: #5E768E;
+  font-size: 0.68rem;
 }
 
-.custom-home .home-game-cta {
+.custom-home .home-game-tile-go {
   position: relative;
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-  padding: 10px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.13);
-  color: #FFFFFF;
-  font-size: 0.8rem;
+  gap: 6px;
+  color: #2E75B6;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
+  letter-spacing: 0.04em;
 }
 
-.custom-home .home-game-card:hover .home-game-cta {
-  background: rgba(255, 255, 255, 0.22);
+.custom-home .home-game-tile.is-soon {
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-color: rgba(46, 117, 182, 0.26);
+  background: rgba(232, 241, 248, 0.46);
+  box-shadow: none;
+  text-align: center;
+  cursor: default;
 }
 
-html.dark .custom-home .home-game-card {
-  border-color: rgba(127, 178, 229, 0.2);
-  background: linear-gradient(135deg, #0A1B2E 0%, #123453 56%, #173F63 100%);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
+.custom-home .home-game-tile.is-soon::after { display: none; }
+
+.custom-home .home-game-soon-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px dashed rgba(46, 117, 182, 0.36);
+  border-radius: 50%;
+  color: #2E75B6;
+  font-size: 1.3rem;
+  font-weight: 300;
+  line-height: 1;
 }
 
-html.dark .custom-home .home-game-desc {
-  color: #A9C8E1;
+.custom-home .home-game-tile.is-soon .home-game-tile-copy strong {
+  color: #5E768E;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+
+.custom-home .home-game-tile.is-soon .home-game-tile-copy small {
+  font-size: 0.64rem;
+  opacity: 0.85;
+}
+
+/* 深色：整块和方块都用藏青，不偏青绿。 */
+html.dark .custom-home .home-games-section {
+  border-color: rgba(127, 178, 229, 0.16);
+  background: #12233A;
+}
+
+html.dark .custom-home .home-games-eyebrow { color: #7FB2E5; }
+html.dark .custom-home .home-games-title { color: #EDF5FD; }
+html.dark .custom-home .home-games-desc { color: #A9C8E1; }
+
+html.dark .custom-home .home-game-tile {
+  border-color: rgba(127, 178, 229, 0.18);
+  background: linear-gradient(155deg, #16304B 0%, #10253C 100%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .custom-home .home-game-mini { background: #081522; }
+html.dark .custom-home .home-game-tile-copy strong { color: #EAF4FF; }
+html.dark .custom-home .home-game-tile-copy small { color: #9DB7D2; }
+html.dark .custom-home .home-game-tile-go { color: #7FB2E5; }
+
+html.dark .custom-home .home-game-tile.is-soon {
+  border-color: rgba(127, 178, 229, 0.24);
+  background: rgba(18, 35, 58, 0.55);
+}
+
+html.dark .custom-home .home-game-soon-mark {
+  border-color: rgba(127, 178, 229, 0.4);
+  color: #7FB2E5;
+}
+
+html.dark .custom-home .home-game-tile.is-soon .home-game-tile-copy strong {
+  color: #9DB7D2;
 }
 
 /* ---------- 侧边栏底部的小狗值班卡 ---------- */
@@ -1856,35 +1974,43 @@ html.dark .home-sidebar-note p {
     display: none;
   }
 
-  .custom-home .home-game-section {
-    margin-top: 20px;
-  }
-
-  .custom-home .home-game-card {
-    flex-direction: column;
-    align-items: flex-start;
+  .custom-home .home-games-section {
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
-    padding: 20px 18px;
+    margin-top: 20px;
+    padding: 18px 16px 20px;
     border-radius: 16px;
   }
 
-  .custom-home .home-game-card::after {
-    right: 14px;
-    bottom: -22px;
-    font-size: 6.2rem;
+  .custom-home .home-games-title { font-size: 1.2rem; }
+
+  .custom-home .home-games-desc {
+    max-width: none;
+    font-size: 0.76rem;
   }
 
-  .custom-home .home-game-title {
-    font-size: 1.32rem;
+  .custom-home .home-games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  .custom-home .home-game-desc {
-    font-size: 0.78rem;
+  .custom-home .home-game-tile {
+    width: 100%;
+    gap: 8px;
+    padding: 13px;
+    border-radius: 15px;
   }
 
-  .custom-home .home-game-cta {
-    padding: 9px 16px;
+  .custom-home .home-game-mini {
+    width: 78px;
+    padding: 6px;
+    gap: 3px;
   }
+
+  .custom-home .home-game-mini i { font-size: 0.58rem; }
+  .custom-home .home-game-tile-copy strong { font-size: 0.88rem; }
+  .custom-home .home-game-tile-copy small { font-size: 0.62rem; }
+  .custom-home .home-game-tile-go { font-size: 0.66rem; }
 }
 
 @media (max-width: 480px) {

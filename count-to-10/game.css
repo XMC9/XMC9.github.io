@@ -137,7 +137,7 @@ html[data-theme="dark"] .ct10-icon-moon { display: none; }
 /* ---------- 主区域 ---------- */
 
 .ct10-main {
-  width: min(100%, 860px);
+  width: min(100%, 760px);
   margin: 0 auto;
   padding: 48px 20px 32px;
 }
@@ -179,7 +179,8 @@ html[data-theme="dark"] .ct10-icon-moon { display: none; }
 /* ---------- 游戏面板 ---------- */
 
 .ct10-shell {
-  margin-top: 34px;
+  max-width: 620px;
+  margin: 34px auto 0;
   padding: 22px;
   border: 1px solid var(--ct10-line);
   border-radius: 28px;
@@ -244,7 +245,7 @@ html[data-theme="dark"] .ct10-stat { background: rgba(255, 255, 255, 0.04); }
 .ct10-board-wrap {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -263,8 +264,10 @@ html[data-theme="dark"] .ct10-stat { background: rgba(255, 255, 255, 0.04); }
   display: flex;
   align-items: center;
   justify-content: center;
+  place-self: center;
+  width: 88%;
   aspect-ratio: 1;
-  border-radius: 9px;
+  border-radius: 8px;
   background: var(--ct10-tile);
   box-shadow: 0 2px 0 rgba(24, 62, 96, 0.12);
   color: var(--ct10-tile-ink);
@@ -396,7 +399,8 @@ html[data-theme="dark"] .ct10-btn.is-primary {
 /* ---------- 排行榜 ---------- */
 
 .ct10-lb-section {
-  margin-top: 34px;
+  max-width: 620px;
+  margin: 34px auto 0;
   padding: 22px;
   border: 1px solid var(--ct10-line);
   border-radius: 24px;
@@ -610,15 +614,27 @@ html[data-theme="dark"] .ct10-form-msg.is-error { color: #FF9C9C; }
 /* ---------- 页脚 ---------- */
 
 .ct10-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(100%, 860px);
+  width: min(100%, 760px);
   margin: 0 auto;
   padding: 10px 20px 34px;
   color: var(--ct10-muted);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
+}
+
+.ct10-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ct10-credit {
+  margin: 8px 0 0;
+  color: var(--ct10-muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+  text-align: center;
 }
 
 .ct10-footer a {

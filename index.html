@@ -113,13 +113,13 @@
 
     <!--- Site custom styles (homepage / line-dog category) --->
     
-    <link rel="stylesheet" href="/css/custom-theme.css?v=2026-10-24.10">
+    <link rel="stylesheet" href="/css/custom-theme.css?v=2026-10-24.12">
     <!--- Marketing Dashboard bulletin --->
-    <link rel="stylesheet" href="/css/marketing-dashboard.css?v=2026-10-24.10">
+    <link rel="stylesheet" href="/css/marketing-dashboard.css?v=2026-10-24.12">
     <!--- News Dashboard daily briefing --->
-    <link rel="stylesheet" href="/css/notice.css?v=2026-10-24.10">
+    <link rel="stylesheet" href="/css/notice.css?v=2026-10-24.12">
     <!--- Daily Astrology --->
-    <link rel="stylesheet" href="/css/astrology.css?v=2026-10-24.10">
+    <link rel="stylesheet" href="/css/astrology.css?v=2026-10-24.12">
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 
@@ -887,15 +887,35 @@
           </div>
         </section>
 
-        <section class="home-game-section home-reveal" aria-label="COUNT TO 10">
-          <a class="home-game-card" href="/count-to-10/">
-            <div class="home-game-copy">
-              <p class="home-game-eyebrow">MINI GAME · 60 SECONDS</p>
-              <h2 class="home-game-title">COUNT TO 10</h2>
-              <p class="home-game-desc">框出相邻的方块，让它们的和正好是 10。60 秒，看看能消掉多少。</p>
+        <section class="home-games-section home-reveal" aria-labelledby="home-games-title">
+          <div class="home-games-head">
+            <p class="home-games-eyebrow">MINI GAMES</p>
+            <h2 class="home-games-title" id="home-games-title">PLAY NOOK</h2>
+            <p class="home-games-desc">60 秒一局，随时来玩。以后还会有新的小游戏。</p>
+          </div>
+
+          <div class="home-games-grid">
+            <a class="home-game-tile" href="/count-to-10/">
+              <span class="home-game-mini" aria-hidden="true">
+                <i class="is-picked">1</i><i class="is-picked">9</i><i>2</i>
+                <i>3</i><i>7</i><i>4</i>
+                <i>5</i><i>6</i><i>8</i>
+              </span>
+              <span class="home-game-tile-copy">
+                <strong>COUNT TO 10</strong>
+                <small>60 秒 · 凑十消除</small>
+              </span>
+              <span class="home-game-tile-go">开始玩 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
+
+            <div class="home-game-tile is-soon" aria-hidden="true">
+              <span class="home-game-soon-mark">+</span>
+              <span class="home-game-tile-copy">
+                <strong>MORE SOON</strong>
+                <small>下一款小游戏正在路上</small>
+              </span>
             </div>
-            <span class="home-game-cta">开始玩 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
-          </a>
+          </div>
         </section>
         
       </div>
@@ -1056,7 +1076,7 @@
 
   
 
-  <script src="/js/home.js?v=2026-10-24.10" data-swup-reload-script></script>
+  <script src="/js/home.js?v=2026-10-24.12" data-swup-reload-script></script>
 </main>
 
 
