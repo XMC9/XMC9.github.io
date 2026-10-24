@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<meta name="theme-color" content="#E8F1F8">
+	<!-- 全服排行榜地址：和 COUNT TO 10 共用一个 Worker。 -->
+	<meta name="hx-api" content="https://count-to-10.curiosity-chen.workers.dev">
+	<title>HEXTRIS · 秘密基地</title>
+	<script>
+		// 先于渲染读取博客的深浅色设置，避免闪一下白底。
+		(function () {
+			try {
+				var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+				var dark = stored && typeof stored.isDark !== 'undefined'
+					? !!stored.isDark
+					: window.matchMedia('(prefers-color-scheme: dark)').matches;
+				document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+			} catch (e) { /* 隐私模式下读不到就跟随系统 */ }
+		})();
+	</script>
+	<link rel="icon" type="image/svg+xml" href="./favicon.svg?v=2026-10-24.4">
+	<link rel="stylesheet" href="./style/style.css?v=2026-10-24.4">
+	<link rel="stylesheet" href="./css/hx.css?v=2026-10-24.4">
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+	<header class="hx-top">
+		<a class="hx-back" href="/"><span aria-hidden="true">←</span> 秘密基地</a>
+		<span class="hx-brand" aria-hidden="true">HEXTRIS</span>
+		<div class="hx-actions">
+			<button class="hx-btn" type="button" data-help>玩法</button>
+			<button class="hx-btn" type="button" data-lb-open>排行榜</button>
+			<button class="hx-btn hx-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+				<svg data-theme-icon viewBox="0 0 24 24" width="17" height="17" fill="none"
+					stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+					<path class="hx-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+					<g class="hx-icon-sun">
+						<circle cx="12" cy="12" r="4"></circle>
+						<path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+					</g>
+				</svg>
+			</button>
+		</div>
+	</header>
+
+	<div id="highScoreInGameText">
+		<div id="highScoreInGameTextHeader">历史最高</div>
+		<div id="currentHighScore">0</div>
+	</div>
+
+	<div id="overlay" class="overlay"></div>
+	<div id="startBtn" role="button" tabindex="0" aria-label="开始游戏"></div>
+
+	<div id="helpScreen" class="unselectable" role="dialog" aria-label="玩法说明">
+		<button class="hx-help-close" type="button" data-help-close aria-label="关闭玩法">×</button>
+		<div id="inst_main_body"></div>
+	</div>
+
+	<img id="openSideBar" class="helpText" src="./images/btn_help.svg" alt="">
+	<img id="pauseBtn" src="./images/btn_pause.svg" alt="暂停">
+	<img id="restartBtn" src="./images/btn_restart.svg?v=2026-10-24.4" alt="重新开始">
+
+	<div id="gameoverscreen">
+		<div id="container">
+			<div id="gameOverBox" class="GOTitle">游戏结束</div>
+			<div id="cScore">0</div>
+			<div id="highScoresTitle" class="GOTitle">这台设备的前三</div>
+			<div class="score"><span class="scoreNum">1.</span><span id="1place">0</span></div>
+			<div class="score"><span class="scoreNum">2.</span><span id="2place">0</span></div>
+			<div class="score"><span class="scoreNum">3.</span><span id="3place">0</span></div>
+			<button id="hxLbBtn" class="hx-primary" type="button" data-lb-open>全服排行榜</button>
+			<p class="hx-inline-credit">Hextris © 2018 Logan Engstrom &amp; Garrett Finucane · GPLv3</p>
+		</div>
+		<div id="bottomContainer">
+			<img id="restart" src="./images/btn_restart.svg?v=2026-10-24.4" height="57px" alt="重新开始">
+			<div id="buttonCont"></div>
+		</div>
+	</div>
+
+	<div id="hxLb" class="hx-lb" hidden>
+		<div class="hx-lb-backdrop" data-lb-close></div>
+		<section class="hx-lb-card" role="dialog" aria-modal="true" aria-labelledby="hxLbTitle">
+			<header class="hx-lb-head">
+				<div>
+					<p class="hx-eyebrow">GLOBAL LEADERBOARD</p>
+					<h2 id="hxLbTitle">全服排行榜</h2>
+				</div>
+				<div class="hx-lb-head-actions">
+					<button class="hx-ghost" type="button" data-lb-refresh>刷新</button>
+					<button class="hx-close" type="button" data-lb-close aria-label="关闭排行榜">×</button>
+				</div>
+			</header>
+
+			<p class="hx-lb-score" data-lb-score hidden></p>
+			<p class="hx-lb-hint" data-lb-hint>游戏结束之后，可以在这里留下昵称上榜。</p>
+
+			<form class="hx-lb-form" data-lb-form hidden>
+				<label for="hx-name">留下昵称，登上全服榜</label>
+				<div class="hx-lb-form-row">
+					<input id="hx-name" name="name" maxlength="12" autocomplete="nickname" placeholder="例如：小狗" required>
+					<button class="hx-primary" type="submit" data-lb-submit>上榜</button>
+				</div>
+				<p class="hx-lb-msg" data-lb-msg></p>
+			</form>
+
+			<div class="hx-lb-list" data-lb-list aria-live="polite">
+				<p class="hx-lb-empty">正在读取排行榜…</p>
+			</div>
+			<p class="hx-lb-note">昵称只用于排行榜展示，不需要注册。</p>
+			<p class="hx-lb-credit">Hextris © 2018 Logan Engstrom &amp; Garrett Finucane，以 GPLv3 授权 ·
+				<a href="https://github.com/XMC9/hextris" target="_blank" rel="noopener">源码</a>
+			</p>
+		</section>
+	</div>
+
+	<noscript>
+		<p class="hx-noscript">这个小游戏需要 JavaScript 才能运行。</p>
+	</noscript>
+
+	<script src="./vendor/jquery.js"></script>
+	<script src="./vendor/js.cookie.js"></script>
+	<script src="./vendor/jsonfn.min.js"></script>
+	<script src="./vendor/keypress.min.js"></script>
+	<script src="./js/hx-theme.js?v=2026-10-24.4"></script>
+	<script src="./js/save-state.js?v=2026-10-24.4"></script>
+	<script src="./js/view.js?v=2026-10-24.4"></script>
+	<script src="./js/wavegen.js?v=2026-10-24.4"></script>
+	<script src="./js/math.js?v=2026-10-24.4"></script>
+	<script src="./js/Block.js?v=2026-10-24.4"></script>
+	<script src="./js/Hex.js?v=2026-10-24.4"></script>
+	<script src="./js/Text.js?v=2026-10-24.4"></script>
+	<script src="./js/comboTimer.js?v=2026-10-24.4"></script>
+	<script src="./js/checking.js?v=2026-10-24.4"></script>
+	<script src="./js/update.js?v=2026-10-24.4"></script>
+	<script src="./js/render.js?v=2026-10-24.4"></script>
+	<script src="./js/input.js?v=2026-10-24.4"></script>
+	<script src="./js/main.js?v=2026-10-24.4"></script>
+	<script src="./js/initialization.js?v=2026-10-24.4"></script>
+	<script src="./js/hx-ui.js?v=2026-10-24.4"></script>
+</body>
+</html>

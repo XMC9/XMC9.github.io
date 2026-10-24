@@ -1550,10 +1550,6 @@ html.dark .custom-home .home-random-slot.is-rolling {
 /* ---------- 首页 PLAY NOOK 小游戏入口 ---------- */
 
 .custom-home .home-games-section {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 26px;
   margin-top: 24px;
   padding: 22px 24px;
   border: 1px solid var(--border-color);
@@ -1562,7 +1558,30 @@ html.dark .custom-home .home-random-slot.is-rolling {
   box-shadow: var(--redefine-box-shadow-flat);
 }
 
-.custom-home .home-games-head { min-width: 0; }
+.custom-home .home-games-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.custom-home .home-games-head-text { min-width: 0; }
+
+.custom-home .home-games-all {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 2px;
+  color: #2E75B6;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.custom-home .home-games-all:hover { color: #16283F; }
 
 .custom-home .home-games-eyebrow {
   margin: 0 0 5px;
@@ -1591,8 +1610,9 @@ html.dark .custom-home .home-random-slot.is-rolling {
 
 .custom-home .home-games-grid {
   display: grid;
-  grid-template-columns: repeat(2, 190px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  margin-top: 16px;
 }
 
 .custom-home .home-game-tile {
@@ -1602,8 +1622,8 @@ html.dark .custom-home .home-random-slot.is-rolling {
   justify-content: space-between;
   gap: 10px;
   overflow: hidden;
-  width: 190px;
-  aspect-ratio: 1;
+  width: 100%;
+  min-height: 172px;
   padding: 16px;
   border: 1px solid rgba(46, 117, 182, 0.18);
   border-radius: 18px;
@@ -1662,6 +1682,72 @@ html.dark .custom-home .home-random-slot.is-rolling {
   background: #FFD76A;
   color: #3A2A00;
 }
+
+/* HEXTRIS：一圈小六边形，颜色和游戏里的方块一致。 */
+.custom-home .home-game-hex {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 92px;
+  padding: 9px;
+  border-radius: 14px;
+  background: #0D2540;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.custom-home .home-game-hex i {
+  aspect-ratio: 1;
+  background: var(--c, #2E75B6);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+/* 2048：4×4 小棋盘，2 → 2048 由浅蓝走到金色。 */
+.custom-home .home-game-2048 {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  width: 92px;
+  padding: 6px;
+  border-radius: 12px;
+  background: #0D2540;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.custom-home .home-game-2048 i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: #F2F7FC;
+  color: #5E768E;
+  font-size: 0.5rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.custom-home .home-game-2048 i:nth-child(2) { background: #E3EEF8; }
+.custom-home .home-game-2048 i:nth-child(3) { background: #CFE2F3; }
+.custom-home .home-game-2048 i:nth-child(4) { background: #B3D2EC; color: #234867; }
+.custom-home .home-game-2048 i:nth-child(5) { background: #8FB9DF; color: #183A57; }
+.custom-home .home-game-2048 i:nth-child(6) { background: #6C9FD0; color: #FFFFFF; }
+.custom-home .home-game-2048 i:nth-child(7) { background: #4C86BE; color: #FFFFFF; }
+.custom-home .home-game-2048 i:nth-child(8) { background: #2E75B6; color: #FFFFFF; }
+.custom-home .home-game-2048 i:nth-child(9) { background: #1F5E97; color: #FFFFFF; }
+.custom-home .home-game-2048 i:nth-child(10) { background: #174A78; color: #FFFFFF; }
+.custom-home .home-game-2048 i.is-gold { background: #FFD76A; color: #3A2A00; }
+.custom-home .home-game-2048 i:last-child { background: rgba(255, 255, 255, 0.06); }
+.custom-home .home-game-2048 i:nth-child(4),
+.custom-home .home-game-2048 i:nth-child(7) { font-size: 0.42rem; }
+.custom-home .home-game-2048 i:nth-child(8),
+.custom-home .home-game-2048 i:nth-child(9),
+.custom-home .home-game-2048 i:nth-child(10),
+.custom-home .home-game-2048 i.is-gold { font-size: 0.36rem; }
 
 .custom-home .home-game-tile-copy {
   position: relative;
@@ -1743,6 +1829,8 @@ html.dark .custom-home .home-games-section {
 html.dark .custom-home .home-games-eyebrow { color: #7FB2E5; }
 html.dark .custom-home .home-games-title { color: #EDF5FD; }
 html.dark .custom-home .home-games-desc { color: #A9C8E1; }
+html.dark .custom-home .home-games-all { color: #7FB2E5; }
+html.dark .custom-home .home-games-all:hover { color: #EDF5FD; }
 
 html.dark .custom-home .home-game-tile {
   border-color: rgba(127, 178, 229, 0.18);
@@ -1750,10 +1838,25 @@ html.dark .custom-home .home-game-tile {
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
 }
 
-html.dark .custom-home .home-game-mini { background: #081522; }
+html.dark .custom-home .home-game-mini,
+html.dark .custom-home .home-game-hex,
+html.dark .custom-home .home-game-2048 { background: #081522; }
 html.dark .custom-home .home-game-tile-copy strong { color: #EAF4FF; }
 html.dark .custom-home .home-game-tile-copy small { color: #9DB7D2; }
 html.dark .custom-home .home-game-tile-go { color: #7FB2E5; }
+
+html.dark .custom-home .home-game-2048 i { background: #1B3550; color: #B8D3EA; }
+html.dark .custom-home .home-game-2048 i:nth-child(2) { background: #21405F; }
+html.dark .custom-home .home-game-2048 i:nth-child(3) { background: #274B70; }
+html.dark .custom-home .home-game-2048 i:nth-child(4) { background: #2F587F; color: #D9EAF8; }
+html.dark .custom-home .home-game-2048 i:nth-child(5) { background: #376590; color: #E4F1FB; }
+html.dark .custom-home .home-game-2048 i:nth-child(6) { background: #4073A1; color: #FFFFFF; }
+html.dark .custom-home .home-game-2048 i:nth-child(7) { background: #4A81B2; color: #FFFFFF; }
+html.dark .custom-home .home-game-2048 i:nth-child(8) { background: #2E75B6; color: #FFFFFF; }
+html.dark .custom-home .home-game-2048 i:nth-child(9) { background: #26649F; color: #FFFFFF; }
+html.dark .custom-home .home-game-2048 i:nth-child(10) { background: #1F568A; color: #FFFFFF; }
+html.dark .custom-home .home-game-2048 i.is-gold { background: #FFD76A; color: #3A2A00; }
+html.dark .custom-home .home-game-2048 i:last-child { background: rgba(255, 255, 255, 0.06); }
 
 html.dark .custom-home .home-game-tile.is-soon {
   border-color: rgba(127, 178, 229, 0.24);
@@ -1831,7 +1934,8 @@ html.dark .home-sidebar-note p {
 @media (min-width: 769px) {
   .home-sidebar-container + .home-custom-main .home-custom-top,
   .home-sidebar-container + .home-custom-main .home-feed-section,
-  .home-sidebar-container + .home-custom-main .home-random-section {
+  .home-sidebar-container + .home-custom-main .home-random-section,
+  .home-sidebar-container + .home-custom-main .home-games-section {
     margin-right: 38px;
   }
 }
@@ -1975,12 +2079,12 @@ html.dark .home-sidebar-note p {
   }
 
   .custom-home .home-games-section {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
     margin-top: 20px;
     padding: 18px 16px 20px;
     border-radius: 16px;
   }
+
+  .custom-home .home-games-head { gap: 12px; }
 
   .custom-home .home-games-title { font-size: 1.2rem; }
 
@@ -1989,28 +2093,61 @@ html.dark .home-sidebar-note p {
     font-size: 0.76rem;
   }
 
+  .custom-home .home-games-all {
+    gap: 4px;
+    font-size: 0.66rem;
+  }
+
   .custom-home .home-games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
+    margin-top: 14px;
   }
 
   .custom-home .home-game-tile {
+    /* 手机上一行一个，预览在左、文字在中、「开始玩」在右。 */
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
     width: 100%;
-    gap: 8px;
-    padding: 13px;
+    min-height: 0;
+    gap: 12px;
+    padding: 11px 13px;
     border-radius: 15px;
   }
 
+  .custom-home .home-game-mini,
+  .custom-home .home-game-hex,
+  .custom-home .home-game-2048 {
+    width: 64px;
+  }
+
   .custom-home .home-game-mini {
-    width: 78px;
-    padding: 6px;
+    padding: 5px;
     gap: 3px;
   }
 
-  .custom-home .home-game-mini i { font-size: 0.58rem; }
+  .custom-home .home-game-hex {
+    padding: 7px;
+    gap: 3px;
+  }
+
+  .custom-home .home-game-2048 {
+    padding: 5px;
+    gap: 2px;
+  }
+
+  .custom-home .home-game-mini i { font-size: 0.5rem; }
+  .custom-home .home-game-2048 i { font-size: 0.36rem; }
+  .custom-home .home-game-2048 i:nth-child(4),
+  .custom-home .home-game-2048 i:nth-child(7) { font-size: 0.3rem; }
+  .custom-home .home-game-2048 i:nth-child(8),
+  .custom-home .home-game-2048 i:nth-child(9),
+  .custom-home .home-game-2048 i:nth-child(10),
+  .custom-home .home-game-2048 i.is-gold { font-size: 0.26rem; }
   .custom-home .home-game-tile-copy strong { font-size: 0.88rem; }
   .custom-home .home-game-tile-copy small { font-size: 0.62rem; }
-  .custom-home .home-game-tile-go { font-size: 0.66rem; }
+  .custom-home .home-game-tile-go { font-size: 0.64rem; white-space: nowrap; }
 }
 
 @media (max-width: 480px) {

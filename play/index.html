@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <title>PLAY NOOK · 秘密基地</title>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下跟随系统 */ }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./play.css?v=2026-10-25.2">
+</head>
+<body>
+  <header class="p-top">
+    <a class="p-back" href="/"><span aria-hidden="true">←</span> 秘密基地</a>
+    <span class="p-brand" aria-hidden="true">PLAY NOOK</span>
+    <button class="p-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+      <svg data-theme-icon viewBox="0 0 24 24" width="17" height="17" fill="none"
+        stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+        <path class="p-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+        <g class="p-icon-sun">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+        </g>
+      </svg>
+    </button>
+  </header>
+
+  <main class="p-main">
+    <section class="p-head">
+      <p class="p-eyebrow">MINI GAMES</p>
+      <h1>PLAY NOOK</h1>
+      <p class="p-sub">三款小游戏，随时来玩。以后还会有新的。</p>
+    </section>
+
+    <section class="p-grid" aria-label="小游戏列表">
+      <a class="p-card" href="/count-to-10/">
+        <span class="p-preview p-preview-ct10" aria-hidden="true">
+          <i>1</i><i>9</i><i>2</i>
+          <i>3</i><i>7</i><i>4</i>
+          <i>5</i><i>6</i><i>8</i>
+        </span>
+        <span class="p-copy">
+          <small>60 秒 · 凑十消除</small>
+          <strong>COUNT TO 10</strong>
+          <span>拖出一个矩形，让框里的数字加起来正好是 10。</span>
+        </span>
+        <span class="p-go">开始玩 <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="p-card" href="/hextris/">
+        <span class="p-preview p-preview-hex" aria-hidden="true">
+          <i style="--c:#e06c5a"></i><i style="--c:#e8b85c"></i><i style="--c:#2e75b6"></i>
+          <i style="--c:#6faf8f"></i><i style="--c:#2e75b6"></i><i style="--c:#e06c5a"></i>
+          <i style="--c:#e8b85c"></i><i style="--c:#6faf8f"></i><i style="--c:#e06c5a"></i>
+        </span>
+        <span class="p-copy">
+          <small>转六边形 · 三消</small>
+          <strong>HEXTRIS</strong>
+          <span>旋转六边形，让三个同色方块连在一起。</span>
+        </span>
+        <span class="p-go">开始玩 <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="p-card" href="/2048/">
+        <span class="p-preview p-preview-2048" aria-hidden="true">
+          <i>2</i><i>4</i><i>8</i><i>16</i>
+          <i>32</i><i>64</i><i>128</i><i>256</i>
+          <i>512</i><i>1024</i><i>2048</i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span class="p-copy">
+          <small>合并数字 · 凑出 2048</small>
+          <strong>2048</strong>
+          <span>方向键或滑动，把相同数字合并成更大的数字。</span>
+        </span>
+        <span class="p-go">开始玩 <span aria-hidden="true">→</span></span>
+      </a>
+    </section>
+
+    <p class="p-foot">三款游戏都有全服排行榜 · <a href="/">回到秘密基地</a></p>
+  </main>
+
+  <script src="./play.js?v=2026-10-25.1"></script>
+</body>
+</html>

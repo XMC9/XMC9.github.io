@@ -554,6 +554,12 @@
         });
       })
       .then(function (data) {
+        if (data.taken) {
+          if (data.scores) renderLeaderboard(data.scores);
+          showFormMessage("这个昵称已经有 " + data.personal_best + " 分的成绩了，换一个昵称再提交吧", true);
+          button.disabled = false;
+          return;
+        }
         state.submitted = true;
         try { localStorage.setItem(NAME_KEY, name); } catch (e) { /* 忽略 */ }
         if (data.scores) renderLeaderboard(data.scores);

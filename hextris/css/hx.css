@@ -1,0 +1,572 @@
+/* ============================================================
+ * HEXTRIS × 秘密基地 · 界面配色
+ * 叠在游戏自带的 style.css 后面，只负责主题、顶栏和排行榜。
+ * 深色模式全部用藏青 / 深蓝，不掺青绿。
+ * ============================================================ */
+
+:root {
+	--hx-bg: #E8F1F8;
+	--hx-surface: rgba(255, 255, 255, 0.62);
+	--hx-surface-strong: #F7FBFF;
+	--hx-ink: #1F2F40;
+	--hx-muted: #5E768E;
+	--hx-blue: #2E75B6;
+	--hx-blue-deep: #245D91;
+	--hx-line: rgba(46, 117, 182, 0.16);
+	--hx-overlay: rgba(24, 62, 96, 0.36);
+	--hx-shadow: rgba(24, 62, 96, 0.16);
+	--hx-gold: #B8862F;
+	--hx-silver: #6F8499;
+	--hx-bronze: #A5673F;
+}
+
+html[data-theme="dark"] {
+	--hx-bg: #0B1726;
+	--hx-surface: rgba(18, 35, 58, 0.66);
+	--hx-surface-strong: #12233A;
+	--hx-ink: #EDF5FD;
+	--hx-muted: #8BA5C0;
+	--hx-blue: #7FB2E5;
+	--hx-blue-deep: #A9CCEF;
+	--hx-line: rgba(127, 178, 229, 0.18);
+	--hx-overlay: rgba(0, 0, 0, 0.56);
+	--hx-shadow: rgba(0, 0, 0, 0.45);
+	--hx-gold: #F0C674;
+	--hx-silver: #AFC8DE;
+	--hx-bronze: #D9A47E;
+}
+
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+[hidden] { display: none !important; }
+
+body {
+	background-color: var(--hx-bg);
+	color: var(--hx-ink);
+	font-family: 'Exo', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+		"Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+#canvas { background-color: var(--hx-bg) !important; }
+
+button, input { font-family: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+/* ---------- 顶栏 ---------- */
+
+.hx-top {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 3005;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding:
+		calc(env(safe-area-inset-top, 0px) + 12px)
+		calc(env(safe-area-inset-right, 0px) + 14px)
+		0
+		calc(env(safe-area-inset-left, 0px) + 14px);
+	pointer-events: none;
+}
+
+.hx-top > * { pointer-events: auto; }
+
+.hx-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border: 1px solid var(--hx-line);
+	border-radius: 999px;
+	background: var(--hx-surface);
+	color: var(--hx-muted);
+	font-size: 0.76rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-decoration: none;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.hx-back:hover { color: var(--hx-blue); border-color: var(--hx-blue); }
+
+.hx-brand {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	color: var(--hx-muted);
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.34em;
+	pointer-events: none;
+}
+
+.hx-actions {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin-left: auto;
+}
+
+.hx-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 34px;
+	padding: 0 12px;
+	border: 1px solid var(--hx-line);
+	border-radius: 999px;
+	background: var(--hx-surface);
+	color: var(--hx-ink);
+	font-size: 0.76rem;
+	font-weight: 600;
+	cursor: pointer;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.hx-btn:hover { color: var(--hx-blue); border-color: var(--hx-blue); }
+
+.hx-theme { width: 34px; padding: 0; }
+.hx-theme svg { display: block; }
+.hx-icon-sun { display: none; }
+html[data-theme="dark"] .hx-icon-sun { display: block; }
+html[data-theme="dark"] .hx-icon-moon { display: none; }
+
+/* 原版左上角的帮助图标藏起来，改用顶栏的「玩法」。 */
+#openSideBar { display: none !important; }
+
+/* ---------- 游戏内文字 ---------- */
+
+#highScoreInGameText {
+	top: calc(env(safe-area-inset-top, 0px) + 58px);
+	width: auto;
+	min-width: 96px;
+	left: 50%;
+	margin-left: 0;
+	transform: translateX(-50%);
+	padding: 5px 16px 7px;
+	border: 1px solid var(--hx-line);
+	border-radius: 16px;
+	background: var(--hx-surface);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+#highScoreInGameTextHeader {
+	color: var(--hx-muted);
+	font-size: 0.62rem;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+}
+
+#currentHighScore {
+	color: var(--hx-ink);
+	font-size: 1.5rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	margin-top: 0;
+	line-height: 1.25;
+}
+
+#startBtn {
+	left: 50%;
+	top: 50%;
+	width: 48%;
+	height: 34%;
+	min-height: 150px;
+	transform: translate(-50%, -50%);
+	z-index: 500;
+	cursor: pointer;
+	outline: none;
+}
+
+#pauseBtn,
+#restartBtn {
+	width: 58px;
+	height: 58px;
+	margin: 0;
+	opacity: 0.92;
+	filter: drop-shadow(0 6px 14px var(--hx-shadow));
+}
+
+#pauseBtn {
+	right: calc(env(safe-area-inset-right, 0px) + 6px);
+	bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
+}
+
+#restartBtn {
+	left: calc(env(safe-area-inset-left, 0px) + 6px);
+	bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
+}
+
+.overlay { color: var(--hx-ink); }
+.hx-pause-hint { margin-top: 10px; color: var(--hx-muted); }
+
+/* ---------- 玩法说明 ---------- */
+
+#helpScreen {
+	box-sizing: border-box;
+	z-index: 3006;
+	padding:
+		calc(env(safe-area-inset-top, 0px) + 68px)
+		calc(env(safe-area-inset-right, 0px) + 22px)
+		calc(env(safe-area-inset-bottom, 0px) + 32px)
+		calc(env(safe-area-inset-left, 0px) + 22px);
+	background-color: var(--hx-bg);
+	color: var(--hx-ink);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#inst_main_body {
+	position: relative;
+	left: auto;
+	top: auto;
+	transform: none;
+	width: auto;
+	max-width: 460px;
+	margin: 0 auto;
+	font-size: 0.94rem;
+	line-height: 1.85;
+	text-align: left;
+}
+
+#instructions_head {
+	font-size: 1.5rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	padding-bottom: 14px;
+}
+
+#inst_main_body > p { margin-bottom: 12px; }
+#inst_main_body > hr {
+	height: 1px;
+	margin: 16px 0 12px;
+	border: 0;
+	background-color: var(--hx-line);
+}
+
+.hx-help-close {
+	position: fixed;
+	top: calc(env(safe-area-inset-top, 0px) + 12px);
+	right: calc(env(safe-area-inset-right, 0px) + 14px);
+	z-index: 3007;
+	width: 36px;
+	height: 36px;
+	border: 1px solid var(--hx-line);
+	border-radius: 50%;
+	background: var(--hx-surface);
+	color: var(--hx-ink);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+.hx-help-credit {
+	color: var(--hx-muted);
+	font-size: 0.78rem;
+	line-height: 1.75;
+}
+
+.hx-help-credit a { color: var(--hx-blue); }
+
+/* ---------- 游戏结束 ---------- */
+
+#gameoverscreen { padding: 0; }
+
+#container {
+	color: var(--hx-ink);
+	min-width: 236px;
+	padding: 22px 30px 18px;
+	border: 1px solid var(--hx-line);
+	border-radius: 24px;
+	background: var(--hx-surface-strong);
+	box-shadow: 0 26px 60px var(--hx-shadow);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
+
+#gameOverBox {
+	color: var(--hx-muted);
+	font-size: 0.86rem;
+	font-weight: 700;
+	letter-spacing: 0.22em;
+}
+
+#cScore {
+	color: var(--hx-blue);
+	font-size: 3.4rem;
+	font-weight: 800;
+	line-height: 1.1;
+	margin: 2px 0 0;
+}
+
+#highScoresTitle {
+	margin: 12px 0 6px;
+	color: var(--hx-muted);
+	font-size: 0.62rem;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+}
+
+.score { color: var(--hx-ink); font-size: 0.9rem; line-height: 1.7; }
+.scoreNum { display: inline-block; width: 1.7em; color: var(--hx-muted); }
+
+#hxLbBtn { width: 100%; margin-top: 14px; }
+
+.hx-inline-credit {
+	margin: 10px 0 0;
+	color: var(--hx-muted);
+	font-size: 0.56rem;
+	line-height: 1.5;
+}
+
+#restart {
+	left: 50%;
+	bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+	margin: 0;
+	height: 52px;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	filter: drop-shadow(0 6px 14px var(--hx-shadow));
+}
+
+/* ---------- 全服排行榜 ---------- */
+
+.hx-lb {
+	position: fixed;
+	inset: 0;
+	z-index: 3200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+}
+
+.hx-lb-backdrop {
+	position: absolute;
+	inset: 0;
+	background: var(--hx-overlay);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+}
+
+.hx-lb-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: min(100%, 420px);
+	max-height: min(86vh, 640px);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	padding: 20px;
+	border: 1px solid var(--hx-line);
+	border-radius: 24px;
+	background: var(--hx-surface-strong);
+	box-shadow: 0 24px 60px var(--hx-shadow);
+	color: var(--hx-ink);
+}
+
+.hx-lb-head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.hx-eyebrow {
+	margin: 0 0 4px;
+	color: var(--hx-blue);
+	font-size: 0.58rem;
+	font-weight: 700;
+	letter-spacing: 0.2em;
+}
+
+.hx-lb-head h2 {
+	margin: 0;
+	font-size: 1.2rem;
+	font-weight: 800;
+	letter-spacing: 0.02em;
+}
+
+.hx-lb-head-actions { display: flex; gap: 6px; }
+
+.hx-ghost {
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--hx-line);
+	border-radius: 999px;
+	background: transparent;
+	color: var(--hx-muted);
+	font-size: 0.68rem;
+	cursor: pointer;
+}
+
+.hx-ghost:hover { color: var(--hx-blue); border-color: var(--hx-blue); }
+
+.hx-close {
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--hx-line);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--hx-muted);
+	font-size: 1.1rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.hx-close:hover { color: var(--hx-blue); border-color: var(--hx-blue); }
+
+.hx-lb-score { margin: 0; color: var(--hx-muted); font-size: 0.8rem; }
+.hx-lb-score strong { margin-left: 4px; color: var(--hx-blue); font-size: 1.1rem; }
+.hx-lb-hint { margin: 0; color: var(--hx-muted); font-size: 0.78rem; line-height: 1.7; }
+
+.hx-lb-form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid var(--hx-line);
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme="dark"] .hx-lb-form { background: rgba(255, 255, 255, 0.04); }
+
+.hx-lb-form label { color: var(--hx-muted); font-size: 0.7rem; }
+.hx-lb-form-row { display: flex; gap: 8px; }
+
+.hx-lb-form input {
+	flex: 1;
+	min-width: 0;
+	height: 38px;
+	padding: 0 12px;
+	border: 1px solid var(--hx-line);
+	border-radius: 12px;
+	background: #FFFFFF;
+	color: #16283F;
+	font-size: 0.9rem;
+	user-select: text;
+	-webkit-user-select: text;
+}
+
+html[data-theme="dark"] .hx-lb-form input { background: #0F2033; color: #EDF5FD; }
+.hx-lb-form input:disabled { opacity: 0.6; }
+.hx-lb-form input::placeholder { color: #93A7BA; }
+
+.hx-primary {
+	height: 38px;
+	padding: 0 16px;
+	border: 0;
+	border-radius: 12px;
+	background: var(--hx-blue);
+	color: #FFFFFF;
+	font-size: 0.82rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: filter 0.2s ease;
+}
+
+html[data-theme="dark"] .hx-primary { color: #0B1726; }
+.hx-primary:hover { filter: brightness(1.06); }
+.hx-primary:disabled { opacity: 0.55; cursor: default; }
+
+.hx-lb-msg { min-height: 1.2em; margin: 0; color: var(--hx-blue); font-size: 0.7rem; line-height: 1.5; }
+.hx-lb-msg.is-error { color: #C0453A; }
+html[data-theme="dark"] .hx-lb-msg.is-error { color: #F09A90; }
+
+.hx-lb-list { display: flex; flex-direction: column; gap: 6px; }
+
+.hx-lb-empty {
+	margin: 0;
+	padding: 16px 8px;
+	color: var(--hx-muted);
+	font-size: 0.78rem;
+	text-align: center;
+}
+
+.hx-lb-row {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 12px;
+	background: rgba(46, 117, 182, 0.06);
+	font-size: 0.84rem;
+}
+
+html[data-theme="dark"] .hx-lb-row { background: rgba(127, 178, 229, 0.08); }
+.hx-lb-row.is-me { outline: 1px solid var(--hx-blue); background: rgba(46, 117, 182, 0.13); }
+
+.hx-lb-rank { color: var(--hx-muted); font-size: 0.7rem; font-weight: 700; }
+.hx-lb-row:nth-child(1) .hx-lb-rank { color: var(--hx-gold); }
+.hx-lb-row:nth-child(2) .hx-lb-rank { color: var(--hx-silver); }
+.hx-lb-row:nth-child(3) .hx-lb-rank { color: var(--hx-bronze); }
+
+.hx-lb-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 600;
+}
+
+.hx-lb-score {
+	color: var(--hx-blue);
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.hx-lb-note,
+.hx-lb-credit { margin: 0; color: var(--hx-muted); font-size: 0.64rem; line-height: 1.6; }
+.hx-lb-credit a { color: var(--hx-blue); }
+
+.hx-noscript {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	background: var(--hx-bg);
+	color: var(--hx-ink);
+	font-size: 0.9rem;
+	z-index: 9999;
+}
+
+/* ---------- 手机 ---------- */
+
+@media only screen and (max-width: 560px) {
+	.hx-brand { display: none; }
+
+	.hx-top { gap: 6px; padding-top: calc(env(safe-area-inset-top, 0px) + 10px); }
+	.hx-back { padding: 7px 10px; font-size: 0.72rem; }
+	.hx-btn { height: 32px; padding: 0 10px; font-size: 0.72rem; }
+	.hx-theme { width: 32px; padding: 0; }
+
+	#highScoreInGameText { top: calc(env(safe-area-inset-top, 0px) + 54px); }
+	#currentHighScore { font-size: 1.3rem; }
+
+	#pauseBtn, #restartBtn { width: 52px; height: 52px; }
+
+	#container { padding: 18px 22px 14px; min-width: 210px; }
+	#cScore { font-size: 2.9rem; }
+
+	.hx-lb { align-items: flex-end; padding: 10px; }
+	.hx-lb-card {
+		max-height: 88vh;
+		padding: 16px;
+		border-radius: 22px 22px 16px 16px;
+	}
+}

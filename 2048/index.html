@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <!-- 全服排行榜：和 COUNT TO 10、HEXTRIS 共用一个 Worker。 -->
+  <meta name="c2048-api" content="https://count-to-10.curiosity-chen.workers.dev">
+  <title>2048 · 秘密基地</title>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下跟随系统 */ }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./style/main.css?v=2026-10-25.1">
+  <link rel="stylesheet" href="./css/blog-2048.css?v=2026-10-25.2">
+</head>
+<body>
+  <header class="g-top">
+    <a class="g-back" href="/play/"><span aria-hidden="true">←</span> PLAY NOOK</a>
+    <span class="g-brand" aria-hidden="true">2048</span>
+    <div class="g-actions">
+      <button class="g-btn" type="button" data-help>玩法</button>
+      <button class="g-btn" type="button" data-lb-open>排行榜</button>
+      <button class="g-btn g-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+        <svg data-theme-icon viewBox="0 0 24 24" width="17" height="17" fill="none"
+          stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path class="g-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+          <g class="g-icon-sun">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+          </g>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="g-main">
+    <section class="g-head">
+      <div class="g-head-copy">
+        <p class="g-eyebrow">MINI GAME · MERGE THE NUMBERS</p>
+        <h1 class="g-title">2048</h1>
+        <p class="g-sub">合并相同的数字，凑出 2048。</p>
+      </div>
+      <div class="g-scores">
+        <div class="score-container">0</div>
+        <div class="best-container">0</div>
+      </div>
+    </section>
+
+    <div class="g-board-wrap">
+      <div class="game-container">
+        <div class="game-message">
+          <p></p>
+          <div class="lower">
+            <a class="keep-playing-button">继续玩</a>
+            <a class="retry-button">再来一局</a>
+            <a class="leaderboard-button" data-lb-open role="button">全服排行榜</a>
+          </div>
+        </div>
+
+        <div class="grid-container">
+          <div class="grid-row"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
+          <div class="grid-row"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
+          <div class="grid-row"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
+          <div class="grid-row"><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div></div>
+        </div>
+
+        <div class="tile-container"></div>
+      </div>
+    </div>
+
+    <div class="g-under">
+      <button class="restart-button" type="button">新游戏</button>
+      <p class="g-hint">方向键 / WASD / 在棋盘上滑动</p>
+    </div>
+
+    <p class="g-credit">
+      2048 © 2014 <a href="https://gabrielecirulli.com" target="_blank" rel="noopener">Gabriele Cirulli</a> ·
+      <a href="https://github.com/XMC9/2048" target="_blank" rel="noopener">MIT 授权 / 源码</a> ·
+      本页为秘密基地定制版
+    </p>
+  </main>
+
+  <div class="g-help" data-help-panel hidden>
+    <div class="g-help-backdrop" data-help-close></div>
+    <section class="g-help-card" role="dialog" aria-modal="true" aria-labelledby="gHelpTitle">
+      <header class="g-panel-head">
+        <div>
+          <p class="g-eyebrow">HOW TO PLAY</p>
+          <h2 id="gHelpTitle">怎么玩</h2>
+        </div>
+        <button class="g-close" type="button" data-help-close aria-label="关闭玩法">×</button>
+      </header>
+      <p>用方向键、WASD，或者在棋盘上滑动，让所有方块一起往一个方向移动。</p>
+      <p>两个相同数字的方块碰在一起会合并成一个，分数就是合并出来的数字。</p>
+      <p>凑出 <strong>2048</strong> 就算通关，之后还可以继续挑战更大的数字。</p>
+      <hr>
+      <p class="g-help-credit">
+        2048 原作 © 2014 <a href="https://gabrielecirulli.com" target="_blank" rel="noopener">Gabriele Cirulli</a>，
+        以 MIT 授权发布。本页的中文界面、配色与排行榜由秘密基地定制，
+        <a href="https://github.com/XMC9/2048" target="_blank" rel="noopener">源码在这里</a>。
+      </p>
+    </section>
+  </div>
+
+  <div id="c2048Lb" class="g-lb" hidden>
+    <div class="g-lb-backdrop" data-lb-close></div>
+    <section class="g-lb-card" role="dialog" aria-modal="true" aria-labelledby="c2048LbTitle">
+      <header class="g-panel-head">
+        <div>
+          <p class="g-eyebrow">GLOBAL LEADERBOARD</p>
+          <h2 id="c2048LbTitle">全服排行榜</h2>
+        </div>
+        <div class="g-lb-head-actions">
+          <button class="g-ghost" type="button" data-lb-refresh>刷新</button>
+          <button class="g-close" type="button" data-lb-close aria-label="关闭排行榜">×</button>
+        </div>
+      </header>
+
+      <p class="g-lb-score" data-lb-score hidden></p>
+      <p class="g-lb-hint" data-lb-hint>游戏结束之后，可以在这里留下昵称上榜。</p>
+
+      <form class="g-lb-form" data-lb-form hidden>
+        <label for="c2048-name">留下昵称，登上全服榜</label>
+        <div class="g-lb-form-row">
+          <input id="c2048-name" name="name" maxlength="12" autocomplete="nickname" placeholder="例如：小狗" required>
+          <button class="g-primary" type="submit" data-lb-submit>上榜</button>
+        </div>
+        <p class="g-lb-msg" data-lb-msg></p>
+      </form>
+
+      <div class="g-lb-list" data-lb-list aria-live="polite">
+        <p class="g-lb-empty">正在读取排行榜…</p>
+      </div>
+      <p class="g-lb-note">昵称只用于排行榜展示，不需要注册。</p>
+      <p class="g-lb-credit">
+        2048 © 2014 Gabriele Cirulli，以 MIT 授权 ·
+        <a href="https://github.com/XMC9/2048" target="_blank" rel="noopener">源码</a>
+      </p>
+    </section>
+  </div>
+
+  <noscript><p class="g-noscript">这个小游戏需要 JavaScript 才能运行。</p></noscript>
+
+  <script src="./js/bind_polyfill.js"></script>
+  <script src="./js/classlist_polyfill.js"></script>
+  <script src="./js/animframe_polyfill.js"></script>
+  <script src="./js/keyboard_input_manager.js"></script>
+  <script src="./js/html_actuator.js"></script>
+  <script src="./js/grid.js"></script>
+  <script src="./js/tile.js"></script>
+  <script src="./js/local_storage_manager.js"></script>
+  <script src="./js/game_manager.js"></script>
+  <script src="./js/application.js"></script>
+  <script src="./js/c2048-theme.js?v=2026-10-25.1"></script>
+  <script src="./js/c2048-ui.js?v=2026-10-25.2"></script>
+</body>
+</html>
