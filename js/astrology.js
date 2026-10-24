@@ -1,7 +1,7 @@
 /**
- * 占星页的星座切换。
+ * 占星页的下拉切换：星座大板块，以及太阳 / 上升两段解读。
  *
- * 12 个星座的正文都已经渲染在 HTML 里（默认只有白羊那份可见），
+ * 12 个星座的正文都已经渲染在 HTML 里（默认只有一份可见），
  * 这里只负责跟着下拉框切显示，不请求接口，也不做任何改写。
  *
  * 注意绑定方式：Redefine 用 Swup 做无刷新切页，而它用的是 swup.hooks
@@ -20,6 +20,21 @@
         panel.removeAttribute("hidden");
       } else {
         panel.setAttribute("hidden", "");
+      }
+    });
+  }
+
+  // 太阳 / 上升：同一张卡里 12 段文字，按选中的星座留一段。
+  function applyPersonal(select) {
+    var card = select.closest(".astro-read-personal");
+    if (!card) return;
+    var role = select.getAttribute("data-astro-personal");
+    var texts = card.querySelectorAll('[data-personal-panel="' + role + '"]');
+    Array.prototype.forEach.call(texts, function (text) {
+      if (text.getAttribute("data-sign") === select.value) {
+        text.removeAttribute("hidden");
+      } else {
+        text.setAttribute("hidden", "");
       }
     });
   }
@@ -58,7 +73,12 @@
     "change",
     function (event) {
       var target = event.target;
-      if (!target || !target.matches || !target.matches("[data-astro-select]")) return;
+      if (!target || !target.matches) return;
+      if (target.matches("[data-astro-personal]")) {
+        applyPersonal(target);
+        return;
+      }
+      if (!target.matches("[data-astro-select]")) return;
       var root = target.closest(".astro-dashboard") || document;
       apply(root, target.value);
       try {

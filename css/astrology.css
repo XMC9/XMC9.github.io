@@ -558,6 +558,65 @@ html.dark .astro-aspect-type {
   margin-top: 0;
 }
 
+/* 太阳 / 上升解读：卡头右侧一个迷你下拉，切换 12 个星座。 */
+.astro-read-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.astro-read-head .astro-read-title {
+  margin: 0;
+}
+
+.astro-mini-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.astro-mini-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 4px 26px 4px 11px;
+  border: 1px solid var(--astro-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--astro-blue);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.16s ease;
+}
+
+.astro-mini-select select:hover {
+  border-color: rgba(74, 144, 217, 0.45);
+}
+
+.astro-mini-select select:focus {
+  outline: none;
+  border-color: var(--astro-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.18);
+}
+
+html.dark .astro-mini-select select {
+  background: #12233A;
+  color: #E4F1FC;
+}
+
+html.dark .astro-mini-select select option {
+  background: #12233A;
+  color: #E4F1FC;
+}
+
+.astro-mini-select .astro-select-caret {
+  right: 9px;
+  font-size: 0.7rem;
+  pointer-events: none;
+}
+
 /* ---------- 页脚 ---------- */
 
 .astro-footer {

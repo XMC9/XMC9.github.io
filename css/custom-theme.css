@@ -409,6 +409,8 @@ body.navbar-shrink .navbar-container {
   align-items: flex-end;
   justify-content: space-between;
   gap: 18px;
+  /* 标题和下面的卡片之间留一口气，之前贴得太近。 */
+  margin-bottom: 14px;
 }
 
 .custom-home .home-section-title {
@@ -418,6 +420,20 @@ body.navbar-shrink .navbar-container {
   font-size: 1.42rem;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+/* 标题后的更新时间：小字、半透明，跟标题同一行。 */
+.custom-home .home-section-stamp {
+  margin-left: 8px;
+  color: var(--third-text-color);
+  font-family: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.5;
+  vertical-align: 0.18em;
 }
 
 .custom-home .home-section-subtitle {
@@ -531,20 +547,20 @@ body.navbar-shrink .navbar-container {
 
 .custom-home .home-weather-city {
   color: #12324F;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .custom-home .home-weather-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 15px;
   background: rgba(214, 234, 250, 0.9);
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   line-height: 1;
 }
 
@@ -700,7 +716,7 @@ html.dark .custom-home .home-weather-alert {
   }
 
   .custom-home .home-weather-now {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
   }
 
   .custom-home .home-weather-icon {
@@ -1668,6 +1684,13 @@ html.dark .home-sidebar-note p {
     align-items: flex-start;
   }
 
+  /* 手机上「（更新于10月24日 13时）」更长，缩一点、允许跟标题一起换行。 */
+  .custom-home .home-section-stamp {
+    margin-left: 5px;
+    font-size: 0.6rem;
+    letter-spacing: 0;
+  }
+
   .custom-home .home-section-more {
     margin-top: 4px;
   }
@@ -1963,6 +1986,11 @@ body.cat-love .love-cat-stickers img:hover,
   transform: rotate(-3deg);
 }
 
+/* 第四张（躺平）只在手机上散落出现，桌面端整只不加载。 */
+body.cat-love .love-sticker.is-lie {
+  display: none;
+}
+
 body.cat-love .love-cat-paws {
   position: relative;
   z-index: 1;
@@ -2059,33 +2087,78 @@ body.cat-love .article-tags a:hover {
 
 @media (max-width: 768px) {
   body.cat-love .love-cat-hero {
-    padding: 24px 20px 22px;
+    padding: 24px 20px 132px;
     border-radius: 18px;
   }
 
+  /* 简笔画小狗在手机上会和文字、表情包挤在一起，直接收起来；
+     四张表情包改成散落在卡片四角。 */
   body.cat-love .love-cat-pup {
-    right: 12px;
-    bottom: 4px;
-    width: 104px;
-    height: 104px;
-    opacity: 0.55;
+    display: none;
   }
 
   body.cat-love .love-cat-title {
-    max-width: 78%;
+    max-width: 74%;
     font-size: 1.75rem;
   }
 
   body.cat-love .love-cat-sub {
-    max-width: 74%;
+    max-width: 100%;
     font-size: 0.86rem;
   }
 
-  /* 手机上三只小狗并排会顶到边，缩到能一起露脸的大小。 */
+  body.cat-love .love-cat-stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    margin: 0;
+    pointer-events: none;
+  }
+
   body.cat-love .love-cat-stickers img,
   body.cat-love .love-cat-stickers img:nth-child(1),
-  body.cat-love .love-cat-stickers img:nth-child(2) {
-    width: 92px;
+  body.cat-love .love-cat-stickers img:nth-child(2),
+  body.cat-love .love-cat-stickers img:nth-child(3) {
+    position: absolute;
+    width: auto;
+    opacity: 0.92;
+  }
+
+  body.cat-love .love-cat-stickers img.love-sticker.is-sit {
+    bottom: 10px;
+    left: 10px;
+    width: 78px;
+    transform: rotate(-7deg);
+  }
+
+  body.cat-love .love-cat-stickers img.love-sticker.is-hug {
+    top: 12px;
+    right: 8px;
+    width: 66px;
+    transform: rotate(8deg);
+  }
+
+  body.cat-love .love-cat-stickers img.love-sticker.is-lick {
+    right: 6px;
+    bottom: 4px;
+    width: 88px;
+    transform: rotate(5deg);
+  }
+
+  body.cat-love .love-cat-stickers picture.love-sticker.is-lie {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 42%;
+    width: 64px;
+    transform: rotate(-3deg);
+  }
+
+  body.cat-love .love-cat-stickers picture.love-sticker.is-lie img {
+    position: static;
+    display: block;
+    width: 100%;
   }
 
   .tag-love-stickers img {

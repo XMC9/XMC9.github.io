@@ -103,10 +103,10 @@
 .news-dashboard .ntc-weather-card {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 13px 15px 12px;
+  gap: 10px;
+  padding: 16px 18px 14px;
   border: 1px solid var(--ntc-chip-line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.04) 100%);
 }
 
@@ -119,32 +119,32 @@
 
 .news-dashboard .ntc-weather-city {
   color: #EAF4FF;
-  font-size: 0.92rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .news-dashboard .ntc-weather-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
   background: rgba(255, 255, 255, 0.1);
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   line-height: 1;
 }
 
 .news-dashboard .ntc-weather-body {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .news-dashboard .ntc-weather-now {
   color: #FFFFFF;
-  font-size: 1.9rem;
+  font-size: 2.1rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.03em;
@@ -154,19 +154,19 @@
 .news-dashboard .ntc-weather-detail {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-width: 0;
 }
 
 .news-dashboard .ntc-weather-detail strong {
   color: #FFFFFF;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 700;
 }
 
 .news-dashboard .ntc-weather-range {
   color: #B7D4EC;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -177,11 +177,11 @@
 }
 
 .news-dashboard .ntc-weather-meta span {
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   color: #C9E0F3;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   line-height: 1.7;
 }
 
@@ -190,10 +190,10 @@
   align-items: flex-start;
   gap: 6px;
   margin: 0;
-  padding-top: 8px;
+  padding-top: 9px;
   border-top: 1px dashed rgba(255, 255, 255, 0.14);
   color: #C9E0F3;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   line-height: 1.6;
 }
 
@@ -435,32 +435,32 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   }
 
   .news-dashboard .ntc-weather-card {
-    gap: 7px;
-    padding: 11px 12px 10px;
+    gap: 8px;
+    padding: 12px 13px;
   }
 
   .news-dashboard .ntc-weather-body {
-    gap: 9px;
+    gap: 10px;
   }
 
   .news-dashboard .ntc-weather-now {
-    font-size: 1.55rem;
+    font-size: 1.7rem;
   }
 
   .news-dashboard .ntc-weather-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    font-size: 1.22rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    font-size: 1.4rem;
   }
 
   .news-dashboard .ntc-weather-meta span {
-    font-size: 0.66rem;
+    font-size: 0.72rem;
   }
 
   .news-dashboard .ntc-weather-tip {
     padding-top: 7px;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
   }
 
   .news-dashboard .page-template-content .ntc-item {
