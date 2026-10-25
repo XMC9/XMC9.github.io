@@ -1700,6 +1700,7 @@ html.dark .custom-home .home-random-slot.is-rolling {
 .custom-home .home-game-hex i {
   aspect-ratio: 1;
   background: var(--c, #2E75B6);
+  -webkit-clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
