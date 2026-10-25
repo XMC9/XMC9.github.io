@@ -84,6 +84,11 @@
 
   var palette = PALETTE[Arcade.currentTheme()] || PALETTE.light;
   var cell = 30;
+  // 棋盘在画布里的左上角偏移：格子大小按画布「宽高都能装下」来算，
+  // 剩下的余量两边均分，网格线和方块共用同一套坐标，永远不会错位。
+  var originX = 0;
+  var originY = 0;
+  var pixelRatio = 1;
 
   /* ---------- 基础逻辑 ---------- */
 
@@ -305,7 +310,7 @@
         var py = piece.y + y;
         if (py < 0) continue;
         var r = Math.max(2, cell * 0.2);
-        roundRect(ctx, (piece.x + x) * cell + 1, py * cell + 1, cell - 2, cell - 2, r);
+        roundRect(ctx, originX + (piece.x + x) * cell + 1, originY + py * cell + 1, cell - 2, cell - 2, r);
         ctx.stroke();
       }
     }
@@ -313,9 +318,36 @@
     piece.y = ghostY;
   }
 
+  // 背景格子直接画在画布上（不再依赖 CSS 背景图层），和方块同一套坐标。
+  function drawGrid() {
+    var w = COLS * cell;
+    var h = ROWS * cell;
+    var half = pixelRatio <= 1 ? 0.5 : 0;
+    ctx.strokeStyle = document.documentElement.dataset.theme === "dark"
+      ? "rgba(127, 178, 229, 0.13)"
+      : "rgba(31, 47, 64, 0.09)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (var i = 1; i < COLS; i++) {
+      var gx = originX + i * cell + half;
+      ctx.moveTo(gx, originY);
+      ctx.lineTo(gx, originY + h);
+    }
+    for (var j = 1; j < ROWS; j++) {
+      var gy = originY + j * cell + half;
+      ctx.moveTo(originX, gy);
+      ctx.lineTo(originX + w, gy);
+    }
+    ctx.stroke();
+  }
+
   function draw() {
     if (!ctx) return;
-    ctx.clearRect(0, 0, COLS * cell, ROWS * cell);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    drawGrid();
 
     var flash = state.phase === "clearing" && Math.floor(state.clearTimer / 55) % 2 === 0;
     for (var y = 0; y < ROWS; y++) {
@@ -323,9 +355,9 @@
         var value = state.board[y][x];
         if (!value) continue;
         if (state.clearRows.indexOf(y) !== -1) {
-          drawBlock(ctx, x * cell, y * cell, cell, flash ? "#FFFFFF" : palette[value], flash ? 0.9 : 0.5);
+          drawBlock(ctx, originX + x * cell, originY + y * cell, cell, flash ? "#FFFFFF" : palette[value], flash ? 0.9 : 0.5);
         } else {
-          drawBlock(ctx, x * cell, y * cell, cell, palette[value] || "#5B9BD5");
+          drawBlock(ctx, originX + x * cell, originY + y * cell, cell, palette[value] || "#5B9BD5");
         }
       }
     }
@@ -338,7 +370,7 @@
           if (!piece.cells[py][px]) continue;
           var by = piece.y + py;
           if (by < 0) continue;
-          drawBlock(ctx, (piece.x + px) * cell, by * cell, cell, palette[piece.id] || "#5B9BD5");
+          drawBlock(ctx, originX + (piece.x + px) * cell, originY + by * cell, cell, palette[piece.id] || "#5B9BD5");
         }
       }
     }
@@ -373,6 +405,7 @@
     var rect = canvas.getBoundingClientRect();
     if (!rect.width) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 3);
+    pixelRatio = dpr;
     var w = Math.round(rect.width * dpr);
     var h = Math.round(rect.height * dpr);
     if (canvas.width !== w || canvas.height !== h) {
@@ -380,7 +413,10 @@
       canvas.height = h;
     }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cell = rect.width / COLS;
+    // 宽、高都塞得下才算格子边长，剩下的余量均分到左右 / 上下。
+    cell = Math.min(rect.width / COLS, rect.height / ROWS);
+    originX = (rect.width - cell * COLS) / 2;
+    originY = (rect.height - cell * ROWS) / 2;
     draw();
     drawNext();
   }
@@ -398,6 +434,12 @@
     ui.status.textContent = text;
     ui.status.classList.toggle("is-good", tone === "good");
     ui.status.classList.toggle("is-warn", tone === "warn");
+  }
+
+  // 触屏按键只在窄屏 / 触屏设备上出现，提示文案跟着走
+  function padVisible() {
+    var pad = document.querySelector(".bf-pad");
+    return !!pad && getComputedStyle(pad).display !== "none";
   }
 
   function showOverlay(title, buttonText, note, score) {
@@ -439,7 +481,9 @@
     closeModal();
     spawnPiece();
     updateHud();
-    setStatus("方向键移动，↑ 旋转，空格直接落底");
+    setStatus(padVisible()
+      ? "右边按键：↑ 旋转、⤓ 落底；也能直接在棋盘上拖动"
+      : "方向键移动，↑ 旋转，空格直接落底");
     draw();
     cancelAnimationFrame(state.rafId);
     state.rafId = requestAnimationFrame(loop);
@@ -770,8 +814,8 @@
       if (state.phase === "playing") togglePause();
     });
 
-    if (matchMedia("(pointer: coarse)").matches) {
-      setStatus("拖动移动，点一下旋转，快速下滑直接落底");
+    if (padVisible()) {
+      setStatus("右边按键：↑ 旋转、⤓ 落底；也能直接在棋盘上拖动");
       $("[data-key-hint]").textContent = "屏幕按钮";
     }
 

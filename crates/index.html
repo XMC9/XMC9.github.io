@@ -17,9 +17,9 @@
       } catch (e) { /* 隐私模式下读不到就跟随系统 */ }
     })();
   </script>
-  <link rel="icon" type="image/svg+xml" href="/crates/favicon.svg?v=2026-10-25.1">
-  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.1">
-  <link rel="stylesheet" href="/crates/game.css?v=2026-10-25.1">
+  <link rel="icon" type="image/svg+xml" href="/crates/favicon.svg?v=2026-10-25.2">
+  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.2">
+  <link rel="stylesheet" href="/crates/game.css?v=2026-10-25.2">
 </head>
 <body>
   <header class="gm-top">
@@ -80,15 +80,15 @@
       </div>
 
       <div class="cr-controls">
+        <div class="cr-tools">
+          <button class="gm-btn" type="button" data-undo>撤销</button>
+          <button class="gm-btn" type="button" data-restart>重来</button>
+        </div>
         <div class="cr-pad" aria-label="方向键">
           <button class="cr-key cr-key-up" type="button" data-move="up" aria-label="上">↑</button>
           <button class="cr-key cr-key-left" type="button" data-move="left" aria-label="左">←</button>
           <button class="cr-key cr-key-down" type="button" data-move="down" aria-label="下">↓</button>
           <button class="cr-key cr-key-right" type="button" data-move="right" aria-label="右">→</button>
-        </div>
-        <div class="cr-tools">
-          <button class="gm-btn" type="button" data-undo>撤销</button>
-          <button class="gm-btn" type="button" data-restart>重来</button>
         </div>
       </div>
 
@@ -98,7 +98,7 @@
         <button type="button" class="gm-btn" data-goto>跳到第…关</button>
       </div>
 
-      <p class="gm-tip cr-tip">电脑：方向键移动，Z 撤销，R 重来；手机：滑动或用下方方向键。</p>
+      <p class="gm-tip cr-tip">电脑：方向键移动，Z 撤销，R 重来；手机：滑动或在右侧方向键上点。</p>
     </section>
 
     <section class="gm-lb-section" aria-label="全服排行榜">
@@ -127,7 +127,10 @@
       <a href="/">← 回到秘密基地</a>
       <span>CRATES</span>
     </div>
-    <p class="gm-credit">关卡来自 ecyrbe/sokoban（MIT License）；本页代码、配色与文案为重新实现。</p>
+    <p class="gm-credit">
+      Sokoban © <a href="https://github.com/ecyrbe/sokoban" target="_blank" rel="noopener">ecyrbe · MIT 授权 / 源码</a> ·
+      本页为秘密基地定制版
+    </p>
   </footer>
 
   <div class="gm-modal" data-goto-modal hidden>
@@ -149,8 +152,8 @@
     <p class="gm-noscript">这个小游戏需要 JavaScript 才能运行。</p>
   </noscript>
 
-  <script src="/js/arcade.js?v=2026-10-25.1"></script>
-  <script src="/crates/levels.js?v=2026-10-25.1"></script>
-  <script src="/crates/crates.js?v=2026-10-25.1"></script>
+  <script src="/js/arcade.js?v=2026-10-25.2"></script>
+  <script src="/crates/levels.js?v=2026-10-25.2"></script>
+  <script src="/crates/crates.js?v=2026-10-25.2"></script>
 </body>
 </html>

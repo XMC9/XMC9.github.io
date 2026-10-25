@@ -17,7 +17,6 @@
   position: relative;
   flex: 0 0 auto;
   width: min(100%, 300px, 32vh);
-  aspect-ratio: 1 / 2;
   padding: 6px;
   border: 1px solid var(--gm-line);
   border-radius: 18px;
@@ -30,17 +29,15 @@ html[data-theme="dark"] .bf-stage {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
+/* 画布固定 1 : 2，和 10 × 20 的棋盘完全同比；
+   背景格子由 JS 画在画布里，和方块共用同一套坐标，不会错位。 */
 .bf-canvas {
   display: block;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 2;
+  height: auto;
   border-radius: 13px;
   background-color: rgba(24, 62, 96, 0.06);
-  background-image:
-    linear-gradient(to right, var(--gm-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--gm-line) 1px, transparent 1px);
-  background-size: 10% 5%;
-  background-position: -1px -1px;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -48,9 +45,6 @@ html[data-theme="dark"] .bf-stage {
 
 html[data-theme="dark"] .bf-canvas {
   background-color: rgba(6, 16, 28, 0.7);
-  background-image:
-    linear-gradient(to right, rgba(127, 178, 229, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(127, 178, 229, 0.1) 1px, transparent 1px);
 }
 
 /* 开始 / 暂停遮罩 */
@@ -142,26 +136,36 @@ html[data-theme="dark"] .bf-overlay { background: rgba(11, 23, 38, 0.8); }
   font-weight: 700;
 }
 
-/* 手机上的触控按钮 */
-.bf-controls {
+/* ---------- 手机 · 复古掌机按键 ---------- */
+
+.bf-pad {
   display: none;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    ".    up    ."
+    "left down  right"
+    "drop drop  drop";
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--gm-line);
+  border-radius: 16px;
+  background: var(--gm-soft);
 }
 
 .bf-key {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 54px;
+  height: 46px;
   padding: 0;
   border: 1px solid var(--gm-line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--gm-surface-strong);
   color: var(--gm-ink);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 800;
+  line-height: 1;
   cursor: pointer;
   touch-action: none;
   user-select: none;
@@ -177,47 +181,96 @@ html[data-theme="dark"] .bf-overlay { background: rgba(11, 23, 38, 0.8); }
 }
 
 .bf-key small {
-  display: block;
   margin-top: 2px;
-  font-size: 0.56rem;
+  font-size: 0.54rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
+.bf-key-up { grid-area: up; }
+.bf-key-left { grid-area: left; }
+.bf-key-down { grid-area: down; }
+.bf-key-right { grid-area: right; }
+
+/* 一落到底：压在下键正下方、横跨整排，拇指往下蹭一下就到 */
+.bf-key-drop {
+  grid-area: drop;
+  height: 40px;
+  flex-direction: row;
+  gap: 6px;
+  color: var(--gm-blue);
+}
+
+.bf-key-drop small { margin-top: 0; }
+
 @media (max-width: 768px), (pointer: coarse) {
-  .bf-controls { display: grid; }
+  .bf-pad { display: grid; }
 }
 
 @media (max-width: 640px) {
-  .bf-layout { flex-direction: column; align-items: center; gap: 10px; }
+  /* 屏幕在左、控制台在右，HUD 保持原样 */
+  .bf-layout {
+    align-items: stretch;
+    justify-content: center;
+    gap: 9px;
+  }
 
-  .bf-stage { width: min(100%, 250px, 31vh); padding: 5px; border-radius: 16px; }
+  .bf-stage {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    padding: 5px;
+    border-radius: 16px;
+  }
+
+  .bf-canvas { border-radius: 11px; }
 
   .bf-overlay { inset: 5px; padding: 12px; gap: 8px; }
 
   .bf-overlay-title { font-size: 1rem; }
 
+  /* 右上 NEXT，右下按键，整列做成一块掌机控制台 */
   .bf-side {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 clamp(140px, 46%, 168px);
+    align-self: stretch;
     width: auto;
-    padding-top: 0;
-    gap: 10px;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid var(--gm-line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.46);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  html[data-theme="dark"] .bf-side {
+    background: rgba(9, 22, 38, 0.72);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .bf-next-card {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 12px 4px 8px;
-    border-radius: 12px;
+    justify-content: center;
+    gap: 6px;
+    padding: 2px 0 0;
+    border: 0;
+    background: none;
   }
 
-  .bf-next-card span { margin-bottom: 0; font-size: 0.52rem; }
+  .bf-next-card span { margin-bottom: 0; font-size: 0.5rem; }
 
-  .bf-next-canvas { width: 40px; height: 40px; margin: 0; }
+  .bf-next-canvas { width: 42px; height: 42px; margin: 0; }
 
   .bf-note { display: none; }
+
+  .bf-pad {
+    margin-top: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    gap: 7px;
+  }
+
+  .bf-key { height: 48px; }
 }

@@ -31,9 +31,17 @@ html[data-theme="dark"] .ph-canvas { background: #0B1726; }
 
 .ph-controls {
   display: none;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 14px;
+  padding: 0 6px;
+}
+
+/* 跳在左，左右在右，两只拇指各管一边 */
+.ph-arrows {
+  display: flex;
+  gap: 10px;
 }
 
 @media (max-width: 768px), (pointer: coarse) {
@@ -82,7 +90,9 @@ html[data-theme="dark"] .ph-canvas { background: #0B1726; }
 @media (max-width: 640px) {
   .ph-stage { border-radius: 12px; }
 
-  .ph-controls { gap: 8px; margin-top: 10px; }
+  .ph-controls { gap: 8px; margin-top: 10px; padding: 0 2px; }
+
+  .ph-arrows { gap: 8px; }
 
   .ph-key { width: 66px; height: 50px; border-radius: 13px; }
 

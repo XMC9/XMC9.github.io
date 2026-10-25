@@ -46,14 +46,14 @@ html[data-theme="dark"] .cr-scroll { background: rgba(9, 22, 38, 0.72); }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 26px;
+  gap: 22px;
   margin-top: 16px;
 }
 
 .cr-pad {
   display: grid;
   grid-template-columns: repeat(3, 48px);
-  grid-template-rows: repeat(3, 48px);
+  grid-template-rows: repeat(2, 48px);
   gap: 6px;
 }
 
@@ -106,7 +106,7 @@ html[data-theme="dark"] .cr-scroll { background: rgba(9, 22, 38, 0.72); }
 
   .cr-pad {
     grid-template-columns: repeat(3, 52px);
-    grid-template-rows: repeat(3, 52px);
+    grid-template-rows: repeat(2, 52px);
   }
 
   .cr-tools .gm-btn { padding: 8px 14px; }

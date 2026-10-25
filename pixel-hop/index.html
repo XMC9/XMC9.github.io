@@ -18,9 +18,9 @@
       } catch (e) { /* 隐私模式下读不到就跟随系统 */ }
     })();
   </script>
-  <link rel="icon" type="image/svg+xml" href="/pixel-hop/favicon.svg?v=2026-10-25.1">
-  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.1">
-  <link rel="stylesheet" href="/pixel-hop/game.css?v=2026-10-25.1">
+  <link rel="icon" type="image/svg+xml" href="/pixel-hop/favicon.svg?v=2026-10-25.2">
+  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.2">
+  <link rel="stylesheet" href="/pixel-hop/game.css?v=2026-10-25.2">
 </head>
 <body>
   <header class="gm-top">
@@ -76,9 +76,11 @@
       </div>
 
       <div class="ph-controls" aria-label="触屏按键">
-        <button class="ph-key" type="button" data-key="left" aria-label="向左">←</button>
         <button class="ph-key" type="button" data-key="jump" aria-label="跳跃">跳</button>
-        <button class="ph-key" type="button" data-key="right" aria-label="向右">→</button>
+        <div class="ph-arrows">
+          <button class="ph-key ph-key-arrow" type="button" data-key="left" aria-label="向左">←</button>
+          <button class="ph-key ph-key-arrow" type="button" data-key="right" aria-label="向右">→</button>
+        </div>
       </div>
 
       <div class="gm-actions">
@@ -107,7 +109,10 @@
       <a href="/">← 回到秘密基地</a>
       <span>PIXEL HOP</span>
     </div>
-    <p class="gm-credit">玩法来自经典横版跳跃游戏；本页美术、关卡、配色与代码为重新实现，非官方版本。</p>
+    <p class="gm-credit">
+      Super Mario Game © <a href="https://github.com/XMC9/mario" target="_blank" rel="noopener">mahmodnasser · 源码</a> ·
+      本页为秘密基地定制版
+    </p>
   </footer>
 
   <div class="gm-modal" data-modal hidden>
@@ -137,7 +142,7 @@
     <p class="gm-noscript">这个小游戏需要 JavaScript 才能运行。</p>
   </noscript>
 
-  <script src="/js/arcade.js?v=2026-10-25.1"></script>
-  <script src="/pixel-hop/pixel-hop.js?v=2026-10-25.1"></script>
+  <script src="/js/arcade.js?v=2026-10-25.2"></script>
+  <script src="/pixel-hop/pixel-hop.js?v=2026-10-25.2"></script>
 </body>
 </html>

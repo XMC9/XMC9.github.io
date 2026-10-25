@@ -19,9 +19,9 @@
       } catch (e) { /* 隐私模式下读不到就跟随系统 */ }
     })();
   </script>
-  <link rel="icon" type="image/svg+xml" href="/blockfall/favicon.svg?v=2026-10-25.1">
-  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.1">
-  <link rel="stylesheet" href="/blockfall/game.css?v=2026-10-25.1">
+  <link rel="icon" type="image/svg+xml" href="/blockfall/favicon.svg?v=2026-10-25.2">
+  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.2">
+  <link rel="stylesheet" href="/blockfall/game.css?v=2026-10-25.2">
 </head>
 <body>
   <header class="gm-top">
@@ -87,15 +87,20 @@
             <b data-key-hint>方向键</b> 移动 · ↑ 旋转<br>
             空格 直接落底 · Esc 暂停
           </p>
-        </aside>
-      </div>
 
-      <div class="bf-controls" data-controls aria-label="触屏按键">
-        <button class="bf-key" type="button" data-key="rotate" aria-label="旋转">⟲</button>
-        <button class="bf-key" type="button" data-key="left" aria-label="左移">←</button>
-        <button class="bf-key" type="button" data-key="down" aria-label="加速下落">↓</button>
-        <button class="bf-key" type="button" data-key="right" aria-label="右移">→</button>
-        <button class="bf-key" type="button" data-key="drop" aria-label="直接落底">⤓</button>
+          <!-- 手机：右上 NEXT、右下按键，↑ 旋转，落底键压在下键下面 -->
+          <div class="bf-pad" aria-label="触屏按键">
+            <button class="bf-key bf-key-up" type="button" data-key="rotate" aria-label="旋转">
+              ↑<small>旋转</small>
+            </button>
+            <button class="bf-key bf-key-left" type="button" data-key="left" aria-label="左移">←</button>
+            <button class="bf-key bf-key-down" type="button" data-key="down" aria-label="加速下落">↓</button>
+            <button class="bf-key bf-key-right" type="button" data-key="right" aria-label="右移">→</button>
+            <button class="bf-key bf-key-drop" type="button" data-key="drop" aria-label="直接落底">
+              ⤓<small>落底</small>
+            </button>
+          </div>
+        </aside>
       </div>
 
       <div class="gm-actions">
@@ -124,7 +129,10 @@
       <a href="/">← 回到秘密基地</a>
       <span>BLOCKFALL</span>
     </div>
-    <p class="gm-credit">玩法源自经典的俄罗斯方块；本页代码、配色与文案为重新实现，非官方版本。</p>
+    <p class="gm-credit">
+      Tetris Ultimate © <a href="https://github.com/XMC9/tetris-game" target="_blank" rel="noopener">Zenver · 源码</a> ·
+      本页为秘密基地定制版
+    </p>
   </footer>
 
   <div class="gm-modal" data-modal hidden>
@@ -154,7 +162,7 @@
     <p class="gm-noscript">这个小游戏需要 JavaScript 才能运行。</p>
   </noscript>
 
-  <script src="/js/arcade.js?v=2026-10-25.1"></script>
-  <script src="/blockfall/blockfall.js?v=2026-10-25.1"></script>
+  <script src="/js/arcade.js?v=2026-10-25.2"></script>
+  <script src="/blockfall/blockfall.js?v=2026-10-25.2"></script>
 </body>
 </html>
