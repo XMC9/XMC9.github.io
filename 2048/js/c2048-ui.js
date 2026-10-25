@@ -147,7 +147,7 @@
     if (!els.panel || !state.open) return;
     state.open = false;
     els.panel.hidden = true;
-    blockGame(!els.help || els.help.hidden);
+    blockGame(!!els.help && !els.help.hidden);
   }
 
   function listMessage(text) {

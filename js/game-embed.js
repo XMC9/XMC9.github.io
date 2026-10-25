@@ -10,6 +10,23 @@
   if (window.self === window.top) return;
   document.documentElement.classList.add('is-embedded');
 
+  // 浮层顶栏已经提供了「返回 + 游戏名」，游戏页自己的返回和标题就不再重复。
+  // 这里用 href / class 兜底，六个游戏页和大厅都不用各写一份 CSS。
+  var style = document.createElement('style');
+  style.id = 'xm-embed-header-fix';
+  style.textContent = [
+    'html.is-embedded header > a[href="/"],',
+    'html.is-embedded header > a[href="/play/"],',
+    'html.is-embedded header > a[href="/index.html"],',
+    'html.is-embedded header > [class*="brand"] { display: none !important; }',
+    'html.is-embedded .g-top,',
+    'html.is-embedded .hx-top,',
+    'html.is-embedded .ct10-top,',
+    'html.is-embedded .gm-top,',
+    'html.is-embedded .p-top { justify-content: flex-end !important; }'
+  ].join('\n');
+  (document.head || document.documentElement).appendChild(style);
+
   function postClose() {
     try {
       window.parent.postMessage({ type: 'xm9-overlay-close' }, window.location.origin);

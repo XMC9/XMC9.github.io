@@ -41,7 +41,7 @@
     overlay.setAttribute('aria-label', '小游戏');
     overlay.innerHTML = [
       '<div class="xm-overlay-bar">',
-      '  <button type="button" class="xm-overlay-close"><span aria-hidden="true">←</span> 返回博客</button>',
+      '  <button type="button" class="xm-overlay-close"><span aria-hidden="true">←</span>返回秘密基地</button>',
       '  <span class="xm-overlay-title">PLAY NOOK</span>',
       '  <span class="xm-overlay-music" aria-hidden="true"></span>',
       '</div>',

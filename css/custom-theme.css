@@ -5180,28 +5180,29 @@ html.dark .hbe-unlock-btn:hover {
   justify-self: start;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   height: 26px;
-  padding: 0 12px 0 10px;
-  border: 1px solid rgba(127, 178, 229, 0.28);
-  border-radius: 999px;
-  background: rgba(127, 178, 229, 0.1);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
   color: #DCE9F6;
   font: inherit;
   letter-spacing: inherit;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.xm-overlay-close:hover {
-  border-color: rgba(127, 178, 229, 0.52);
-  background: rgba(127, 178, 229, 0.22);
+.xm-overlay-close:hover,
+.xm-overlay-close:focus-visible {
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .xm-overlay-close:focus-visible {
-  outline: 2px solid #7FB2E5;
-  outline-offset: 2px;
+  outline: none;
 }
 
 .xm-overlay-title {
