@@ -1702,7 +1702,7 @@ html.dark .custom-home .home-random-slot.is-rolling {
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-/* 2048：正方形图标，只放一块金色 2048，数字再大也不会溢出。 */
+/* 2048：深蓝底 + 浅蓝字的正方形图标，干净、不抢戏。 */
 .custom-home .home-game-2048 {
   position: relative;
   z-index: 1;
@@ -1726,13 +1726,14 @@ html.dark .custom-home .home-random-slot.is-rolling {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  border: 1px solid rgba(127, 178, 229, 0.42);
   border-radius: 9px;
-  background: linear-gradient(150deg, #FFE29A 0%, #FFD76A 55%, #F0C674 100%);
-  color: #3A2A00;
-  font-size: 0.84rem;
+  background: #12233A;
+  color: #A9D1F2;
+  font-size: 0.98rem;
   font-style: normal;
   font-weight: 900;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   line-height: 1;
 }
 
@@ -1832,8 +1833,9 @@ html.dark .custom-home .home-game-tile-copy small { color: #9DB7D2; }
 html.dark .custom-home .home-game-tile-go { color: #7FB2E5; }
 
 html.dark .custom-home .home-game-2048 i {
-  background: linear-gradient(150deg, #FFE7A8 0%, #FFD76A 55%, #F0C674 100%);
-  color: #0B1726;
+  border-color: rgba(127, 178, 229, 0.52);
+  background: #16304B;
+  color: #BFE0FF;
 }
 
 html.dark .custom-home .home-game-tile.is-soon {
@@ -2110,7 +2112,7 @@ html.dark .home-sidebar-note p {
   }
 
   .custom-home .home-game-mini i { font-size: 0.5rem; }
-  .custom-home .home-game-2048 i { font-size: 0.62rem; }
+  .custom-home .home-game-2048 i { font-size: 0.72rem; }
   .custom-home .home-game-tile-copy strong { font-size: 0.88rem; }
   .custom-home .home-game-tile-copy small { font-size: 0.62rem; }
   .custom-home .home-game-tile-go { font-size: 0.64rem; white-space: nowrap; }
