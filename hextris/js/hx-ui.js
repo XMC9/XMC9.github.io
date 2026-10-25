@@ -31,10 +31,16 @@
   var HINT_DEFAULT = els.hint ? els.hint.textContent : "";
   var HINT_ZERO = "这一局还没得分，先不上榜。再玩一局吧。";
 
-  var API_BASE = (function () {
+  // 可以写多个地址、用逗号分隔：国内先走自定义域名，workers.dev 留作备用。
+  var API_BASES = (function () {
     var meta = $('meta[name="hx-api"]');
-    return (meta && meta.content ? meta.content : "").trim().replace(/\/+$/, "");
+    return (meta && meta.content ? meta.content : "")
+      .split(/[\s,]+/)
+      .map(function (item) { return item.trim().replace(/\/+$/, ""); })
+      .filter(function (item) { return /^https?:\/\//i.test(item); });
   })();
+
+  var workingBase = "";
 
   var state = {
     playerId: getPlayerId(),
@@ -66,12 +72,22 @@
     try { return localStorage.getItem(NAME_KEY) || ""; } catch (e) { return ""; }
   }
 
-  function resolveApiBase() {
+  function resolveApiBases() {
+    var bases = [];
     try {
       var override = new URLSearchParams(location.search).get("api");
-      if (override && /^https?:\/\//i.test(override)) return override.replace(/\/+$/, "");
+      if (override && /^https?:\/\//i.test(override)) {
+        bases.push(override.replace(/\/+$/, ""));
+      }
     } catch (e) { /* 忽略 */ }
-    return API_BASE;
+    API_BASES.forEach(function (base) {
+      if (bases.indexOf(base) === -1) bases.push(base);
+    });
+    // 上一轮已经连通的地址排到最前面，少一次无谓的等待。
+    if (workingBase && bases.indexOf(workingBase) > 0) {
+      bases = [workingBase].concat(bases.filter(function (base) { return base !== workingBase; }));
+    }
+    return bases;
   }
 
   function fetchWithTimeout(url, options, timeoutMs) {
@@ -82,6 +98,25 @@
     Object.keys(options || {}).forEach(function (key) { opts[key] = options[key]; });
     opts.signal = controller.signal;
     return fetch(url, opts).finally(function () { clearTimeout(timer); });
+  }
+
+  // 依次尝试候选地址（国内 workers.dev 经常超时），记住第一个通的。
+  function apiFetch(path, options, timeoutMs) {
+    var bases = resolveApiBases();
+    if (!bases.length) return Promise.reject(new Error("no_api"));
+    var attempt = function (index) {
+      return fetchWithTimeout(bases[index] + path, options, timeoutMs || 6000)
+        .then(function (response) {
+          if (response.status >= 500) throw new Error("HTTP " + response.status);
+          workingBase = bases[index];
+          return response;
+        })
+        .catch(function (error) {
+          if (index + 1 >= bases.length) throw error;
+          return attempt(index + 1);
+        });
+    };
+    return attempt(0);
   }
 
   /* ---------- 面板开关 ---------- */
@@ -154,13 +189,12 @@
   }
 
   function loadLeaderboard() {
-    var base = resolveApiBase();
-    if (!base) {
+    if (!resolveApiBases().length) {
       listMessage("全服排行榜还没接通。");
       return;
     }
     els.refresh.disabled = true;
-    fetchWithTimeout(base + "/hextris/leaderboard?limit=20", { cache: "no-store" }, 8000)
+    apiFetch("/hextris/leaderboard?limit=20", { cache: "no-store" }, 6000)
       .then(function (response) {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -214,8 +248,7 @@
     event.preventDefault();
     if (state.submitted || !state.gameOver) return;
 
-    var base = resolveApiBase();
-    if (!base) {
+    if (!resolveApiBases().length) {
       showMessage("排行榜还没接通，等 Worker 部署好就能上榜。", true);
       return;
     }
@@ -230,11 +263,11 @@
     els.name.disabled = true;
     showMessage("正在上传…", false);
 
-    fetchWithTimeout(base + "/hextris/score", {
+    apiFetch("/hextris/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: state.playerId, name: name, score: state.score })
-    }, 10000)
+    }, 8000)
       .then(function (response) {
         return response.json().then(function (data) {
           if (!response.ok || !data.ok) throw new Error(data && data.error ? data.error : "submit_failed");

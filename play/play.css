@@ -100,7 +100,6 @@ html[data-theme="dark"] .p-icon-sun { display: block; }
 .p-head { margin-bottom: 28px; text-align: center; }
 .p-eyebrow { margin: 0 0 8px; color: var(--p-accent); font-size: 0.64rem; font-weight: 800; letter-spacing: 0.18em; }
 .p-head h1 { margin: 0; color: var(--p-ink); font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 900; letter-spacing: 0.01em; }
-.p-sub { margin: 12px 0 0; color: var(--p-muted); font-size: 0.86rem; line-height: 1.7; }
 
 .p-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 
@@ -138,9 +137,11 @@ html[data-theme="dark"] .p-icon-sun { display: block; }
   position: relative;
   z-index: 1;
   display: grid;
+  box-sizing: border-box;
   width: 132px;
   height: 132px;
   margin: 0 auto;
+  overflow: hidden;
   border-radius: 18px;
   background: #0D2540;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -159,19 +160,23 @@ html[data-theme="dark"] .p-icon-sun { display: block; }
 }
 .p-preview-hex i:nth-child(2), .p-preview-hex i:nth-child(8) { transform: translateY(8px); }
 
-.p-preview-2048 { grid-template-columns: repeat(4, 1fr); gap: 3px; padding: 7px; }
-.p-preview-2048 i { display: grid; place-items: center; border-radius: 4px; background: #1B3552; color: #EAF4FF; font-size: 0.52rem; font-style: normal; font-weight: 800; }
-.p-preview-2048 i:nth-child(1) { background: #EEF5FB; color: #16283F; }
-.p-preview-2048 i:nth-child(2) { background: #DCEAF7; color: #16283F; }
-.p-preview-2048 i:nth-child(3) { background: #B9D6EF; color: #16283F; }
-.p-preview-2048 i:nth-child(4) { background: #8FBEE3; color: #16283F; }
-.p-preview-2048 i:nth-child(5) { background: #5B9BD5; }
-.p-preview-2048 i:nth-child(6) { background: #2E75B6; }
-.p-preview-2048 i:nth-child(7) { background: #1F5C94; }
-.p-preview-2048 i:nth-child(8) { background: #18304C; }
-.p-preview-2048 i:nth-child(9) { background: #D9A441; color: #2A1B04; }
-.p-preview-2048 i:nth-child(10) { background: #F0C674; color: #2A1B04; }
-.p-preview-2048 i:nth-child(11) { background: #F0C674; color: #2A1B04; font-size: 0.44rem; }
+.p-preview-2048 { display: flex; align-items: center; justify-content: center; padding: 13px; }
+.p-preview-2048 i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(150deg, #FFE29A 0%, #FFD76A 55%, #F0C674 100%);
+  color: #3A2A00;
+  font-size: 1.32rem;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
 
 .p-copy { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .p-copy small { color: var(--p-accent); font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; }
@@ -191,9 +196,8 @@ html[data-theme="dark"] .p-icon-sun { display: block; }
   .p-preview-hex { gap: 3px; padding: 9px; }
   .p-preview-hex i { width: 20px; height: 23px; }
   .p-preview-hex i:nth-child(2), .p-preview-hex i:nth-child(8) { transform: translateY(6px); }
-  .p-preview-2048 { gap: 2px; padding: 5px; }
-  .p-preview-2048 i { font-size: 0.4rem; border-radius: 3px; }
-  .p-preview-2048 i:nth-child(11) { font-size: 0.34rem; }
+  .p-preview-2048 { padding: 10px; }
+  .p-preview-2048 i { font-size: 0.86rem; border-radius: 9px; }
   .p-copy strong { font-size: 1rem; }
   .p-copy span { font-size: 0.7rem; }
   .p-go { align-self: end; font-size: 0.7rem; }
@@ -205,12 +209,12 @@ html[data-theme="dark"] .p-icon-sun { display: block; }
   .p-brand { display: none; }
   .p-main { padding: 34px 16px 46px; }
   .p-head { margin-bottom: 22px; }
-  .p-sub { font-size: 0.76rem; }
   .p-card { grid-template-columns: 80px minmax(0, 1fr); gap: 12px; padding: 14px; }
   .p-preview { width: 80px; height: 80px; }
   .p-preview-hex { padding: 7px; }
   .p-preview-hex i { width: 17px; height: 20px; }
-  .p-preview-2048 { padding: 4px; }
+  .p-preview-2048 { padding: 8px; }
+  .p-preview-2048 i { font-size: 0.76rem; border-radius: 7px; }
   .p-copy small { font-size: 0.58rem; }
   .p-copy strong { font-size: 0.92rem; }
   .p-copy span { display: none; }

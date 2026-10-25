@@ -42,10 +42,16 @@
     themeToggle: $("[data-theme-toggle]")
   };
 
-  var API_BASE = (function () {
+  // 可以写多个地址、用逗号分隔：国内先走自定义域名，workers.dev 留作备用。
+  var API_BASES = (function () {
     var meta = $('meta[name="ct10-api"]');
-    return (meta && meta.content ? meta.content : "").trim().replace(/\/+$/, "");
+    return (meta && meta.content ? meta.content : "")
+      .split(/[\s,]+/)
+      .map(function (item) { return item.trim().replace(/\/+$/, ""); })
+      .filter(function (item) { return /^https?:\/\//i.test(item); });
   })();
+
+  var workingBase = "";
 
   var state = {
     phase: "idle", // idle | running | over
@@ -418,7 +424,7 @@
       ? "个人最佳刷新为 " + state.best + " 分"
       : "个人最佳 " + state.best + " 分";
 
-    var canSubmit = record && !!resolveApiBase();
+    var canSubmit = record && resolveApiBases().length > 0;
     els.form.hidden = !canSubmit;
     els.formMsg.textContent = "";
     els.formMsg.classList.remove("is-error");
@@ -439,13 +445,23 @@
 
   /* ---------- 排行榜 ---------- */
 
-  function resolveApiBase() {
+  function resolveApiBases() {
     // 本地测试可以加 ?api=http://127.0.0.1:4003，正式环境用 meta 里的地址。
+    var bases = [];
     try {
       var override = new URLSearchParams(location.search).get("api");
-      if (override && /^https?:\/\//i.test(override)) return override.replace(/\/+$/, "");
+      if (override && /^https?:\/\//i.test(override)) {
+        bases.push(override.replace(/\/+$/, ""));
+      }
     } catch (e) { /* 忽略 */ }
-    return API_BASE;
+    API_BASES.forEach(function (base) {
+      if (bases.indexOf(base) === -1) bases.push(base);
+    });
+    // 上一轮已经连通的地址排到最前面，少一次无谓的等待。
+    if (workingBase && bases.indexOf(workingBase) > 0) {
+      bases = [workingBase].concat(bases.filter(function (base) { return base !== workingBase; }));
+    }
+    return bases;
   }
 
   function renderLeaderboard(scores) {
@@ -500,15 +516,33 @@
     return fetch(url, opts).finally(function () { clearTimeout(timer); });
   }
 
+  // 依次尝试候选地址（国内 workers.dev 经常超时），记住第一个通的。
+  function apiFetch(path, options, timeoutMs) {
+    var bases = resolveApiBases();
+    if (!bases.length) return Promise.reject(new Error("no_api"));
+    var attempt = function (index) {
+      return fetchWithTimeout(bases[index] + path, options, timeoutMs || 6000)
+        .then(function (response) {
+          if (response.status >= 500) throw new Error("HTTP " + response.status);
+          workingBase = bases[index];
+          return response;
+        })
+        .catch(function (error) {
+          if (index + 1 >= bases.length) throw error;
+          return attempt(index + 1);
+        });
+    };
+    return attempt(0);
+  }
+
   function loadLeaderboard(silent) {
-    var base = resolveApiBase();
-    if (!base) {
+    if (!resolveApiBases().length) {
       leaderboardMessage("全服排行榜还没接通。");
       els.lbNote.textContent = "本地最高分照常记录；等 Worker 部署后，这里会自动出现全服榜。";
       return;
     }
     if (!silent) els.refresh.disabled = true;
-    fetchWithTimeout(base + "/leaderboard?limit=20", { cache: "no-store" }, 8000)
+    apiFetch("/leaderboard?limit=20", { cache: "no-store" }, 6000)
       .then(function (response) {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -529,8 +563,7 @@
 
   function submitScore(event) {
     event.preventDefault();
-    var base = resolveApiBase();
-    if (!base || state.submitted) return;
+    if (!resolveApiBases().length || state.submitted) return;
 
     var name = els.nameInput.value.trim().slice(0, 12);
     if (!name) {
@@ -542,11 +575,11 @@
     button.disabled = true;
     showFormMessage("正在上传…", false);
 
-    fetchWithTimeout(base + "/score", {
+    apiFetch("/score", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: state.playerId, name: name, score: state.score })
-    }, 10000)
+    }, 8000)
       .then(function (response) {
         return response.json().then(function (data) {
           if (!response.ok || !data.ok) throw new Error(data && data.error ? data.error : "提交失败");

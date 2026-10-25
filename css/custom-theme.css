@@ -1600,14 +1600,6 @@ html.dark .custom-home .home-random-slot.is-rolling {
   line-height: 1.15;
 }
 
-.custom-home .home-games-desc {
-  max-width: 320px;
-  margin: 8px 0 0;
-  color: #5E768E;
-  font-size: 0.8rem;
-  line-height: 1.65;
-}
-
 .custom-home .home-games-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1655,10 +1647,13 @@ html.dark .custom-home .home-random-slot.is-rolling {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  box-sizing: border-box;
   gap: 4px;
   width: 92px;
+  aspect-ratio: 1;
   padding: 7px;
+  overflow: hidden;
   border-radius: 12px;
   background: #0D2540;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -1688,10 +1683,13 @@ html.dark .custom-home .home-random-slot.is-rolling {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  box-sizing: border-box;
   gap: 4px;
   width: 92px;
+  aspect-ratio: 1;
   padding: 9px;
+  overflow: hidden;
   border-radius: 14px;
   background: #0D2540;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -1704,16 +1702,19 @@ html.dark .custom-home .home-random-slot.is-rolling {
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-/* 2048：4×4 小棋盘，2 → 2048 由浅蓝走到金色。 */
+/* 2048：正方形图标，只放一块金色 2048，数字再大也不会溢出。 */
 .custom-home .home-game-2048 {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: 92px;
-  padding: 6px;
-  border-radius: 12px;
+  aspect-ratio: 1;
+  padding: 8px;
+  overflow: hidden;
+  border-radius: 14px;
   background: #0D2540;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -1722,33 +1723,18 @@ html.dark .custom-home .home-random-slot.is-rolling {
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
-  border-radius: 3px;
-  background: #F2F7FC;
-  color: #5E768E;
-  font-size: 0.5rem;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 9px;
+  background: linear-gradient(150deg, #FFE29A 0%, #FFD76A 55%, #F0C674 100%);
+  color: #3A2A00;
+  font-size: 0.84rem;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   line-height: 1;
 }
-
-.custom-home .home-game-2048 i:nth-child(2) { background: #E3EEF8; }
-.custom-home .home-game-2048 i:nth-child(3) { background: #CFE2F3; }
-.custom-home .home-game-2048 i:nth-child(4) { background: #B3D2EC; color: #234867; }
-.custom-home .home-game-2048 i:nth-child(5) { background: #8FB9DF; color: #183A57; }
-.custom-home .home-game-2048 i:nth-child(6) { background: #6C9FD0; color: #FFFFFF; }
-.custom-home .home-game-2048 i:nth-child(7) { background: #4C86BE; color: #FFFFFF; }
-.custom-home .home-game-2048 i:nth-child(8) { background: #2E75B6; color: #FFFFFF; }
-.custom-home .home-game-2048 i:nth-child(9) { background: #1F5E97; color: #FFFFFF; }
-.custom-home .home-game-2048 i:nth-child(10) { background: #174A78; color: #FFFFFF; }
-.custom-home .home-game-2048 i.is-gold { background: #FFD76A; color: #3A2A00; }
-.custom-home .home-game-2048 i:last-child { background: rgba(255, 255, 255, 0.06); }
-.custom-home .home-game-2048 i:nth-child(4),
-.custom-home .home-game-2048 i:nth-child(7) { font-size: 0.42rem; }
-.custom-home .home-game-2048 i:nth-child(8),
-.custom-home .home-game-2048 i:nth-child(9),
-.custom-home .home-game-2048 i:nth-child(10),
-.custom-home .home-game-2048 i.is-gold { font-size: 0.36rem; }
 
 .custom-home .home-game-tile-copy {
   position: relative;
@@ -1829,7 +1815,6 @@ html.dark .custom-home .home-games-section {
 
 html.dark .custom-home .home-games-eyebrow { color: #7FB2E5; }
 html.dark .custom-home .home-games-title { color: #EDF5FD; }
-html.dark .custom-home .home-games-desc { color: #A9C8E1; }
 html.dark .custom-home .home-games-all { color: #7FB2E5; }
 html.dark .custom-home .home-games-all:hover { color: #EDF5FD; }
 
@@ -1846,18 +1831,10 @@ html.dark .custom-home .home-game-tile-copy strong { color: #EAF4FF; }
 html.dark .custom-home .home-game-tile-copy small { color: #9DB7D2; }
 html.dark .custom-home .home-game-tile-go { color: #7FB2E5; }
 
-html.dark .custom-home .home-game-2048 i { background: #1B3550; color: #B8D3EA; }
-html.dark .custom-home .home-game-2048 i:nth-child(2) { background: #21405F; }
-html.dark .custom-home .home-game-2048 i:nth-child(3) { background: #274B70; }
-html.dark .custom-home .home-game-2048 i:nth-child(4) { background: #2F587F; color: #D9EAF8; }
-html.dark .custom-home .home-game-2048 i:nth-child(5) { background: #376590; color: #E4F1FB; }
-html.dark .custom-home .home-game-2048 i:nth-child(6) { background: #4073A1; color: #FFFFFF; }
-html.dark .custom-home .home-game-2048 i:nth-child(7) { background: #4A81B2; color: #FFFFFF; }
-html.dark .custom-home .home-game-2048 i:nth-child(8) { background: #2E75B6; color: #FFFFFF; }
-html.dark .custom-home .home-game-2048 i:nth-child(9) { background: #26649F; color: #FFFFFF; }
-html.dark .custom-home .home-game-2048 i:nth-child(10) { background: #1F568A; color: #FFFFFF; }
-html.dark .custom-home .home-game-2048 i.is-gold { background: #FFD76A; color: #3A2A00; }
-html.dark .custom-home .home-game-2048 i:last-child { background: rgba(255, 255, 255, 0.06); }
+html.dark .custom-home .home-game-2048 i {
+  background: linear-gradient(150deg, #FFE7A8 0%, #FFD76A 55%, #F0C674 100%);
+  color: #0B1726;
+}
 
 html.dark .custom-home .home-game-tile.is-soon {
   border-color: rgba(127, 178, 229, 0.24);
@@ -2089,11 +2066,6 @@ html.dark .home-sidebar-note p {
 
   .custom-home .home-games-title { font-size: 1.2rem; }
 
-  .custom-home .home-games-desc {
-    max-width: none;
-    font-size: 0.76rem;
-  }
-
   .custom-home .home-games-all {
     gap: 4px;
     font-size: 0.66rem;
@@ -2134,18 +2106,11 @@ html.dark .home-sidebar-note p {
   }
 
   .custom-home .home-game-2048 {
-    padding: 5px;
-    gap: 2px;
+    padding: 6px;
   }
 
   .custom-home .home-game-mini i { font-size: 0.5rem; }
-  .custom-home .home-game-2048 i { font-size: 0.36rem; }
-  .custom-home .home-game-2048 i:nth-child(4),
-  .custom-home .home-game-2048 i:nth-child(7) { font-size: 0.3rem; }
-  .custom-home .home-game-2048 i:nth-child(8),
-  .custom-home .home-game-2048 i:nth-child(9),
-  .custom-home .home-game-2048 i:nth-child(10),
-  .custom-home .home-game-2048 i.is-gold { font-size: 0.26rem; }
+  .custom-home .home-game-2048 i { font-size: 0.62rem; }
   .custom-home .home-game-tile-copy strong { font-size: 0.88rem; }
   .custom-home .home-game-tile-copy small { font-size: 0.62rem; }
   .custom-home .home-game-tile-go { font-size: 0.64rem; white-space: nowrap; }
