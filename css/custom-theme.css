@@ -1950,6 +1950,116 @@ html.dark .home-sidebar-note p {
   50% { transform: translateY(-4px); }
 }
 
+/* ---------- 侧边栏：各板块的更新节奏（在小狗值班卡下面） ---------- */
+
+.home-sidebar-updates {
+  margin-top: 12px;
+  padding: 12px 13px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #F7FBFF 0%, #E8F1FA 100%);
+  box-shadow: var(--redefine-box-shadow-flat);
+}
+
+.home-sidebar-updates-title {
+  margin: 0 0 6px;
+  color: #2E75B6;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-align: center;
+}
+
+.home-sidebar-updates-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-sidebar-updates-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 1px;
+  color: #3E6485;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.home-sidebar-updates-list li + li {
+  border-top: 1px dashed rgba(46, 117, 182, 0.18);
+}
+
+.home-sidebar-updates-list span {
+  font-family: 'Chillax-Variable', sans-serif;
+  font-weight: 600;
+  color: #1F4A72;
+  letter-spacing: 0.01em;
+}
+
+.home-sidebar-updates-list em {
+  font-style: normal;
+  font-size: 0.68rem;
+  color: #5C7E9E;
+  white-space: nowrap;
+}
+
+html.dark .home-sidebar-updates {
+  border-color: rgba(127, 178, 229, 0.18);
+  background: linear-gradient(180deg, #16283F 0%, #1B3552 100%);
+}
+
+html.dark .home-sidebar-updates-title {
+  color: #7FB2E5;
+}
+
+html.dark .home-sidebar-updates-list li + li {
+  border-top-color: rgba(127, 178, 229, 0.16);
+}
+
+html.dark .home-sidebar-updates-list span {
+  color: #DCE9F6;
+}
+
+html.dark .home-sidebar-updates-list em {
+  color: #9DB7D2;
+}
+
+/* 侧边栏内容比视口高时（笔记本 768 / 900 高度很常见），
+   让整列自己滚动，别把底下的值班卡和更新节奏卡截掉。 */
+@media (min-width: 769px) {
+  .home-sidebar-container .sticky-container {
+    max-height: calc(100vh - 82px);
+    overflow-y: auto;
+    /* 不用 overscroll-behavior: contain：滚到底之后要继续滚页面，别把滚轮锁在侧栏里 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(46, 117, 182, 0.28) transparent;
+    padding-bottom: 2px;
+  }
+
+  .home-sidebar-container .sticky-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .home-sidebar-container .sticky-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .home-sidebar-container .sticky-container::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(46, 117, 182, 0.28);
+  }
+
+  html.dark .home-sidebar-container .sticky-container {
+    scrollbar-color: rgba(127, 178, 229, 0.34) transparent;
+  }
+
+  html.dark .home-sidebar-container .sticky-container::-webkit-scrollbar-thumb {
+    background: rgba(127, 178, 229, 0.34);
+  }
+}
+
 @media (max-width: 768px) {
   .home-sidebar-note {
     display: none;
