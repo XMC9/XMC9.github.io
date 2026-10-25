@@ -1,0 +1,223 @@
+/* ============================================================
+ * BLOCKFALL · 页面专属样式（通用外壳见 /css/arcade.css）
+ * 方块颜色由 JS 按深浅色分配，这里只管版式。
+ * ============================================================ */
+
+.bf-shell { max-width: 640px; }
+
+.bf-layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 26px;
+  margin-top: 16px;
+}
+
+.bf-stage {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(100%, 300px, 32vh);
+  aspect-ratio: 1 / 2;
+  padding: 6px;
+  border: 1px solid var(--gm-line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="dark"] .bf-stage {
+  background: rgba(9, 22, 38, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.bf-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 13px;
+  background-color: rgba(24, 62, 96, 0.06);
+  background-image:
+    linear-gradient(to right, var(--gm-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gm-line) 1px, transparent 1px);
+  background-size: 10% 5%;
+  background-position: -1px -1px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html[data-theme="dark"] .bf-canvas {
+  background-color: rgba(6, 16, 28, 0.7);
+  background-image:
+    linear-gradient(to right, rgba(127, 178, 229, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(127, 178, 229, 0.1) 1px, transparent 1px);
+}
+
+/* 开始 / 暂停遮罩 */
+.bf-overlay {
+  position: absolute;
+  inset: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 13px;
+  background: rgba(232, 241, 248, 0.78);
+  text-align: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+html[data-theme="dark"] .bf-overlay { background: rgba(11, 23, 38, 0.8); }
+
+.bf-overlay-title {
+  margin: 0;
+  color: var(--gm-ink);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.bf-overlay-score {
+  margin: 0;
+  color: var(--gm-blue);
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.bf-overlay small {
+  color: var(--gm-muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+/* 侧栏：下一块 + 用时 + 操作说明 */
+.bf-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 168px;
+  flex: 0 0 auto;
+  padding-top: 4px;
+}
+
+.bf-next-card {
+  padding: 12px 12px 8px;
+  border: 1px solid var(--gm-line);
+  border-radius: 16px;
+  background: var(--gm-soft);
+  text-align: center;
+}
+
+.bf-next-card span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--gm-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.bf-next-canvas {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto;
+}
+
+.bf-note {
+  margin: 0;
+  color: var(--gm-muted);
+  font-size: 0.7rem;
+  line-height: 1.8;
+}
+
+.bf-note b {
+  color: var(--gm-ink);
+  font-weight: 700;
+}
+
+/* 手机上的触控按钮 */
+.bf-controls {
+  display: none;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.bf-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  padding: 0;
+  border: 1px solid var(--gm-line);
+  border-radius: 14px;
+  background: var(--gm-surface-strong);
+  color: var(--gm-ink);
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.bf-key:active,
+.bf-key.is-down {
+  border-color: transparent;
+  background: linear-gradient(135deg, #3D86C6 0%, #245D91 100%);
+  color: #FFFFFF;
+}
+
+.bf-key small {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .bf-controls { display: grid; }
+}
+
+@media (max-width: 640px) {
+  .bf-layout { flex-direction: column; align-items: center; gap: 10px; }
+
+  .bf-stage { width: min(100%, 250px, 31vh); padding: 5px; border-radius: 16px; }
+
+  .bf-overlay { inset: 5px; padding: 12px; gap: 8px; }
+
+  .bf-overlay-title { font-size: 1rem; }
+
+  .bf-side {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding-top: 0;
+    gap: 10px;
+  }
+
+  .bf-next-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 8px;
+    border-radius: 12px;
+  }
+
+  .bf-next-card span { margin-bottom: 0; font-size: 0.52rem; }
+
+  .bf-next-canvas { width: 40px; height: 40px; margin: 0; }
+
+  .bf-note { display: none; }
+}

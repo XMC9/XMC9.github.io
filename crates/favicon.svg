@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CRATES">
+  <rect width="64" height="64" rx="14" fill="#12233A"/>
+  <circle cx="24" cy="24" r="6" fill="none" stroke="#F0C674" stroke-width="3"/>
+  <rect x="18" y="36" width="20" height="20" rx="4" fill="#C98A4B"/>
+  <path d="M22 40 L34 52 M34 40 L22 52" stroke="#DDA76C" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="43" cy="43" r="7" fill="#5B9BD5"/>
+  <path d="M45.5 43 L41 40 L41 46 Z" fill="#0B1726"/>
+</svg>

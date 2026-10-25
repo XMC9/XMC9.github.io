@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PIXEL HOP">
+  <rect width="64" height="64" rx="14" fill="#12233A"/>
+  <rect x="8" y="44" width="48" height="12" rx="3" fill="#33597E"/>
+  <rect x="8" y="44" width="48" height="3" rx="1.5" fill="#5F81A3"/>
+  <rect x="14" y="36" width="10" height="8" rx="2" fill="#C98A4B"/>
+  <rect x="30" y="26" width="14" height="14" rx="4" fill="#5B9BD5"/>
+  <rect x="33" y="30" width="3" height="3" rx="1" fill="#FFFFFF"/>
+  <rect x="38" y="30" width="3" height="3" rx="1" fill="#FFFFFF"/>
+  <rect x="34" y="36" width="6" height="2" rx="1" fill="#0B1726"/>
+  <circle cx="50" cy="14" r="5" fill="#F0C674"/>
+</svg>

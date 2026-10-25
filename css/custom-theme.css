@@ -1702,6 +1702,59 @@ html.dark .custom-home .home-random-slot.is-rolling {
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
+/* BLOCKFALL：四列小方块堆成一小段，右上还挂着一块正在下落。 */
+.custom-home .home-game-blockfall {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  box-sizing: border-box;
+  gap: 4px;
+  width: 92px;
+  aspect-ratio: 1;
+  padding: 8px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0D2540;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.custom-home .home-game-blockfall i {
+  border-radius: 2.5px;
+  background: var(--c, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.custom-home .home-game-blockfall i.is-empty {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* CRATES / PIXEL HOP：SVG 插画，外层盒子和其它图标统一。 */
+.custom-home .home-game-crates,
+.custom-home .home-game-hop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 92px;
+  aspect-ratio: 1;
+  padding: 6px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0D2540;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.custom-home .home-game-crates svg,
+.custom-home .home-game-hop svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* 2048：深蓝底 + 浅蓝字的正方形图标，干净、不抢戏。 */
 .custom-home .home-game-2048 {
   position: relative;
@@ -1827,7 +1880,10 @@ html.dark .custom-home .home-game-tile {
 
 html.dark .custom-home .home-game-mini,
 html.dark .custom-home .home-game-hex,
-html.dark .custom-home .home-game-2048 { background: #081522; }
+html.dark .custom-home .home-game-2048,
+html.dark .custom-home .home-game-blockfall,
+html.dark .custom-home .home-game-crates,
+html.dark .custom-home .home-game-hop { background: #081522; }
 html.dark .custom-home .home-game-tile-copy strong { color: #EAF4FF; }
 html.dark .custom-home .home-game-tile-copy small { color: #9DB7D2; }
 html.dark .custom-home .home-game-tile-go { color: #7FB2E5; }
@@ -2093,7 +2149,10 @@ html.dark .home-sidebar-note p {
 
   .custom-home .home-game-mini,
   .custom-home .home-game-hex,
-  .custom-home .home-game-2048 {
+  .custom-home .home-game-2048,
+  .custom-home .home-game-blockfall,
+  .custom-home .home-game-crates,
+  .custom-home .home-game-hop {
     width: 64px;
   }
 
@@ -2109,6 +2168,16 @@ html.dark .home-sidebar-note p {
 
   .custom-home .home-game-2048 {
     padding: 6px;
+  }
+
+  .custom-home .home-game-blockfall {
+    padding: 6px;
+    gap: 3px;
+  }
+
+  .custom-home .home-game-crates,
+  .custom-home .home-game-hop {
+    padding: 4px;
   }
 
   .custom-home .home-game-mini i { font-size: 0.5rem; }

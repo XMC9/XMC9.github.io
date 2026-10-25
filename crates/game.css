@@ -1,0 +1,113 @@
+/* ============================================================
+ * CRATES · 页面专属样式（通用外壳见 /css/arcade.css）
+ * ============================================================ */
+
+.cr-shell { max-width: 660px; }
+
+.cr-board-wrap { margin-top: 14px; }
+
+.cr-scroll {
+  display: flex;
+  overflow: auto;
+  max-height: 62vh;
+  padding: 10px;
+  border: 1px solid var(--gm-line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.46);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+html[data-theme="dark"] .cr-scroll { background: rgba(9, 22, 38, 0.72); }
+
+.cr-canvas {
+  display: block;
+  flex: 0 0 auto;
+  margin: auto;
+  border-radius: 10px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cr-cover { border-radius: 18px; }
+
+.cr-cover-sub {
+  margin: 0;
+  color: var(--gm-muted);
+  font-size: 0.78rem;
+}
+
+.cr-cover-sub strong { color: var(--gm-blue); }
+
+/* ---------- 方向键 ---------- */
+
+.cr-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  margin-top: 16px;
+}
+
+.cr-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 6px;
+}
+
+.cr-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--gm-line);
+  border-radius: 13px;
+  background: var(--gm-surface-strong);
+  color: var(--gm-ink);
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.cr-key:active,
+.cr-key.is-down {
+  border-color: transparent;
+  background: linear-gradient(135deg, #3D86C6 0%, #245D91 100%);
+  color: #FFFFFF;
+}
+
+.cr-key-up { grid-column: 2; grid-row: 1; }
+.cr-key-left { grid-column: 1; grid-row: 2; }
+.cr-key-down { grid-column: 2; grid-row: 2; }
+.cr-key-right { grid-column: 3; grid-row: 2; }
+
+.cr-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cr-tools .gm-btn { padding: 9px 18px; font-size: 0.78rem; }
+
+.cr-nav .gm-btn { padding: 9px 16px; font-size: 0.78rem; }
+
+.cr-tip { margin-top: 12px; text-align: center; }
+
+@media (max-width: 640px) {
+  .cr-scroll { max-height: 56vh; padding: 6px; border-radius: 14px; }
+
+  .cr-controls { gap: 16px; margin-top: 12px; }
+
+  .cr-pad {
+    grid-template-columns: repeat(3, 52px);
+    grid-template-rows: repeat(3, 52px);
+  }
+
+  .cr-tools .gm-btn { padding: 8px 14px; }
+}

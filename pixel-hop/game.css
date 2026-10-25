@@ -1,0 +1,90 @@
+/* ============================================================
+ * PIXEL HOP · 页面专属样式（通用外壳见 /css/arcade.css）
+ * ============================================================ */
+
+.ph-shell { max-width: 860px; }
+
+.ph-stage {
+  margin-top: 8px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px var(--gm-shadow);
+}
+
+.ph-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #EAF3FB;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html[data-theme="dark"] .ph-canvas { background: #0B1726; }
+
+.ph-cover { border-radius: 0; gap: 12px; }
+
+.ph-cover .gm-btn.is-large { padding: 11px 26px; font-size: 0.86rem; }
+
+/* ---------- 触屏按键 ---------- */
+
+.ph-controls {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .ph-controls { display: flex; }
+}
+
+.ph-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 54px;
+  padding: 0;
+  border: 1px solid var(--gm-line);
+  border-radius: 15px;
+  background: var(--gm-surface-strong);
+  color: var(--gm-ink);
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.ph-key[data-key="jump"] {
+  width: 96px;
+  border-color: transparent;
+  background: linear-gradient(135deg, #3D86C6 0%, #245D91 100%);
+  box-shadow: 0 8px 20px rgba(46, 117, 182, 0.26);
+  color: #FFFFFF;
+}
+
+.ph-key.is-down {
+  border-color: var(--gm-blue);
+  background: var(--gm-soft);
+  transform: translateY(1px);
+}
+
+.ph-key[data-key="jump"].is-down {
+  background: linear-gradient(135deg, #245D91 0%, #3D86C6 100%);
+  color: #FFFFFF;
+}
+
+@media (max-width: 640px) {
+  .ph-stage { border-radius: 12px; }
+
+  .ph-controls { gap: 8px; margin-top: 10px; }
+
+  .ph-key { width: 66px; height: 50px; border-radius: 13px; }
+
+  .ph-key[data-key="jump"] { width: 88px; }
+}

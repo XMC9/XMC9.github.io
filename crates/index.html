@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <meta name="cr-api" content="https://games-api.xm9.asia,https://count-to-10.curiosity-chen.workers.dev">
+  <title>CRATES · 秘密基地</title>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下读不到就跟随系统 */ }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/crates/favicon.svg?v=2026-10-25.1">
+  <link rel="stylesheet" href="/css/arcade.css?v=2026-10-25.1">
+  <link rel="stylesheet" href="/crates/game.css?v=2026-10-25.1">
+</head>
+<body>
+  <header class="gm-top">
+    <a class="gm-back" href="/"><span aria-hidden="true">←</span> 秘密基地</a>
+    <button class="gm-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+      <svg data-theme-icon viewBox="0 0 24 24" width="18" height="18" fill="none"
+        stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+        <path class="gm-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+        <g class="gm-icon-sun">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+        </g>
+      </svg>
+    </button>
+  </header>
+
+  <main class="gm-main">
+    <section class="gm-intro">
+      <p class="gm-eyebrow">MINI GAME · 推箱子</p>
+      <h1>CRATES</h1>
+      <p class="gm-sub">把所有木箱推到金色的目标点上。箱子只能推、不能拉，一步走错就撤回来重想。</p>
+    </section>
+
+    <section class="gm-shell cr-shell" aria-label="CRATES 游戏">
+      <div class="gm-hud is-four">
+        <div class="gm-stat">
+          <span>当前关卡</span>
+          <strong data-level-no>1</strong>
+          <em>共 490 关</em>
+        </div>
+        <div class="gm-stat">
+          <span>已通关</span>
+          <strong data-cleared>0</strong>
+          <em>关</em>
+        </div>
+        <div class="gm-stat">
+          <span>步数</span>
+          <strong data-moves>0</strong>
+        </div>
+        <div class="gm-stat">
+          <span>个人最佳</span>
+          <strong data-best>0</strong>
+          <em>关</em>
+        </div>
+      </div>
+
+      <p class="gm-status" data-status>第 1 关 · atlas starts easy</p>
+
+      <div class="cr-board-wrap gm-board-wrap">
+        <div class="cr-scroll" data-scroll>
+          <canvas class="cr-canvas" data-canvas width="320" height="320" aria-label="CRATES 关卡"></canvas>
+        </div>
+        <div class="gm-cover cr-cover" data-cover hidden>
+          <p class="gm-cover-title" data-cover-title>这一关完成了</p>
+          <p class="cr-cover-sub" data-cover-sub></p>
+          <button type="button" class="gm-btn is-primary" data-next-level>下一关</button>
+        </div>
+      </div>
+
+      <div class="cr-controls">
+        <div class="cr-pad" aria-label="方向键">
+          <button class="cr-key cr-key-up" type="button" data-move="up" aria-label="上">↑</button>
+          <button class="cr-key cr-key-left" type="button" data-move="left" aria-label="左">←</button>
+          <button class="cr-key cr-key-down" type="button" data-move="down" aria-label="下">↓</button>
+          <button class="cr-key cr-key-right" type="button" data-move="right" aria-label="右">→</button>
+        </div>
+        <div class="cr-tools">
+          <button class="gm-btn" type="button" data-undo>撤销</button>
+          <button class="gm-btn" type="button" data-restart>重来</button>
+        </div>
+      </div>
+
+      <div class="gm-actions cr-nav">
+        <button type="button" class="gm-btn" data-prev>← 上一关</button>
+        <button type="button" class="gm-btn" data-next>下一关 →</button>
+        <button type="button" class="gm-btn" data-goto>跳到第…关</button>
+      </div>
+
+      <p class="gm-tip cr-tip">电脑：方向键移动，Z 撤销，R 重来；手机：滑动或用下方方向键。</p>
+    </section>
+
+    <section class="gm-lb-section" aria-label="全服排行榜">
+      <div class="gm-lb-head">
+        <div>
+          <p class="gm-eyebrow">GLOBAL LEADERBOARD</p>
+          <h2>全服排行榜</h2>
+        </div>
+        <button type="button" class="gm-refresh" data-refresh>刷新</button>
+      </div>
+      <div class="gm-leaderboard" data-leaderboard aria-live="polite">
+        <p class="gm-lb-empty">正在读取排行榜…</p>
+      </div>
+      <div class="gm-lb-self">
+        <div class="gm-lb-self-row">
+          <input id="cr-name" maxlength="12" autocomplete="nickname" placeholder="昵称，用于上全服榜">
+          <button class="gm-btn is-primary" type="button" data-submit>提交最好成绩</button>
+        </div>
+        <p data-self-msg>排行榜按「通关数」排名，过了新的一关会自动帮你更新。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="gm-footer">
+    <div class="gm-footer-row">
+      <a href="/">← 回到秘密基地</a>
+      <span>CRATES</span>
+    </div>
+    <p class="gm-credit">关卡来自 ecyrbe/sokoban（MIT License）；本页代码、配色与文案为重新实现。</p>
+  </footer>
+
+  <div class="gm-modal" data-goto-modal hidden>
+    <div class="gm-modal-card" role="dialog" aria-modal="true" aria-labelledby="cr-goto-title" style="max-width:320px">
+      <h2 id="cr-goto-title">跳到第几关？</h2>
+      <form class="gm-submit" data-goto-form>
+        <div class="gm-submit-row">
+          <input type="number" min="1" max="490" step="1" placeholder="1 – 490" required>
+          <button type="submit" class="gm-btn is-primary">出发</button>
+        </div>
+      </form>
+      <div class="gm-modal-actions">
+        <button type="button" class="gm-btn" data-goto-close>取消</button>
+      </div>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="gm-noscript">这个小游戏需要 JavaScript 才能运行。</p>
+  </noscript>
+
+  <script src="/js/arcade.js?v=2026-10-25.1"></script>
+  <script src="/crates/levels.js?v=2026-10-25.1"></script>
+  <script src="/crates/crates.js?v=2026-10-25.1"></script>
+</body>
+</html>
