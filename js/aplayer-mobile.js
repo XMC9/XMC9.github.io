@@ -1,8 +1,12 @@
+/* 背景音乐盒的「发呆隐身」：
+ * 桌面和手机都一样，20 秒没碰音乐盒就加 .is-idle 淡下去；
+ * 鼠标移回来、滚动、切回标签页都会立刻恢复。
+ * 具体透明度和动画在 source/css/custom-theme.css 里。
+ */
 (function () {
   'use strict';
 
-  const mobileQuery = window.matchMedia('(max-width: 640px)');
-  const IDLE_DELAY = 12000;
+  const IDLE_DELAY = 20000;
   let player = null;
   let idleTimer = null;
 
@@ -12,10 +16,10 @@
 
   function scheduleIdle() {
     clearTimeout(idleTimer);
-    if (!player || !mobileQuery.matches || player.classList.contains('hide')) return;
+    if (!player || player.classList.contains('hide')) return;
 
     idleTimer = setTimeout(function () {
-      if (player && mobileQuery.matches && !player.classList.contains('hide')) {
+      if (player && !player.classList.contains('hide')) {
         player.classList.add('is-idle');
       }
     }, IDLE_DELAY);
@@ -28,10 +32,10 @@
 
   function initPlayer() {
     const element = document.getElementById('aplayer');
-    if (!element || element.dataset.mobileIdleReady === '1') return;
+    if (!element || element.dataset.idleReady === '1') return;
 
     player = element;
-    player.dataset.mobileIdleReady = '1';
+    player.dataset.idleReady = '1';
 
     ['pointerdown', 'pointermove', 'touchstart', 'click', 'focusin'].forEach(function (eventName) {
       player.addEventListener(eventName, wakePlayer, { passive: true });
@@ -41,12 +45,6 @@
     document.addEventListener('visibilitychange', function () {
       if (!document.hidden) wakePlayer();
     });
-
-    if (mobileQuery.addEventListener) {
-      mobileQuery.addEventListener('change', wakePlayer);
-    } else if (mobileQuery.addListener) {
-      mobileQuery.addListener(wakePlayer);
-    }
 
     wakePlayer();
   }

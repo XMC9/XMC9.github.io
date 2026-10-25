@@ -2530,6 +2530,17 @@ body.cat-love .love-cat-stickers img:hover,
   transform: rotate(-3deg);
 }
 
+/* 手心上的两只小狗是竖图，比前面两张略窄一点，站成一排刚好 */
+.tag-love-stickers img:nth-child(3) {
+  width: 104px;
+  transform: rotate(2deg);
+}
+
+.tag-love-stickers img:nth-child(4) {
+  width: 104px;
+  transform: rotate(-2deg);
+}
+
 /* 第四张（躺平）只在手机上散落出现，桌面端整只不加载。 */
 body.cat-love .love-sticker.is-lie {
   display: none;
@@ -2705,13 +2716,79 @@ body.cat-love .article-tags a:hover {
     width: 100%;
   }
 
-  .tag-love-stickers img {
-    width: 88px;
+  .tag-love-stickers {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* 四只并排：66×4 + 8×3 = 288，手机卡片内宽约 315，刚好一行放下 */
+  .tag-love-stickers img,
+  .tag-love-stickers img:nth-child(3),
+  .tag-love-stickers img:nth-child(4) {
+    width: 66px;
   }
 
   body.cat-love .article-content-container::after {
     top: 12px;
     right: 12px;
+  }
+}
+
+/* 分类页最后一条「小狗们一起做的小事」：
+   素材库里剩下的四张零碎 GIF，摆在故事线末尾当收尾。 */
+body.cat-love .love-cat-parade {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  justify-items: center;
+  gap: 10px;
+  margin: 26px 0 6px;
+  padding: 20px 24px 10px;
+  border: 2px dashed var(--love-blue-line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(232, 241, 250, 0.94) 100%);
+  box-shadow: var(--redefine-box-shadow-flat);
+  overflow: hidden;
+}
+
+html.dark body.cat-love .love-cat-parade {
+  background: linear-gradient(180deg, #122338 0%, #182A40 100%);
+}
+
+body.cat-love .love-cat-parade img {
+  display: block;
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+  opacity: 0.96;
+  transition: transform 0.2s ease;
+}
+
+body.cat-love .love-cat-parade img:nth-child(2) {
+  transform: rotate(-1.5deg);
+}
+
+body.cat-love .love-cat-parade img:nth-child(3) {
+  transform: rotate(1.5deg);
+}
+
+body.cat-love .love-cat-parade img:hover {
+  transform: translateY(-4px) rotate(0deg);
+}
+
+@media (max-width: 768px) {
+  body.cat-love .love-cat-parade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 8px;
+    margin-top: 20px;
+    padding: 12px 16px 6px;
+    border-radius: 18px;
+  }
+
+  body.cat-love .love-cat-parade img {
+    max-width: 140px;
   }
 }
 
@@ -4863,11 +4940,33 @@ html.dark .tag-switch-count {
   }
 }
 
+/* 桌面端音乐盒：长时间不动也淡下去（手机端见下面第 6 节）。
+   鼠标移回音乐盒或键盘聚焦时恢复，想暂停时还找得到。 */
+@media (min-width: 641px) {
+  .aplayer.aplayer-fixed {
+    transition: opacity 0.55s ease;
+  }
+
+  .aplayer.aplayer-fixed.is-idle:not(.hide) {
+    opacity: 0.18;
+  }
+
+  .aplayer.aplayer-fixed.is-idle:not(.hide):hover,
+  .aplayer.aplayer-fixed.is-idle:not(.hide):focus-within {
+    opacity: 1;
+  }
+
+  /* 收起／展开的「<」：主题默认悬停时全亮，这里压淡一点 */
+  .aplayer.aplayer-fixed:hover .aplayer-miniswitcher {
+    opacity: 0.6;
+  }
+}
+
 /* ------------------------------------------------------------
  * 6. 手机端音乐盒
  *    主题默认在 <=640px 把 .aplayer 整个 display:none；
  *    这里恢复成左下角 66px 小方块，点右下角按钮才展开。
- *    12 秒不碰音乐盒后半透明；滚动主页时用透明度淡入淡出。
+ *    长时间不碰音乐盒后半透明；滚动主页时用透明度淡入淡出。
  * ---------------------------------------------------------- */
 @media (max-width: 640px) {
   .aplayer.aplayer-fixed {
@@ -4917,9 +5016,14 @@ html.dark .tag-switch-count {
     max-width: 66px;
   }
 
-  /* 手机上没有 hover，展开按钮常显，否则小方块点不开。 */
+  /* 手机上没有 hover，展开按钮要常显，否则小方块点不开；
+     但压到半透明，别在页面角落里太抢眼。 */
   .aplayer.aplayer-fixed .aplayer-miniswitcher {
-    opacity: 1;
+    opacity: 0.42;
+  }
+
+  .aplayer.aplayer-fixed .aplayer-miniswitcher:active {
+    opacity: 0.85;
   }
 
   .aplayer.aplayer-fixed.aplayer-narrow .aplayer-miniswitcher {
@@ -5023,5 +5127,151 @@ html.dark .hbe-unlock-btn:hover {
     display: block;
     width: 100%;
     margin: 14px 0 0;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 8. 站内游戏浮层
+ *    游戏装进 iframe，父页面不卸载，背景音乐不会被掐断。
+ *    顶栏 36px 深藏青；手机上音乐盒先收起来，别挡游戏按键。
+ * ---------------------------------------------------------- */
+.xm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1008;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: #0B1726;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.xm-overlay[hidden] {
+  display: none;
+}
+
+.xm-overlay.is-open {
+  opacity: 1;
+}
+
+.xm-overlay-bar {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: env(safe-area-inset-top, 0px) 12px 0;
+  border-bottom: 1px solid rgba(127, 178, 229, 0.18);
+  background: #0B1726;
+  color: #DCE9F6;
+  font-family: 'Chillax-Variable', 'Geist Variable', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.xm-overlay-close {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px 0 10px;
+  border: 1px solid rgba(127, 178, 229, 0.28);
+  border-radius: 999px;
+  background: rgba(127, 178, 229, 0.1);
+  color: #DCE9F6;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.xm-overlay-close:hover {
+  border-color: rgba(127, 178, 229, 0.52);
+  background: rgba(127, 178, 229, 0.22);
+}
+
+.xm-overlay-close:focus-visible {
+  outline: 2px solid #7FB2E5;
+  outline-offset: 2px;
+}
+
+.xm-overlay-title {
+  justify-self: center;
+  max-width: 100%;
+  overflow: hidden;
+  color: #A8CCF0;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.xm-overlay-music {
+  justify-self: end;
+  color: #7FB2E5;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.xm-overlay-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #0B1726;
+}
+
+.xm-overlay-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0B1726;
+}
+
+html.xm-overlay-open,
+html.xm-overlay-open body {
+  overflow: hidden;
+}
+
+/* 桌面上让音乐盒浮在浮层之上；手机上收起来，免得挡住游戏按键。 */
+@media (min-width: 641px) {
+  html.xm-overlay-open .aplayer.aplayer-fixed {
+    z-index: 1009;
+  }
+}
+
+@media (max-width: 640px) {
+  html.xm-overlay-open .aplayer.aplayer-fixed {
+    display: none !important;
+  }
+
+  .xm-overlay-bar {
+    min-height: 34px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 0.68rem;
+  }
+
+  .xm-overlay-music {
+    font-size: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xm-overlay,
+  .xm-overlay-close {
+    transition: none;
   }
 }
