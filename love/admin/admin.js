@@ -274,6 +274,14 @@
     // 只在安全请求上自动换备用地址：GET 和登录。写操作不重试，避免网络抖动导致重复提交。
     var allowFallback = (opts.method || "GET") === "GET" || path === "/v1/session";
 
+    // 网络错误，或同源入口被 Pages 接走（404/405/5xx）时，才值得换备用地址；
+    // 401（密钥错）、429（锁定）这类业务错误必须原样交给页面。
+    function canFallback(error) {
+      if (!error) return true;
+      if (!error.status) return true;
+      return error.status === 404 || error.status === 405 || error.status >= 500;
+    }
+
     function requestAt(index) {
       var base = bases[index];
       return window.fetch(base + path, {
@@ -297,7 +305,7 @@
           return payload;
         });
       }).catch(function (error) {
-        if (allowFallback && !error.status && index + 1 < bases.length) {
+        if (allowFallback && canFallback(error) && index + 1 < bases.length) {
           return requestAt(index + 1);
         }
         throw error;
