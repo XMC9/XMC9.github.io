@@ -236,18 +236,28 @@
 
   /* ---------- 接口 ---------- */
 
-  function apiBase() {
+  var apiBaseCache = "";
+
+  function apiBases() {
     if (typeof window.LOVE_API_BASE === "string" && window.LOVE_API_BASE) {
-      return String(window.LOVE_API_BASE).replace(/\/+$/, "");
+      return [String(window.LOVE_API_BASE).replace(/\/+$/, "")];
     }
     var host = window.location.hostname;
     if (host === "xm9.asia" || host === "www.xm9.asia") {
-      return "https://xm9.asia/love-api";
+      return ["https://xm9.asia/love-api", "https://love-api.xm9.asia"];
     }
     if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "[::1]") {
-      return "http://127.0.0.1:8787";
+      return ["http://127.0.0.1:8787"];
     }
-    return "https://love-api.xm9.asia";
+    return ["https://love-api.xm9.asia", "https://xm9.asia/love-api"];
+  }
+
+  function orderedApiBases() {
+    var bases = apiBases();
+    if (apiBaseCache && bases.indexOf(apiBaseCache) !== -1) {
+      return [apiBaseCache].concat(bases.filter(function (item) { return item !== apiBaseCache; }));
+    }
+    return bases;
   }
 
   function api(path, options) {
@@ -260,26 +270,41 @@
     }
     if (state.token) headers.Authorization = "Bearer " + state.token;
 
-    return window.fetch(apiBase() + path, {
-      method: opts.method || "GET",
-      headers: headers,
-      body: body,
-      mode: "cors",
-      credentials: "omit",
-      cache: "no-store"
-    }).then(function (response) {
-      return response.text().then(function (text) {
-        var payload = null;
-        try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = null; }
-        if (!response.ok) {
-          var error = new Error((payload && payload.message) || ("请求失败（" + response.status + "）"));
-          error.status = response.status;
-          error.payload = payload;
-          throw error;
+    var bases = orderedApiBases();
+    // 只在安全请求上自动换备用地址：GET 和登录。写操作不重试，避免网络抖动导致重复提交。
+    var allowFallback = (opts.method || "GET") === "GET" || path === "/v1/session";
+
+    function requestAt(index) {
+      var base = bases[index];
+      return window.fetch(base + path, {
+        method: opts.method || "GET",
+        headers: headers,
+        body: body,
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store"
+      }).then(function (response) {
+        return response.text().then(function (text) {
+          var payload = null;
+          try { payload = text ? JSON.parse(text) : null; } catch (e) { payload = null; }
+          if (!response.ok) {
+            var error = new Error((payload && payload.message) || ("请求失败（" + response.status + "）"));
+            error.status = response.status;
+            error.payload = payload;
+            throw error;
+          }
+          apiBaseCache = base;
+          return payload;
+        });
+      }).catch(function (error) {
+        if (allowFallback && !error.status && index + 1 < bases.length) {
+          return requestAt(index + 1);
         }
-        return payload;
+        throw error;
       });
-    });
+    }
+
+    return requestAt(0);
   }
 
   function fail(error, fallback) {
@@ -1015,7 +1040,7 @@
   function loginErrorMessage(error) {
     if (!error) return "登录没有成功。";
     if (!error.status && (error.name === "TypeError" || /fetch|network/i.test(error.message || ""))) {
-      return "连不上 Love API。请确认地址是 https://xm9.asia/love/admin/，检查网络后再试。";
+      return "连不上 Love API（两个入口都没连上）。请确认地址是 https://xm9.asia/love/admin/，换个网络或关掉代理后再试。";
     }
     if (error.status === 429) {
       var until = error.payload && error.payload.until;

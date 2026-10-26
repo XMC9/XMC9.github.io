@@ -947,18 +947,18 @@
 
   /* ---------- 线上数据 ---------- */
 
-  function apiBase() {
+  function apiBases() {
     if (typeof window.LOVE_API_BASE === "string" && window.LOVE_API_BASE) {
-      return String(window.LOVE_API_BASE).replace(/\/+$/, "");
+      return [String(window.LOVE_API_BASE).replace(/\/+$/, "")];
     }
     var host = window.location.hostname;
     if (host === "xm9.asia" || host === "www.xm9.asia") {
-      return "https://xm9.asia/love-api";
+      return ["https://xm9.asia/love-api", "https://love-api.xm9.asia"];
     }
     if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "[::1]") {
-      return "http://127.0.0.1:8787";
+      return ["http://127.0.0.1:8787"];
     }
-    return "https://love-api.xm9.asia";
+    return ["https://love-api.xm9.asia", "https://xm9.asia/love-api"];
   }
 
   function loadPublicData() {
@@ -972,26 +972,34 @@
       window.clearTimeout(timer);
     }
 
-    window.fetch(apiBase() + "/v1/public", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      mode: "cors",
-      credentials: "omit",
-      cache: "no-store",
-      signal: controller ? controller.signal : undefined
-    }).then(function (response) {
-      if (!response.ok) throw new Error("HTTP " + response.status);
-      return response.json();
-    }).then(function (payload) {
-      if (!payload || !payload.ok || !payload.data) throw new Error("bad payload");
-      var next = payload.data;
-      if (next.version && next.version !== 1) throw new Error("unsupported version");
-      applyData(next);
-      dataSource = "api";
-      remoteLoaded = true;
-      renderAll();
-      finish();
-    }).catch(function () {
+    var bases = apiBases();
+
+    function attempt(index) {
+      return window.fetch(bases[index] + "/v1/public", {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store",
+        signal: controller ? controller.signal : undefined
+      }).then(function (response) {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      }).then(function (payload) {
+        if (!payload || !payload.ok || !payload.data) throw new Error("bad payload");
+        var next = payload.data;
+        if (next.version && next.version !== 1) throw new Error("unsupported version");
+        applyData(next);
+        dataSource = "api";
+        remoteLoaded = true;
+        renderAll();
+      }).catch(function (error) {
+        if (index + 1 < bases.length) return attempt(index + 1);
+        throw error;
+      });
+    }
+
+    attempt(0).then(finish, function () {
       // 后端暂时连不上时，继续用页面里嵌的那一份，访客无感。
       finish();
     });
