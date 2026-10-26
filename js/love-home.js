@@ -269,6 +269,9 @@
       return String(window.LOVE_API_BASE).replace(/\/+$/, "");
     }
     var host = window.location.hostname;
+    if (host === "xm9.asia" || host === "www.xm9.asia") {
+      return "https://xm9.asia/love-api";
+    }
     if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "[::1]") {
       return "http://127.0.0.1:8787";
     }

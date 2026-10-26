@@ -241,6 +241,9 @@
       return String(window.LOVE_API_BASE).replace(/\/+$/, "");
     }
     var host = window.location.hostname;
+    if (host === "xm9.asia" || host === "www.xm9.asia") {
+      return "https://xm9.asia/love-api";
+    }
     if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "[::1]") {
       return "http://127.0.0.1:8787";
     }
@@ -1011,6 +1014,9 @@
 
   function loginErrorMessage(error) {
     if (!error) return "登录没有成功。";
+    if (!error.status && (error.name === "TypeError" || /fetch|network/i.test(error.message || ""))) {
+      return "连不上 Love API。请确认地址是 https://xm9.asia/love/admin/，检查网络后再试。";
+    }
     if (error.status === 429) {
       var until = error.payload && error.payload.until;
       if (until) {
