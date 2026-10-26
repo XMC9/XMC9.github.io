@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>管理 · 鸡毛鸡和白小白 · 秘密基地</title>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下跟随系统 */ }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
+  <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+  <link rel="stylesheet" href="/fonts/Geist/geist.css">
+  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-26.5">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="love-admin-page">
+  <header class="la-top">
+    <a class="la-back" href="/love/"><span aria-hidden="true">←</span> 返回信息墙</a>
+    <div class="la-brand" aria-hidden="true"><span>♡</span>LOVE MANAGER</div>
+    <div class="la-top-actions">
+      <button class="la-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+        <svg data-theme-icon viewBox="0 0 24 24" width="17" height="17" fill="none"
+          stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path class="la-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+          <g class="la-icon-sun">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+          </g>
+        </svg>
+      </button>
+      <button class="la-logout" type="button" data-logout hidden>退出</button>
+    </div>
+  </header>
+
+  <main class="la-main">
+    <noscript><p class="la-noscript">管理页需要 JavaScript 才能连接后端。</p></noscript>
+
+    <section class="la-login" data-login-view>
+      <div class="la-login-card">
+        <p class="la-kicker">ONLY FOR US</p>
+        <h1>谁来整理这些日子？</h1>
+        <p class="la-login-sub">只给鸡毛鸡和白小白两个人。密钥只存哈希，连续错 5 次会锁 10 分钟。</p>
+        <form data-login-form novalidate>
+          <div class="la-person-switch" role="radiogroup" aria-label="选择身份">
+            <label>
+              <input type="radio" name="person" value="jmj" checked>
+              <span>🐥 鸡毛鸡</span>
+            </label>
+            <label>
+              <input type="radio" name="person" value="bxb">
+              <span>🐶 白小白</span>
+            </label>
+          </div>
+          <label class="la-field">
+            <span>操作密钥</span>
+            <input type="password" name="key" autocomplete="current-password" placeholder="输入你的那个密钥" required>
+          </label>
+          <p class="la-form-error" data-login-error hidden></p>
+          <button class="la-primary" type="submit" data-login-submit>进入管理</button>
+        </form>
+        <p class="la-login-foot">登录后 2 小时内不用重复输入；这里不保存密码，关掉浏览器也不会留下登录状态。</p>
+      </div>
+    </section>
+
+    <section class="la-app" data-app-view hidden>
+      <div class="la-app-head">
+        <div>
+          <p class="la-kicker">LOVE MANAGER</p>
+          <h1 data-app-title>鸡毛鸡和白小白</h1>
+          <p class="la-app-meta" data-app-meta></p>
+        </div>
+        <a class="la-view-link" href="/love/" target="_blank" rel="noopener">看公开页 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>信息墙文案</h2>
+            <p>改完保存，公开页和首页会读同一份数据。</p>
+          </div>
+          <span class="la-badge" data-room-updated>—</span>
+        </div>
+        <form class="la-form la-form--room" data-room-form>
+          <div class="la-grid">
+            <label class="la-field">
+              <span>名字</span>
+              <input type="text" name="title" maxlength="40" required>
+            </label>
+            <label class="la-field">
+              <span>在一起的第一天</span>
+              <input type="date" name="togetherSince" required>
+            </label>
+            <label class="la-field">
+              <span>顶部小字</span>
+              <input type="text" name="eyebrow" maxlength="60" placeholder="OUR LITTLE UNIVERSE">
+            </label>
+            <label class="la-field">
+              <span>副标题</span>
+              <input type="text" name="subtitle" maxlength="160">
+            </label>
+            <label class="la-field la-field--wide">
+              <span>信息墙底部的小字</span>
+              <input type="text" name="readOnlyNote" maxlength="160">
+            </label>
+            <label class="la-field">
+              <span>明信片上的话</span>
+              <input type="text" name="postcardNote" maxlength="80">
+            </label>
+            <label class="la-field">
+              <span>页脚备注</span>
+              <input type="text" name="footerNote" maxlength="80">
+            </label>
+          </div>
+          <div class="la-form-actions">
+            <button class="la-primary" type="submit">保存文案</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>两个人</h2>
+            <p>生日只写月和日，不公开年份。</p>
+          </div>
+        </div>
+        <div class="la-people" data-people-list></div>
+      </section>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>重要日子</h2>
+            <p>高亮的会出现在信息墙上方，勾选「首页」的会出现在博客首页。</p>
+          </div>
+          <div class="la-head-actions">
+            <label class="la-toggle">
+              <input type="checkbox" data-events-archived>
+              <span>显示归档</span>
+            </label>
+            <button class="la-primary la-primary--small" type="button" data-event-add>+ 新增日子</button>
+          </div>
+        </div>
+        <div class="la-list" data-event-list></div>
+      </section>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>共同清单</h2>
+            <p>完成的事情会排在后面，记录完成日期。</p>
+          </div>
+          <div class="la-head-actions">
+            <label class="la-toggle">
+              <input type="checkbox" data-bucket-archived>
+              <span>显示归档</span>
+            </label>
+            <button class="la-primary la-primary--small" type="button" data-bucket-add>+ 新增事项</button>
+          </div>
+        </div>
+        <div class="la-list" data-bucket-list></div>
+      </section>
+
+      <section class="la-card la-card--audit">
+        <div class="la-card-head">
+          <div>
+            <h2>最近改动</h2>
+            <p>只记录改动，不提供任何删除源数据的入口。</p>
+          </div>
+        </div>
+        <ol class="la-audit" data-audit-list></ol>
+      </section>
+
+      <p class="la-page-foot">这里的「归档」只是从公开页面隐藏，并给双方邮箱发一条简短通知。真正的物理删除只能由 CXM 在本地执行。</p>
+    </section>
+  </main>
+
+  <div class="la-modal" data-modal hidden>
+    <div class="la-modal-backdrop" data-modal-close></div>
+    <div class="la-modal-panel" role="dialog" aria-modal="true" aria-labelledby="la-modal-title">
+      <div class="la-modal-head">
+        <h2 id="la-modal-title" data-modal-title>编辑</h2>
+        <button class="la-icon-button" type="button" data-modal-close aria-label="关闭">×</button>
+      </div>
+
+      <form class="la-form" data-event-form hidden novalidate>
+        <div class="la-grid">
+          <label class="la-field" data-ev-id-field>
+            <span>id（可留空自动生成）</span>
+            <input type="text" name="id" maxlength="64" pattern="[a-z0-9][a-z0-9-]*" placeholder="比如 first-meet">
+          </label>
+          <label class="la-field">
+            <span>标题</span>
+            <input type="text" name="title" maxlength="60" required>
+          </label>
+          <label class="la-field">
+            <span>重复方式</span>
+            <select name="repeat">
+              <option value="yearly">每年</option>
+              <option value="none">仅一次</option>
+              <option value="dates">指定日期列表（农历用）</option>
+            </select>
+          </label>
+          <label class="la-field">
+            <span>类型</span>
+            <select name="kind">
+              <option value="birthday">生日</option>
+              <option value="anniversary">纪念日</option>
+              <option value="valentine">情人节</option>
+              <option value="qixi">七夕</option>
+              <option value="meeting">见面</option>
+              <option value="custom">自定义</option>
+            </select>
+          </label>
+          <label class="la-field" data-ev-date-field>
+            <span>日期</span>
+            <input type="text" name="date" maxlength="10" placeholder="MM-DD 或 YYYY-MM-DD">
+          </label>
+          <label class="la-field la-field--wide" data-ev-lunar-field hidden>
+            <span>农历（可选）</span>
+            <input type="text" name="lunar" maxlength="5" placeholder="07-07">
+          </label>
+          <label class="la-field la-field--wide" data-ev-dates-field hidden>
+            <span>日期列表，一行一个 YYYY-MM-DD</span>
+            <textarea name="dates" rows="6" placeholder="2026-08-19&#10;2027-08-08"></textarea>
+          </label>
+          <label class="la-field">
+            <span>图标</span>
+            <input type="text" name="icon" maxlength="16" placeholder="🎂">
+          </label>
+          <label class="la-field">
+            <span>属于谁（可选）</span>
+            <select name="person">
+              <option value="">不指定</option>
+              <option value="jmj">鸡毛鸡</option>
+              <option value="bxb">白小白</option>
+            </select>
+          </label>
+          <label class="la-field la-field--wide">
+            <span>备注</span>
+            <textarea name="note" rows="3" maxlength="200"></textarea>
+          </label>
+        </div>
+        <div class="la-checks">
+          <label class="la-check"><input type="checkbox" name="highlight"><span>在信息墙上方高亮</span></label>
+          <label class="la-check"><input type="checkbox" name="home"><span>显示在博客首页</span></label>
+          <label class="la-check"><input type="checkbox" name="pin"><span>首页置顶（需同时显示在首页）</span></label>
+        </div>
+        <p class="la-form-error" data-event-error hidden></p>
+        <div class="la-form-actions">
+          <button class="la-ghost" type="button" data-modal-close>取消</button>
+          <button class="la-primary" type="submit" data-event-submit>保存</button>
+        </div>
+      </form>
+
+      <form class="la-form" data-bucket-form hidden novalidate>
+        <div class="la-grid">
+          <label class="la-field la-field--wide">
+            <span>想一起做的事</span>
+            <input type="text" name="title" maxlength="80" required>
+          </label>
+          <label class="la-field">
+            <span>分类</span>
+            <input type="text" name="category" maxlength="24" placeholder="旅行 / 日常 / 未来">
+          </label>
+          <label class="la-field">
+            <span>完成日期</span>
+            <input type="date" name="doneAt">
+          </label>
+          <label class="la-field la-field--wide">
+            <span>备注</span>
+            <textarea name="note" rows="3" maxlength="200"></textarea>
+          </label>
+        </div>
+        <label class="la-check"><input type="checkbox" name="done"><span>已经完成了</span></label>
+        <p class="la-form-error" data-bucket-error hidden></p>
+        <div class="la-form-actions">
+          <button class="la-ghost" type="button" data-modal-close>取消</button>
+          <button class="la-primary" type="submit" data-bucket-submit>保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="la-confirm" data-confirm hidden>
+    <div class="la-modal-backdrop" data-confirm-cancel></div>
+    <div class="la-confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="la-confirm-title">
+      <h2 id="la-confirm-title" data-confirm-title>确认归档？</h2>
+      <p data-confirm-message></p>
+      <div class="la-form-actions">
+        <button class="la-ghost" type="button" data-confirm-cancel>取消</button>
+        <button class="la-danger" type="button" data-confirm-ok>确认归档</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="la-toast" data-toast role="status" hidden></div>
+
+  <script src="/love/admin/admin.js?v=2026-10-26.5" defer></script>
+</body>
+</html>

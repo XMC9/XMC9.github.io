@@ -493,6 +493,7 @@ body.navbar-shrink .navbar-container {
 .custom-home .home-essay-section,
 .custom-home .home-market-section,
 .custom-home .home-astro-section,
+.custom-home .home-love-section,
 .custom-home .home-weather-section {
   padding: 22px 24px;
   border: 1px solid var(--border-color);
@@ -737,6 +738,283 @@ html.dark .custom-home .home-weather-alert {
 @media (max-width: 560px) {
   .custom-home .home-weather-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 主页重要日子（数据来自 source/_data/love.json） ---------- */
+
+.custom-home .home-love-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 13px;
+}
+
+.custom-home .home-love-feature {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 184px;
+  padding: 19px 21px 17px;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(240, 198, 116, 0.3), transparent 44%),
+    linear-gradient(135deg, #1B4C77 0%, #2E75B6 58%, #4A90D9 100%);
+  box-shadow: 0 14px 30px rgba(46, 117, 182, 0.22);
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-home .home-love-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(46, 117, 182, 0.28);
+}
+
+.custom-home .home-love-feature::after {
+  content: "♡";
+  position: absolute;
+  right: 14px;
+  bottom: -24px;
+  color: rgba(255, 255, 255, 0.13);
+  font-family: "Chillax-Variable", serif;
+  font-size: 6.8rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.custom-home .home-love-kicker {
+  position: relative;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.custom-home .home-love-feature strong {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  color: #FFFFFF;
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.custom-home .home-love-date {
+  position: relative;
+  z-index: 1;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.55;
+}
+
+.custom-home .home-love-days {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.custom-home .home-love-days b {
+  color: #FFE3A3;
+  font-family: "Chillax-Variable", "Geist Variable", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.custom-home .home-love-days b.is-word {
+  font-size: 1.65rem;
+  letter-spacing: 0.02em;
+}
+
+.custom-home .home-love-days em {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.63rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+
+.custom-home .home-love-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+@media (min-width: 981px) {
+  .custom-home .home-love-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 8px;
+  }
+}
+
+.custom-home .home-love-row {
+  display: grid;
+  grid-template-columns: 29px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid rgba(46, 117, 182, 0.13);
+  border-radius: 12px;
+  background: linear-gradient(160deg, #FFFFFF 0%, #F7FBFF 100%);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.custom-home .home-love-row:hover {
+  transform: translateX(2px);
+  border-color: rgba(46, 117, 182, 0.32);
+  box-shadow: 0 5px 14px rgba(46, 117, 182, 0.08);
+}
+
+.custom-home .home-love-row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(46, 117, 182, 0.08);
+  font-size: 0.92rem;
+  line-height: 1;
+}
+
+.custom-home .home-love-row-copy {
+  min-width: 0;
+}
+
+.custom-home .home-love-row-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.custom-home .home-love-row-title strong {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.custom-home .home-love-row-copy strong {
+  display: block;
+  overflow: hidden;
+  color: #12324F;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-home .home-love-row-copy small {
+  display: block;
+  margin-top: 1px;
+  color: #5E768E;
+  font-size: 0.61rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.custom-home .home-love-row-pin {
+  flex: none;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(190, 142, 46, 0.14);
+  color: #8C6112;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.custom-home .home-love-row.is-pin {
+  border-color: rgba(190, 142, 46, 0.3);
+}
+
+.custom-home .home-love-row-days {
+  color: #2E75B6;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+html.dark .custom-home .home-love-feature {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(240, 198, 116, 0.16), transparent 44%),
+    linear-gradient(135deg, #12233A 0%, #16304B 58%, #1B4C77 100%);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .custom-home .home-love-row {
+  border-color: rgba(127, 178, 229, 0.16);
+  background: linear-gradient(160deg, #16304B 0%, #12233A 100%);
+}
+
+html.dark .custom-home .home-love-row-icon {
+  background: rgba(127, 178, 229, 0.12);
+}
+
+html.dark .custom-home .home-love-row-copy strong {
+  color: #DCE9F6;
+}
+
+html.dark .custom-home .home-love-row-copy small {
+  color: #8BA5C0;
+}
+
+html.dark .custom-home .home-love-row-days {
+  color: #7FB2E5;
+}
+
+html.dark .custom-home .home-love-row-pin {
+  background: rgba(240, 198, 116, 0.18);
+  color: #F0C674;
+}
+
+html.dark .custom-home .home-love-row.is-pin {
+  border-color: rgba(240, 198, 116, 0.28);
+}
+
+@media (max-width: 760px) {
+  .custom-home .home-love-card {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .custom-home .home-love-feature {
+    min-height: 148px;
+    padding: 17px 18px 15px;
+  }
+
+  .custom-home .home-love-feature strong {
+    font-size: 1.16rem;
+  }
+
+  .custom-home .home-love-days b {
+    font-size: 2.5rem;
+  }
+
+  .custom-home .home-love-days b.is-word {
+    font-size: 1.45rem;
+  }
+
+  .custom-home .home-love-row {
+    padding: 7px 8px;
   }
 }
 
@@ -2108,7 +2386,8 @@ html.dark .home-sidebar-updates-list em {
   .custom-home .home-photo-section,
   .custom-home .home-essay-section,
   .custom-home .home-market-section,
-  .custom-home .home-astro-section {
+  .custom-home .home-astro-section,
+  .custom-home .home-love-section {
     padding: 18px 16px;
     border-radius: 16px;
   }
