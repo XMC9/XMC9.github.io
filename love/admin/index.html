@@ -31,7 +31,7 @@
   <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
   <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
   <link rel="stylesheet" href="/fonts/Geist/geist.css">
-  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.4">
+  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.5">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="love-admin-page">
   <header class="la-top">
@@ -150,6 +150,24 @@
       <section class="la-card">
         <div class="la-card-head">
           <div>
+            <h2>偏好档案</h2>
+            <p>吃、喜好、雷区。只保存在后端，公开页看不到；以后的自然语言录入会读这一份。</p>
+          </div>
+          <span class="la-badge" data-profile-badge>只有我们两个人能看</span>
+        </div>
+        <div class="la-profile-tabs" data-profile-tabs role="tablist" aria-label="选择成员"></div>
+        <form class="la-form" data-profile-form novalidate>
+          <div class="la-profile-groups" data-profile-fields></div>
+          <p class="la-form-error" data-profile-error hidden></p>
+          <div class="la-form-actions">
+            <button class="la-primary" type="submit" data-profile-submit>保存偏好</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
             <h2>重要日子</h2>
             <p>高亮的会出现在信息墙上方，勾选「首页」的会出现在博客首页。</p>
           </div>
@@ -179,6 +197,23 @@
           </div>
         </div>
         <div class="la-list" data-bucket-list></div>
+      </section>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>时间线</h2>
+            <p>每次约会、旅行和重要事件，按日期倒序；只在管理页可见。</p>
+          </div>
+          <div class="la-head-actions">
+            <label class="la-toggle">
+              <input type="checkbox" data-timeline-archived>
+              <span>显示归档</span>
+            </label>
+            <button class="la-primary la-primary--small" type="button" data-timeline-add>+ 新增记录</button>
+          </div>
+        </div>
+        <div class="la-list" data-timeline-list></div>
       </section>
 
       <section class="la-card la-card--audit">
@@ -299,6 +334,36 @@
           <button class="la-primary" type="submit" data-bucket-submit>保存</button>
         </div>
       </form>
+
+      <form class="la-form" data-timeline-form hidden novalidate>
+        <div class="la-grid">
+          <label class="la-field">
+            <span>日期</span>
+            <input type="date" name="date" required>
+          </label>
+          <label class="la-field">
+            <span>标题</span>
+            <input type="text" name="title" maxlength="60" required placeholder="一起去了海边">
+          </label>
+          <label class="la-field">
+            <span>属于谁（可选）</span>
+            <select name="person">
+              <option value="">不指定</option>
+              <option value="jmj">鸡毛鸡</option>
+              <option value="bxb">白小白</option>
+            </select>
+          </label>
+          <label class="la-field la-field--wide">
+            <span>备注</span>
+            <textarea name="note" rows="4" maxlength="500"></textarea>
+          </label>
+        </div>
+        <p class="la-form-error" data-timeline-error hidden></p>
+        <div class="la-form-actions">
+          <button class="la-ghost" type="button" data-modal-close>取消</button>
+          <button class="la-primary" type="submit" data-timeline-submit>保存</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -316,6 +381,6 @@
 
   <div class="la-toast" data-toast role="status" hidden></div>
 
-  <script src="/love/admin/admin.js?v=2026-10-27.4" defer></script>
+  <script src="/love/admin/admin.js?v=2026-10-27.5" defer></script>
 </body>
 </html>

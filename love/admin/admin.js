@@ -31,7 +31,8 @@
     event: "日子",
     bucket: "清单",
     person: "成员",
-    room: "文案"
+    room: "文案",
+    timeline: "时间线"
   };
   var FIELD_LABELS = {
     title: "标题",
@@ -59,8 +60,47 @@
     timezone: "时区",
     readOnlyNote: "底部小字",
     footerNote: "页脚备注",
-    postcardNote: "明信片文案"
+    postcardNote: "明信片文案",
+    "profile.foodLove": "爱吃",
+    "profile.foodAvoid": "不吃",
+    "profile.allergy": "忌口 / 过敏",
+    "profile.taste": "口味",
+    "profile.interests": "兴趣",
+    "profile.colors": "颜色",
+    "profile.brands": "品牌",
+    "profile.media": "影视音乐",
+    "profile.tabooPlaces": "讨厌的地方",
+    "profile.tabooTopics": "讨厌的话题",
+    "profile.tabooActions": "讨厌的行为"
   };
+  var PROFILE_SECTIONS = [
+    {
+      title: "吃",
+      fields: [
+        { key: "foodLove", label: "爱吃", placeholder: "火锅、甜品、杨枝甘露…" },
+        { key: "foodAvoid", label: "不吃", placeholder: "香菜、内脏、太辣…" },
+        { key: "allergy", label: "忌口 / 过敏", placeholder: "花生过敏、乳糖不耐…" },
+        { key: "taste", label: "口味", placeholder: "嗜甜、微辣、不吃太咸…" }
+      ]
+    },
+    {
+      title: "喜好",
+      fields: [
+        { key: "interests", label: "兴趣", placeholder: "看展、拼图、散步…" },
+        { key: "colors", label: "颜色", placeholder: "雾霾蓝、奶油白…" },
+        { key: "brands", label: "品牌", placeholder: "喜欢的牌子，或者完全不挑" },
+        { key: "media", label: "影视音乐", placeholder: "在追的剧、循环的歌…" }
+      ]
+    },
+    {
+      title: "雷区",
+      fields: [
+        { key: "tabooPlaces", label: "讨厌的地方", placeholder: "太吵、太挤、排队两小时…" },
+        { key: "tabooTopics", label: "讨厌的话题", placeholder: "工作、体重、旧事…" },
+        { key: "tabooActions", label: "讨厌的行为", placeholder: "迟到、已读不回…" }
+      ]
+    }
+  ];
 
   var state = {
     token: "",
@@ -68,7 +108,10 @@
     expiresAt: "",
     data: null,
     editingEvent: null,
-    editingBucket: null
+    editingBucket: null,
+    editingTimeline: null,
+    profilePerson: "",
+    profileDrafts: {}
   };
 
   var root = document.documentElement;
@@ -83,20 +126,29 @@
   var roomForm = document.querySelector("[data-room-form]");
   var roomUpdated = document.querySelector("[data-room-updated]");
   var peopleList = document.querySelector("[data-people-list]");
+  var profileTabs = document.querySelector("[data-profile-tabs]");
+  var profileForm = document.querySelector("[data-profile-form]");
+  var profileFields = document.querySelector("[data-profile-fields]");
+  var profileError = document.querySelector("[data-profile-error]");
   var eventList = document.querySelector("[data-event-list]");
   var bucketList = document.querySelector("[data-bucket-list]");
+  var timelineList = document.querySelector("[data-timeline-list]");
   var auditList = document.querySelector("[data-audit-list]");
   var eventsArchived = document.querySelector("[data-events-archived]");
   var bucketArchived = document.querySelector("[data-bucket-archived]");
+  var timelineArchived = document.querySelector("[data-timeline-archived]");
   var eventAdd = document.querySelector("[data-event-add]");
   var bucketAdd = document.querySelector("[data-bucket-add]");
+  var timelineAdd = document.querySelector("[data-timeline-add]");
 
   var modal = document.querySelector("[data-modal]");
   var modalTitle = document.querySelector("[data-modal-title]");
   var eventForm = document.querySelector("[data-event-form]");
   var bucketForm = document.querySelector("[data-bucket-form]");
+  var timelineForm = document.querySelector("[data-timeline-form]");
   var eventError = document.querySelector("[data-event-error]");
   var bucketError = document.querySelector("[data-bucket-error]");
+  var timelineError = document.querySelector("[data-timeline-error]");
   var evIdField = document.querySelector("[data-ev-id-field]");
   var evDateField = document.querySelector("[data-ev-date-field]");
   var evDatesField = document.querySelector("[data-ev-dates-field]");
@@ -501,6 +553,111 @@
     });
   }
 
+  /* ---------- 渲染：偏好档案 ---------- */
+
+  function buildProfileFields() {
+    if (!profileFields || profileFields.getAttribute("data-built") === "1") return;
+    PROFILE_SECTIONS.forEach(function (section) {
+      var group = el("fieldset", "la-profile-group");
+      group.appendChild(el("legend", "", section.title));
+      var grid = el("div", "la-grid");
+      section.fields.forEach(function (field) {
+        var label = el("label", "la-field");
+        label.appendChild(el("span", "", field.label));
+        var textarea = el("textarea");
+        textarea.name = field.key;
+        textarea.maxLength = 300;
+        textarea.rows = 2;
+        if (field.placeholder) textarea.placeholder = field.placeholder;
+        label.appendChild(textarea);
+        grid.appendChild(label);
+      });
+      group.appendChild(grid);
+      profileFields.appendChild(group);
+    });
+    profileFields.setAttribute("data-built", "1");
+  }
+
+  function currentProfilePerson() {
+    if (!state.data) return null;
+    var people = state.data.people || [];
+    return people.filter(function (person) { return person.id === state.profilePerson; })[0] || null;
+  }
+
+  function fillProfileForm() {
+    if (!profileForm) return;
+    var person = currentProfilePerson();
+    if (!person) return;
+    var values = state.profileDrafts[person.id] || person.profile || {};
+    PROFILE_SECTIONS.forEach(function (section) {
+      section.fields.forEach(function (field) {
+        var input = named(profileForm, field.key);
+        if (input) input.value = values[field.key] || "";
+      });
+    });
+    setError(profileError, "");
+  }
+
+  function renderProfile() {
+    if (!state.data || !profileTabs || !profileFields) return;
+    var people = state.data.people || [];
+    if (!people.length) return;
+    var known = people.some(function (person) { return person.id === state.profilePerson; });
+    if (!known) state.profilePerson = people[0].id;
+    buildProfileFields();
+    profileTabs.innerHTML = "";
+    people.forEach(function (person) {
+      var active = person.id === state.profilePerson;
+      var tab = el("button", "la-profile-tab" + (active ? " is-active" : ""));
+      tab.type = "button";
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", active ? "true" : "false");
+      tab.setAttribute("data-profile-person", person.id);
+      tab.appendChild(el("span", "", person.emoji || "♡"));
+      tab.appendChild(el("span", "", person.name || person.id));
+      profileTabs.appendChild(tab);
+    });
+    fillProfileForm();
+  }
+
+  function stashProfileDraft() {
+    if (!profileForm || !state.profilePerson) return;
+    var values = {};
+    PROFILE_SECTIONS.forEach(function (section) {
+      section.fields.forEach(function (field) {
+        values[field.key] = valueOf(profileForm, field.key);
+      });
+    });
+    state.profileDrafts[state.profilePerson] = values;
+  }
+
+  function submitProfile(evt) {
+    evt.preventDefault();
+    if (!profileForm || !state.profilePerson) return;
+    setError(profileError, "");
+    var personId = state.profilePerson;
+    var payload = {};
+    PROFILE_SECTIONS.forEach(function (section) {
+      section.fields.forEach(function (field) {
+        payload[field.key] = valueOf(profileForm, field.key);
+      });
+    });
+    var submit = $("[data-profile-submit]", profileForm);
+    setBusy(submit, true);
+    api("/v1/people/" + encodeURIComponent(personId) + "/profile", { method: "PUT", body: payload })
+      .then(function (result) {
+        delete state.profileDrafts[personId];
+        toast(result && result.changed ? "偏好已经保存。" : "没有改动。");
+        return reload();
+      })
+      .catch(function (error) {
+        setError(profileError, (error && error.message) || "保存没有成功。");
+      })
+      .then(function () {
+        setBusy(submit, false);
+      });
+  }
+
   /* ---------- 渲染：日子 ---------- */
 
   function eventDateText(event) {
@@ -698,6 +855,81 @@
       .catch(function (error) { fail(error, "恢复没有成功。"); });
   }
 
+  /* ---------- 渲染：时间线 ---------- */
+
+  function timelineRow(item) {
+    var row = el("article", "la-row" + (item.archived ? " is-archived" : ""));
+    row.appendChild(el("span", "la-row-icon", "◷"));
+
+    var body = el("div", "la-row-body");
+    var title = el("div", "la-row-title");
+    title.appendChild(el("strong", "", item.title || "时间线记录"));
+    if (item.archived) title.appendChild(el("span", "la-chip is-archived", "归档"));
+    body.appendChild(title);
+
+    var metaParts = [item.date || "日期待定"];
+    if (item.person) metaParts.push(personLabel(item.person) || item.person);
+    body.appendChild(el("p", "la-row-meta", metaParts.join(" · ")));
+    if (item.note) body.appendChild(el("p", "la-row-note", item.note));
+    row.appendChild(body);
+
+    var actions = el("div", "la-row-actions");
+    actions.appendChild(button("编辑", "", function () { openTimelineModal(item); }));
+    if (!item.archived) {
+      actions.appendChild(button("归档", "is-danger", function () { archiveTimeline(item); }));
+    } else {
+      actions.appendChild(button("恢复", "", function () { restoreTimeline(item); }));
+    }
+    row.appendChild(actions);
+    return row;
+  }
+
+  function renderTimeline() {
+    if (!timelineList || !state.data) return;
+    timelineList.innerHTML = "";
+    var showArchived = !!(timelineArchived && timelineArchived.checked);
+    var rows = (state.data.timeline || []).filter(function (item) {
+      return showArchived || !item.archived;
+    });
+    rows.sort(function (a, b) {
+      if (!!a.archived !== !!b.archived) return a.archived ? 1 : -1;
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    if (!rows.length) {
+      timelineList.appendChild(el("p", "la-empty", showArchived ? "时间线还是空的。" : "还没有记录。点「新增记录」写下第一件想记住的事。"));
+      return;
+    }
+    rows.forEach(function (item) {
+      timelineList.appendChild(timelineRow(item));
+    });
+  }
+
+  function archiveTimeline(item) {
+    askConfirm({
+      title: "归档这条记录？",
+      message: "「" + (item.title || "这条记录") + "」会从时间线隐藏，历史记录保留，之后可以恢复。",
+      okLabel: "确认归档"
+    }).then(function (ok) {
+      if (!ok) return;
+      api("/v1/timeline/" + encodeURIComponent(item.id) + "/archive", { method: "POST" })
+        .then(function (payload) {
+          toast(payload && payload.changed ? "已经归档。" : "这条记录本来就已经归档了。");
+          return reload();
+        })
+        .catch(function (error) { fail(error, "归档没有成功。"); });
+    });
+  }
+
+  function restoreTimeline(item) {
+    api("/v1/timeline/" + encodeURIComponent(item.id) + "/restore", { method: "POST" })
+      .then(function () {
+        toast("已经恢复。");
+        return reload();
+      })
+      .catch(function (error) { fail(error, "恢复没有成功。"); });
+  }
+
   /* ---------- 渲染：改动记录 ---------- */
 
   function auditTarget(row) {
@@ -705,8 +937,9 @@
     if (row.entity === "room") return (state.data.room && state.data.room.title) || "信息墙";
     var pool = row.entity === "event" ? state.data.events
       : row.entity === "bucket" ? state.data.bucketList
-        : row.entity === "person" ? state.data.people
-          : [];
+        : row.entity === "timeline" ? state.data.timeline
+          : row.entity === "person" ? state.data.people
+            : [];
     var found = (pool || []).filter(function (item) { return item.id === row.entityId; })[0];
     if (found) return found.title || found.name || row.entityId;
     return row.entityId || "";
@@ -744,8 +977,10 @@
   function render() {
     fillRoomForm();
     renderPeople();
+    renderProfile();
     renderEvents();
     renderBuckets();
+    renderTimeline();
     renderAudit();
     updateMeta();
   }
@@ -773,8 +1008,10 @@
     modal.hidden = true;
     if (eventForm) eventForm.hidden = true;
     if (bucketForm) bucketForm.hidden = true;
+    if (timelineForm) timelineForm.hidden = true;
     setError(eventError, "");
     setError(bucketError, "");
+    setError(timelineError, "");
     syncBodyLock();
   }
 
@@ -854,6 +1091,7 @@
     if (!eventForm || !bucketForm) return;
     eventForm.hidden = false;
     bucketForm.hidden = true;
+    if (timelineForm) timelineForm.hidden = true;
     openModal(event ? "编辑日子" : "新增日子");
     fillEventForm(event);
     var focusField = named(eventForm, "title");
@@ -959,6 +1197,7 @@
     if (!eventForm || !bucketForm) return;
     bucketForm.hidden = false;
     eventForm.hidden = true;
+    if (timelineForm) timelineForm.hidden = true;
     openModal(item ? "编辑事项" : "新增事项");
     fillBucketForm(item);
     var focusField = named(bucketForm, "title");
@@ -1009,6 +1248,76 @@
         return;
       }
       setError(bucketError, (error && error.message) || "保存没有成功。");
+    }).then(function () {
+      setBusy(submit, false);
+    });
+  }
+
+  /* ---------- 时间线表单 ---------- */
+
+  function fillTimelineForm(item) {
+    if (!timelineForm) return;
+    var value = item || {};
+    state.editingTimeline = item || null;
+    named(timelineForm, "date").value = value.date || todayISO();
+    named(timelineForm, "title").value = value.title || "";
+    named(timelineForm, "person").value = value.person || "";
+    named(timelineForm, "note").value = value.note || "";
+    setError(timelineError, "");
+  }
+
+  function openTimelineModal(item) {
+    if (!timelineForm) return;
+    if (eventForm) eventForm.hidden = true;
+    if (bucketForm) bucketForm.hidden = true;
+    timelineForm.hidden = false;
+    openModal(item ? "编辑记录" : "新增记录");
+    fillTimelineForm(item);
+    var focusField = named(timelineForm, "title");
+    if (focusField) {
+      try { focusField.focus(); } catch (e) { /* ignore */ }
+    }
+  }
+
+  function submitTimeline(evt) {
+    evt.preventDefault();
+    if (!timelineForm) return;
+    setError(timelineError, "");
+
+    var payload = {
+      date: valueOf(timelineForm, "date"),
+      title: valueOf(timelineForm, "title"),
+      person: valueOf(timelineForm, "person"),
+      note: valueOf(timelineForm, "note")
+    };
+    if (!payload.date) {
+      setError(timelineError, "日期不能为空。");
+      return;
+    }
+    if (!payload.title) {
+      setError(timelineError, "标题不能为空。");
+      return;
+    }
+
+    var editing = state.editingTimeline;
+    var submit = $("[data-timeline-submit]", timelineForm);
+    setBusy(submit, true);
+    var request = editing
+      ? api("/v1/timeline/" + encodeURIComponent(editing.id), { method: "PUT", body: payload })
+      : api("/v1/timeline", { method: "POST", body: payload });
+
+    request.then(function (result) {
+      closeModal();
+      toast(editing ? "已经保存。" : "已经加进时间线。");
+      if (editing && result && result.changed === 0) toast("没有改动。");
+      return reload();
+    }).catch(function (error) {
+      if (error && error.status === 401) {
+        closeModal();
+        fail(error);
+        return;
+      }
+      setError(timelineError, (error && error.message) || "保存没有成功。");
     }).then(function () {
       setBusy(submit, false);
     });
@@ -1126,10 +1435,26 @@
     }
   }
   if (bucketForm) bucketForm.addEventListener("submit", submitBucket);
+  if (timelineForm) timelineForm.addEventListener("submit", submitTimeline);
+  if (profileForm) profileForm.addEventListener("submit", submitProfile);
+  if (profileTabs) {
+    profileTabs.addEventListener("click", function (evt) {
+      var target = evt.target;
+      var tab = target && target.closest ? target.closest("[data-profile-person]") : null;
+      if (!tab) return;
+      var personId = tab.getAttribute("data-profile-person");
+      if (!personId || personId === state.profilePerson) return;
+      stashProfileDraft();
+      state.profilePerson = personId;
+      renderProfile();
+    });
+  }
   if (eventAdd) eventAdd.addEventListener("click", function () { openEventModal(null); });
   if (bucketAdd) bucketAdd.addEventListener("click", function () { openBucketModal(null); });
+  if (timelineAdd) timelineAdd.addEventListener("click", function () { openTimelineModal(null); });
   if (eventsArchived) eventsArchived.addEventListener("change", renderEvents);
   if (bucketArchived) bucketArchived.addEventListener("change", renderBuckets);
+  if (timelineArchived) timelineArchived.addEventListener("change", renderTimeline);
 
   if (bucketForm) {
     var doneField = named(bucketForm, "done");

@@ -611,6 +611,75 @@ html[data-theme="dark"] .la-field textarea:focus {
 
 .la-person-card .la-form-actions { margin-top: 12px; }
 
+/* ---------- 偏好档案 ---------- */
+
+.la-profile-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.la-profile-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: var(--l-panel-soft);
+  color: var(--l-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.la-profile-tab:hover {
+  border-color: var(--l-line-strong);
+  color: var(--l-ink);
+}
+
+.la-profile-tab.is-active {
+  border-color: var(--l-blue);
+  background: rgba(46, 117, 182, 0.1);
+  color: var(--l-blue);
+}
+
+html[data-theme="dark"] .la-profile-tab.is-active {
+  background: rgba(127, 178, 229, 0.14);
+}
+
+.la-profile-groups {
+  display: grid;
+  gap: 12px;
+}
+
+.la-profile-group {
+  margin: 0;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--l-line);
+  border-radius: 14px;
+  background: var(--l-panel-soft);
+}
+
+.la-profile-group legend {
+  padding: 0 6px;
+  color: var(--l-blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.la-profile-group .la-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.la-profile-group .la-field textarea {
+  min-height: 60px;
+}
+
 /* ---------- 列表 ---------- */
 
 .la-list {
@@ -930,6 +999,7 @@ body.has-modal { overflow: hidden; }
   .la-brand { display: none; }
   .la-main { padding-top: 22px; }
   .la-grid { grid-template-columns: 1fr; }
+  .la-profile-group .la-grid { grid-template-columns: 1fr; }
   .la-people { grid-template-columns: 1fr; }
   .la-app-head { flex-direction: column; align-items: flex-start; gap: 10px; }
   .la-card { padding: 18px 14px 20px; }
