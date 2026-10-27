@@ -31,7 +31,7 @@
   <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
   <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
   <link rel="stylesheet" href="/fonts/Geist/geist.css">
-  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.5">
+  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.6">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="love-admin-page">
   <header class="la-top">
@@ -91,6 +91,38 @@
         </div>
         <a class="la-view-link" href="/love/" target="_blank" rel="noopener">看公开页 <span aria-hidden="true">→</span></a>
       </div>
+
+      <section class="la-card la-card--ai">
+        <div class="la-card-head">
+          <div>
+            <h2>一句话录入</h2>
+            <p>用一句话说清楚要改什么。先看预览，确认后才会写入。</p>
+          </div>
+          <span class="la-badge">AI 整理</span>
+        </div>
+        <form class="la-form" data-ai-form novalidate>
+          <label class="la-field">
+            <span>想做点什么</span>
+            <textarea name="text" rows="3" maxlength="800" placeholder="比如：下周六去海边，记一下；鸡毛鸡不吃香菜；把情人节改到 2 月 15 日"></textarea>
+          </label>
+          <p class="la-form-error" data-ai-error hidden></p>
+          <p class="la-ai-message" data-ai-message hidden></p>
+          <div class="la-form-actions">
+            <button class="la-primary" type="submit" data-ai-parse>解析这句话</button>
+          </div>
+        </form>
+        <div class="la-ai-result" data-ai-result hidden>
+          <p class="la-ai-summary" data-ai-summary></p>
+          <p class="la-ai-clarify" data-ai-clarify hidden></p>
+          <ul class="la-ai-rejected" data-ai-rejected hidden></ul>
+          <div class="la-ai-ops" data-ai-ops></div>
+          <div class="la-form-actions">
+            <button class="la-ghost" type="button" data-ai-cancel>取消这次预览</button>
+            <button class="la-primary" type="button" data-ai-apply>确认写入</button>
+          </div>
+        </div>
+        <p class="la-ai-note">AI 只做事实整理，不代写表白、道歉或情话。预览 10 分钟内有效，同一个预览只能执行一次。</p>
+      </section>
 
       <section class="la-card">
         <div class="la-card-head">
@@ -381,6 +413,6 @@
 
   <div class="la-toast" data-toast role="status" hidden></div>
 
-  <script src="/love/admin/admin.js?v=2026-10-27.5" defer></script>
+  <script src="/love/admin/admin.js?v=2026-10-27.6" defer></script>
 </body>
 </html>

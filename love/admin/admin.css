@@ -680,6 +680,125 @@ html[data-theme="dark"] .la-profile-tab.is-active {
   min-height: 60px;
 }
 
+/* ---------- 一句话录入 ---------- */
+
+.la-card--ai {
+  border-color: rgba(46, 117, 182, 0.28);
+  background:
+    radial-gradient(520px 220px at 100% 0%, rgba(217, 164, 65, 0.1), transparent 70%),
+    var(--l-panel);
+}
+
+html[data-theme="dark"] .la-card--ai {
+  border-color: rgba(127, 178, 229, 0.28);
+  background:
+    radial-gradient(520px 220px at 100% 0%, rgba(240, 198, 116, 0.08), transparent 70%),
+    var(--l-panel);
+}
+
+.la-ai-message,
+.la-ai-clarify {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.la-ai-message {
+  border: 1px solid rgba(46, 117, 182, 0.22);
+  background: rgba(46, 117, 182, 0.08);
+  color: var(--l-blue);
+}
+
+html[data-theme="dark"] .la-ai-message {
+  border-color: rgba(127, 178, 229, 0.28);
+  background: rgba(127, 178, 229, 0.12);
+}
+
+.la-ai-clarify {
+  border: 1px solid rgba(217, 164, 65, 0.26);
+  background: rgba(217, 164, 65, 0.1);
+  color: var(--l-ink);
+}
+
+.la-ai-result {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--l-line);
+}
+
+.la-ai-summary {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.la-ai-rejected {
+  margin: 10px 0 0;
+  padding: 0 0 0 18px;
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  line-height: 1.7;
+}
+
+.la-ai-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.la-ai-op {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--l-line);
+  border-radius: 13px;
+  background: var(--l-panel-soft);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.la-ai-op:hover { border-color: var(--l-line-strong); }
+
+.la-ai-op input {
+  width: 15px;
+  height: 15px;
+  margin: 2px 0 0;
+  accent-color: var(--l-blue);
+  flex-shrink: 0;
+}
+
+.la-ai-op-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.la-ai-op-body strong {
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.la-ai-op-body small {
+  color: var(--l-faint);
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+}
+
+.la-ai-note {
+  margin: 14px 0 0;
+  color: var(--l-faint);
+  font-size: 0.64rem;
+  line-height: 1.75;
+}
+
 /* ---------- 列表 ---------- */
 
 .la-list {

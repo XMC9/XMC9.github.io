@@ -111,7 +111,9 @@
     editingBucket: null,
     editingTimeline: null,
     profilePerson: "",
-    profileDrafts: {}
+    profileDrafts: {},
+    aiPlan: null,
+    aiBusy: false
   };
 
   var root = document.documentElement;
@@ -140,6 +142,18 @@
   var eventAdd = document.querySelector("[data-event-add]");
   var bucketAdd = document.querySelector("[data-bucket-add]");
   var timelineAdd = document.querySelector("[data-timeline-add]");
+
+  var aiForm = document.querySelector("[data-ai-form]");
+  var aiError = document.querySelector("[data-ai-error]");
+  var aiMessage = document.querySelector("[data-ai-message]");
+  var aiResult = document.querySelector("[data-ai-result]");
+  var aiSummary = document.querySelector("[data-ai-summary]");
+  var aiClarify = document.querySelector("[data-ai-clarify]");
+  var aiRejected = document.querySelector("[data-ai-rejected]");
+  var aiOps = document.querySelector("[data-ai-ops]");
+  var aiParse = document.querySelector("[data-ai-parse]");
+  var aiApply = document.querySelector("[data-ai-apply]");
+  var aiCancel = document.querySelector("[data-ai-cancel]");
 
   var modal = document.querySelector("[data-modal]");
   var modalTitle = document.querySelector("[data-modal-title]");
@@ -636,12 +650,20 @@
     if (!profileForm || !state.profilePerson) return;
     setError(profileError, "");
     var personId = state.profilePerson;
+    var person = currentProfilePerson();
+    var current = (person && person.profile) || {};
     var payload = {};
     PROFILE_SECTIONS.forEach(function (section) {
       section.fields.forEach(function (field) {
-        payload[field.key] = valueOf(profileForm, field.key);
+        var next = valueOf(profileForm, field.key);
+        // 只提交改动过的字段，避免手动保存覆盖同时发生的另一处修改。
+        if (next !== String(current[field.key] || "")) payload[field.key] = next;
       });
     });
+    if (!Object.keys(payload).length) {
+      toast("没有改动。");
+      return;
+    }
     var submit = $("[data-profile-submit]", profileForm);
     setBusy(submit, true);
     api("/v1/people/" + encodeURIComponent(personId) + "/profile", { method: "PUT", body: payload })
@@ -656,6 +678,170 @@
       .then(function () {
         setBusy(submit, false);
       });
+  }
+
+  /* ---------- 一句话录入 ---------- */
+
+  function clearAiMessage() {
+    setError(aiError, "");
+    if (aiMessage) {
+      aiMessage.textContent = "";
+      aiMessage.hidden = true;
+    }
+  }
+
+  function showAiMessage(message) {
+    if (!aiMessage) return;
+    aiMessage.textContent = message || "";
+    aiMessage.hidden = !message;
+  }
+
+  function clearAiPlan() {
+    state.aiPlan = null;
+    if (aiResult) aiResult.hidden = true;
+    if (aiOps) aiOps.innerHTML = "";
+    if (aiSummary) aiSummary.textContent = "";
+    if (aiClarify) {
+      aiClarify.textContent = "";
+      aiClarify.hidden = true;
+    }
+    if (aiRejected) {
+      aiRejected.innerHTML = "";
+      aiRejected.hidden = true;
+    }
+  }
+
+  function renderAiPlan(plan) {
+    if (!aiResult || !aiOps) return;
+    clearAiPlan();
+    state.aiPlan = plan;
+    aiResult.hidden = false;
+    if (aiSummary) {
+      aiSummary.textContent = plan.summary || ("整理出 " + plan.operations.length + " 条改动");
+    }
+    if (aiClarify) {
+      var note = plan.clarify || "";
+      aiClarify.textContent = note ? "AI 有点不确定：" + note : "";
+      aiClarify.hidden = !note;
+    }
+    if (aiRejected) {
+      var rejected = plan.rejected || [];
+      aiRejected.innerHTML = "";
+      rejected.forEach(function (item) {
+        aiRejected.appendChild(el("li", "", "第 " + (item.index + 1) + " 条没有采用：" + item.reason));
+      });
+      aiRejected.hidden = !rejected.length;
+    }
+    (plan.operations || []).forEach(function (op) {
+      var label = el("label", "la-ai-op");
+      var checkbox = el("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = true;
+      checkbox.value = String(op.index);
+      checkbox.setAttribute("data-ai-op", String(op.index));
+      label.appendChild(checkbox);
+      var body = el("span", "la-ai-op-body");
+      body.appendChild(el("strong", "", op.preview || "一条改动"));
+      body.appendChild(el("small", "", (ENTITY_LABELS[op.entity] || op.entity) + " · " + (ACTION_LABELS[op.action] || op.action)));
+      label.appendChild(body);
+      aiOps.appendChild(label);
+    });
+  }
+
+  function submitAiParse(evt) {
+    evt.preventDefault();
+    if (!aiForm || state.aiBusy) return;
+    clearAiMessage();
+    var text = valueOf(aiForm, "text");
+    if (!text) {
+      setError(aiError, "先说一句想做什么。");
+      return;
+    }
+    state.aiBusy = true;
+    clearAiPlan();
+    setBusy(aiParse, true, "正在理解…");
+    api("/v1/ai/parse", { method: "POST", body: { text: text } })
+      .then(function (payload) {
+        if (payload && payload.redline) {
+          showAiMessage(payload.message || "有些事情，可以亲口跟小狗说噢。");
+          return;
+        }
+        if (payload && payload.plan) {
+          renderAiPlan(payload.plan);
+          return;
+        }
+        showAiMessage((payload && payload.clarify) || "这次没有听出要改什么，可以再说具体一点。");
+      })
+      .catch(function (error) {
+        if (error && error.status === 401) {
+          fail(error);
+          return;
+        }
+        setError(aiError, (error && error.message) || "AI 暂时没有理解，请再试一次。");
+      })
+      .then(function () {
+        state.aiBusy = false;
+        setBusy(aiParse, false, "解析这句话");
+      });
+  }
+
+  function applyAiPlan() {
+    if (!state.aiPlan || !aiOps) return;
+    clearAiMessage();
+    setError(aiError, "");
+    var checked = Array.prototype.slice.call(aiOps.querySelectorAll("[data-ai-op]")).filter(function (input) {
+      return input.checked;
+    });
+    if (!checked.length) {
+      setError(aiError, "至少选一条要写入的改动。");
+      return;
+    }
+    var accepted = checked.map(function (input) { return Number(input.value); });
+    setBusy(aiApply, true, "正在写入…");
+    api("/v1/ai/apply", { method: "POST", body: { planId: state.aiPlan.id, accepted: accepted } })
+      .then(function (payload) {
+        var failed = payload && Array.isArray(payload.results)
+          ? payload.results.filter(function (item) { return !item.ok; })
+          : [];
+        var applied = payload && typeof payload.applied === "number" ? payload.applied : accepted.length;
+        if (failed.length) {
+          toast("写入了 " + applied + " 条，有 " + failed.length + " 条没有成功。", true);
+        } else {
+          toast("已经写入 " + applied + " 条。");
+        }
+        clearAiPlan();
+        if (aiForm) named(aiForm, "text").value = "";
+        return reload();
+      })
+      .catch(function (error) {
+        if (error && error.status === 401) {
+          fail(error);
+          return;
+        }
+        if (error && error.status === 409) {
+          var message = "有一条刚被改过，请重新解析一下。";
+          if (error.payload && error.payload.error === "plan_used") {
+            message = "这个预览已经执行过了，请重新解析。";
+          }
+          setError(aiError, message);
+          clearAiPlan();
+          return reload();
+        }
+        if (error && error.status === 410) {
+          setError(aiError, "预览过期了，请重新解析。");
+          clearAiPlan();
+          return;
+        }
+        setError(aiError, (error && error.message) || "写入没有成功。");
+      })
+      .then(function () {
+        setBusy(aiApply, false, "确认写入");
+      });
+  }
+
+  function cancelAiPlan() {
+    clearAiPlan();
+    clearAiMessage();
   }
 
   /* ---------- 渲染：日子 ---------- */
@@ -1449,6 +1635,9 @@
       renderProfile();
     });
   }
+  if (aiForm) aiForm.addEventListener("submit", submitAiParse);
+  if (aiApply) aiApply.addEventListener("click", applyAiPlan);
+  if (aiCancel) aiCancel.addEventListener("click", cancelAiPlan);
   if (eventAdd) eventAdd.addEventListener("click", function () { openEventModal(null); });
   if (bucketAdd) bucketAdd.addEventListener("click", function () { openBucketModal(null); });
   if (timelineAdd) timelineAdd.addEventListener("click", function () { openTimelineModal(null); });
