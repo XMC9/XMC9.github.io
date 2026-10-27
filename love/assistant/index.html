@@ -31,8 +31,8 @@
   <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
   <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
   <link rel="stylesheet" href="/fonts/Geist/geist.css">
-  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.7">
-  <link rel="stylesheet" href="/love/assistant/assistant.css?v=2026-10-27.7">
+  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.9">
+  <link rel="stylesheet" href="/love/assistant/assistant.css?v=2026-10-27.9">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="love-admin-page">
   <header class="la-top">
@@ -61,7 +61,7 @@
       <div class="la-login-card">
         <p class="la-kicker">ONLY FOR US</p>
         <h1>先确认是谁在问</h1>
-        <p class="la-login-sub">约会助手只给鸡毛鸡和白小白两个人用。密钥只存哈希，连续错 5 次会锁 10 分钟。</p>
+        <p class="la-login-sub">约会助手只给鸡毛鸡和白小白两个人用。连续错 5 次会锁 10 分钟。</p>
         <form data-login-form novalidate>
           <div class="la-person-switch" role="radiogroup" aria-label="选择身份">
             <label>
@@ -80,7 +80,7 @@
           <p class="la-form-error" data-login-error hidden></p>
           <button class="la-primary" type="submit" data-login-submit>进入助手</button>
         </form>
-        <p class="la-login-foot">和 <a href="/love/admin/">管理页</a> 共用登录状态；登录后 2 小时内不用重复输入，关掉标签页就没了。</p>
+        <p class="la-login-foot">和 <a href="/love/">信息墙</a>、<a href="/love/admin/">管理页</a> 共用登录状态；登录后 2 小时内不用重复输入，关掉标签页就没了。</p>
       </div>
     </section>
 
@@ -88,76 +88,94 @@
       <div class="la-app-head">
         <div>
           <p class="la-kicker">DATE PLANNER</p>
-          <h1>这次想去哪？</h1>
+          <h1>把这期约会敲定</h1>
           <p class="la-app-meta" data-app-meta></p>
         </div>
-        <a class="la-view-link" href="/love/" target="_blank" rel="noopener">看公开页 <span aria-hidden="true">→</span></a>
+        <a class="la-view-link" href="/love/">看信息墙 <span aria-hidden="true">→</span></a>
       </div>
 
-      <section class="la-card">
-        <div class="la-card-head">
-          <div>
-            <h2>找几个地方</h2>
-            <p>联网查最近的展览和好去处，再结合两个人的偏好，给具体名字和理由。</p>
+      <div class="la-plan-layout">
+        <section class="la-card la-form-card">
+          <div class="la-card-head">
+            <div>
+              <h2>时间地点</h2>
+              <p>都可以留空。填了会直接带进对话，不用再重复说一遍。</p>
+            </div>
           </div>
-          <span class="la-badge">AI · 联网</span>
-        </div>
-        <form class="la-form" data-plan-form novalidate>
-          <div class="la-grid">
+          <div class="la-form" data-plan-form>
+            <div class="la-grid">
+              <label class="la-field">
+                <span>目的地城市</span>
+                <input type="text" name="city" maxlength="40" placeholder="杭州">
+              </label>
+              <label class="la-field">
+                <span>出发地</span>
+                <input type="text" name="from" maxlength="40" placeholder="跨城市再填，比如上海">
+              </label>
+              <label class="la-field">
+                <span>总预算</span>
+                <input type="text" name="budget" maxlength="30" placeholder="300-500">
+              </label>
+              <label class="la-field">
+                <span>时长</span>
+                <select name="duration">
+                  <option value="" selected>不限</option>
+                  <option value="2-3 小时">2-3 小时</option>
+                  <option value="半天">半天</option>
+                  <option value="一整天">一整天</option>
+                  <option value="一个晚上">一个晚上</option>
+                  <option value="两天一夜">两天一夜</option>
+                </select>
+              </label>
+              <label class="la-field">
+                <span>场景</span>
+                <input type="text" name="scene" list="plan-scenes" maxlength="40" placeholder="日常约会">
+                <datalist id="plan-scenes">
+                  <option value="日常约会"></option>
+                  <option value="纪念日"></option>
+                  <option value="生日"></option>
+                  <option value="节日"></option>
+                  <option value="见面"></option>
+                  <option value="在家一起"></option>
+                  <option value="雨天"></option>
+                  <option value="想拍照"></option>
+                </datalist>
+              </label>
+              <label class="la-field">
+                <span>日期</span>
+                <input type="date" name="date">
+              </label>
+            </div>
             <label class="la-field">
-              <span>目的地城市 <em class="la-req">必填</em></span>
-              <input type="text" name="city" maxlength="40" required placeholder="杭州">
+              <span>补充</span>
+              <textarea name="notes" rows="2" maxlength="300" placeholder="想看展、不想走太远、想拍照、想安静一点…"></textarea>
             </label>
-            <label class="la-field">
-              <span>出发地（选填）</span>
-              <input type="text" name="from" maxlength="40" placeholder="跨城市再填，比如上海">
-            </label>
-            <label class="la-field">
-              <span>总预算（选填）</span>
-              <input type="text" name="budget" maxlength="30" placeholder="300-500">
-            </label>
-            <label class="la-field">
-              <span>时长（选填）</span>
-              <select name="duration">
-                <option value="" selected>不限</option>
-                <option value="2-3 小时">2-3 小时</option>
-                <option value="半天">半天</option>
-                <option value="一整天">一整天</option>
-                <option value="一个晚上">一个晚上</option>
-                <option value="两天一夜">两天一夜</option>
-              </select>
-            </label>
-            <label class="la-field">
-              <span>场景（选填）</span>
-              <input type="text" name="scene" list="plan-scenes" maxlength="40" placeholder="日常约会">
-              <datalist id="plan-scenes">
-                <option value="日常约会"></option>
-                <option value="纪念日"></option>
-                <option value="生日"></option>
-                <option value="节日"></option>
-                <option value="见面"></option>
-                <option value="在家一起"></option>
-                <option value="雨天"></option>
-                <option value="想拍照"></option>
-              </datalist>
-            </label>
-            <label class="la-field">
-              <span>日期（选填）</span>
-              <input type="date" name="date">
-            </label>
+            <p class="la-form-hint">表单是草稿，填好直接到右边说话；右边「发送」就是唯一的确认键。</p>
           </div>
-          <label class="la-field la-field--wide">
-            <span>补充（选填）</span>
-            <textarea name="notes" rows="2" maxlength="300" placeholder="想看展、不想走太远、想拍照、想安静一点…"></textarea>
-          </label>
-          <p class="la-form-error" data-plan-error hidden></p>
-          <p class="la-ai-message" data-plan-message hidden></p>
-          <div class="la-form-actions">
-            <button class="la-primary" type="submit" data-plan-submit>找几个地方</button>
+        </section>
+
+        <section class="la-card la-chat-card">
+          <div class="la-card-head">
+            <div>
+              <h2>聊一聊</h2>
+              <p>城市、时间、预算都可以慢慢说。缺什么我会问，想去哪吃也可以直接讲。</p>
+            </div>
+            <span class="la-badge">AI · 联网</span>
           </div>
-        </form>
-        <p class="la-ai-note">会联网搜索公开信息，并把两个人的偏好档案和最近的时间线发给模型；不编造店名和日期，推荐也不会写进任何页面。</p>
-      </section>
+          <div class="la-chat-log" data-chat-log aria-live="polite"></div>
+          <form class="la-chat-form" data-chat-form novalidate>
+            <label class="la-field">
+              <span>说点什么</span>
+              <textarea name="message" rows="2" maxlength="600" placeholder="比如：下周六想去杭州，预算 500，想吃当地小吃"></textarea>
+            </label>
+            <p class="la-form-error" data-chat-error hidden></p>
+            <div class="la-chat-actions">
+              <span class="la-chat-hint">左边的表单也可以只填一半，我会追着问。</span>
+              <button class="la-primary" type="submit" data-chat-send>发送</button>
+            </div>
+          </form>
+        </section>
+      </div>
 
       <section class="la-card la-plan" data-plan-result hidden>
         <div class="lp-head">
@@ -170,11 +188,35 @@
         </div>
         <div class="lp-body" data-plan-body></div>
       </section>
+
+      <section class="la-card la-save-card" data-save-card hidden>
+        <div class="la-card-head">
+          <div>
+            <h2>写进我们的重要日子？</h2>
+            <p>只放一个简要标题和日期，备注写几天几夜；会出现在信息墙日历和「我们的重要日子」里，不占首页「重要日子」卡片。</p>
+          </div>
+          <span class="la-badge">时间线</span>
+        </div>
+        <div class="la-save-preview">
+          <strong data-save-title></strong>
+          <span data-save-date></span>
+          <span data-save-kind></span>
+          <p data-save-note></p>
+        </div>
+        <p class="la-form-error" data-save-error hidden></p>
+        <p class="la-save-done" data-save-done hidden></p>
+        <div class="la-form-actions" data-save-actions>
+          <button class="la-ghost" type="button" data-save-dismiss>先不写</button>
+          <button class="la-primary" type="button" data-save-confirm>写进重要日子</button>
+        </div>
+      </section>
+
+      <p class="la-ai-note">会联网搜索公开信息，并把两个人的偏好档案和最近的时间线发给模型；不编造店名和日期。方案只有点「写进重要日子」才会保存。</p>
     </section>
   </main>
 
   <div class="la-toast" data-toast role="status" hidden></div>
 
-  <script src="/love/assistant/assistant.js?v=2026-10-27.7" defer></script>
+  <script src="/love/assistant/assistant.js?v=2026-10-27.9" defer></script>
 </body>
 </html>

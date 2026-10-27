@@ -1018,6 +1018,115 @@ html.dark .custom-home .home-love-row.is-pin {
   }
 }
 
+/* ---------- 主页「今天有想我嘛？」：两张公开摘要卡 ---------- */
+
+.custom-home .home-love-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.custom-home .home-love-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 172px;
+  padding: 20px 22px 18px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-home .home-love-tile.is-important {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(240, 198, 116, 0.3), transparent 44%),
+    linear-gradient(135deg, #1B4C77 0%, #2E75B6 58%, #4A90D9 100%);
+  box-shadow: 0 14px 30px rgba(46, 117, 182, 0.22);
+}
+
+.custom-home .home-love-tile.is-date {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(191, 225, 255, 0.28), transparent 44%),
+    linear-gradient(135deg, #244A6B 0%, #3C7FBF 56%, #6FA8DC 100%);
+  box-shadow: 0 14px 30px rgba(46, 117, 182, 0.18);
+}
+
+.custom-home .home-love-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(46, 117, 182, 0.28);
+}
+
+.custom-home .home-love-tile::after {
+  content: "♡";
+  position: absolute;
+  right: 14px;
+  bottom: -24px;
+  color: rgba(255, 255, 255, 0.13);
+  font-family: "Chillax-Variable", serif;
+  font-size: 6.8rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.custom-home .home-love-tile.is-date::after {
+  content: "✦";
+}
+
+.custom-home .home-love-tile strong {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  color: #FFFFFF;
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: 1.22rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.28;
+}
+
+.custom-home .home-love-tile .home-love-date,
+.custom-home .home-love-tile .home-love-kicker,
+.custom-home .home-love-tile .home-love-days {
+  position: relative;
+  z-index: 1;
+}
+
+.custom-home .home-love-days b.is-past {
+  color: rgba(255, 227, 163, 0.75);
+}
+
+html.dark .custom-home .home-love-tile.is-important {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(240, 198, 116, 0.16), transparent 44%),
+    linear-gradient(135deg, #12233A 0%, #16304B 58%, #1B4C77 100%);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .custom-home .home-love-tile.is-date {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(127, 178, 229, 0.16), transparent 44%),
+    linear-gradient(135deg, #10243A 0%, #16304B 56%, #1E466B 100%);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 760px) {
+  .custom-home .home-love-pair {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .custom-home .home-love-tile {
+    min-height: 148px;
+    padding: 17px 18px 15px;
+  }
+
+  .custom-home .home-love-tile strong {
+    font-size: 1.14rem;
+  }
+}
+
 .custom-home .home-photo-section .home-section-head {
   margin-bottom: 16px;
 }

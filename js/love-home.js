@@ -1,25 +1,20 @@
-/* 首页「重要日子」小栏目：先按页面里嵌的数据渲染，再尝试从后端取最新的一份。
- * 静态兜底数据来自 source/_data/love.json，线上数据来自 love-api 的 /v1/public。
- */
+/* 首页「今天有想我嘛？」：只读 /v1/home 的公开摘要，不读取任何明细。 */
 (function () {
   "use strict";
 
-  var dataEl = document.getElementById("love-home-data");
-  if (!dataEl) return;
+  var root = document.querySelector("[data-love-home]");
+  if (!root) return;
 
-  var data;
-  try {
-    data = JSON.parse(dataEl.textContent || "{}");
-  } catch (e) {
-    return;
-  }
-
-  var room = data.room || {};
-  var events = Array.isArray(data.events) ? data.events : [];
-  var TZ = room.timezone || "Asia/Shanghai";
+  var TZ = "Asia/Shanghai";
   var WEEK_CHARS = "日一二三四五六";
-  var HOME_LIMIT = 6;
-  var today = todayISO();
+  var KIND_LABELS = {
+    birthday: "生日",
+    anniversary: "纪念日",
+    valentine: "情人节",
+    qixi: "七夕",
+    date: "约会啦",
+    milestone: "大事记"
+  };
 
   function pad2(value) {
     return value < 10 ? "0" + value : String(value);
@@ -57,212 +52,87 @@
     var from = splitISO(fromISO);
     var to = splitISO(toISO);
     if (!from || !to) return NaN;
-    var a = Date.UTC(from.y, from.m - 1, from.d);
-    var b = Date.UTC(to.y, to.m - 1, to.d);
-    return Math.round((b - a) / 86400000);
+    return Math.round((Date.UTC(to.y, to.m - 1, to.d) - Date.UTC(from.y, from.m - 1, from.d)) / 86400000);
   }
 
   function formatDateCN(iso) {
     var parts = splitISO(iso);
     if (!parts) return "";
-    return parts.y + "年" + parts.m + "月" + parts.d + "日 · 周" + WEEK_CHARS.charAt(new Date(Date.UTC(parts.y, parts.m - 1, parts.d)).getUTCDay());
-  }
-
-  function isLeapYear(year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-  }
-
-  function yearlySeed(event, year) {
-    var date = String(event.date || "");
-    var monthDay = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date.slice(5) : (/^\d{2}-\d{2}$/.test(date) ? date : "");
-    if (!monthDay) return [];
-    if (monthDay === "02-29" && !isLeapYear(year)) return [];
-    return splitISO(year + "-" + monthDay) ? [year + "-" + monthDay] : [];
-  }
-
-  function occurrencesInYear(event, year) {
-    if (!event) return [];
-    if (event.repeat === "dates") {
-      return (Array.isArray(event.dates) ? event.dates : [])
-        .filter(function (date) { return splitISO(date) && Number(date.slice(0, 4)) === year; })
-        .sort();
-    }
-    if (event.repeat === "yearly") return yearlySeed(event, year);
-    if (event.repeat === "none") {
-      return splitISO(event.date) && Number(event.date.slice(0, 4)) === year ? [event.date] : [];
-    }
-    return [];
-  }
-
-  function nextOccurrence(event, fromISO) {
-    if (!event) return null;
-    if (event.repeat === "dates") {
-      var dates = (Array.isArray(event.dates) ? event.dates : []).filter(function (date) { return splitISO(date); }).sort();
-      for (var i = 0; i < dates.length; i++) {
-        if (dates[i] >= fromISO) return dates[i];
-      }
-      return null;
-    }
-    if (event.repeat === "none") return splitISO(event.date) && event.date >= fromISO ? event.date : null;
-    if (event.repeat === "yearly") {
-      var startYear = Number(fromISO.slice(0, 4)) || new Date().getFullYear();
-      for (var year = startYear; year <= startYear + 8; year++) {
-        var list = occurrencesInYear(event, year);
-        for (var j = 0; j < list.length; j++) {
-          if (list[j] >= fromISO) return list[j];
-        }
-      }
-    }
-    return null;
-  }
-
-  function pastOccurrence(event, fromISO) {
-    if (event && event.repeat === "none" && splitISO(event.date) && event.date < fromISO) return event.date;
-    return null;
+    var weekday = WEEK_CHARS.charAt(new Date(Date.UTC(parts.y, parts.m - 1, parts.d)).getUTCDay());
+    return parts.y + "年" + parts.m + "月" + parts.d + "日 · 周" + weekday;
   }
 
   function countdown(iso, fromISO) {
     var days = diffDays(fromISO, iso);
-    if (!isFinite(days)) return "待定";
-    if (days === 0) return "今天";
-    if (days === 1) return "明天";
-    if (days > 1) return days + " 天后";
-    return "已过 " + Math.abs(days) + " 天";
+    if (!isFinite(days)) return { value: "--", unit: "" };
+    if (days === 0) return { value: "今天", unit: "就是今天", word: true };
+    if (days === 1) return { value: "1", unit: "明天" };
+    if (days > 1) return { value: String(days), unit: "天后" };
+    return { value: String(Math.abs(days)), unit: "已过", past: true };
   }
 
-  function repeatLabel(event) {
-    if (event.repeat === "yearly") return "每年";
-    if (event.repeat === "none") return "仅一次";
-    if (event.repeat === "dates") return "农历七月初七";
-    return "";
+  function q(selector) {
+    return root.querySelector(selector);
   }
 
-  function eventDateLabel(event) {
-    if (!event) return "";
-    if (event.repeat === "dates") return "农历七月初七";
-    if (event.date && event.date.length === 5) return event.date.replace("-", ".");
-    if (event.date) return event.date.slice(5).replace("-", ".");
-    return "";
+  function setText(selector, value) {
+    var node = q(selector);
+    if (node) node.textContent = value == null ? "" : String(value);
   }
 
-  function findNext(fromISO) {
-    var candidates = [];
-    events.forEach(function (event) {
-      var iso = nextOccurrence(event, fromISO);
-      if (iso) candidates.push({ event: event, iso: iso });
-    });
-    candidates.sort(function (a, b) {
-      if (a.iso !== b.iso) return a.iso < b.iso ? -1 : 1;
-      return String(a.event.title || "").localeCompare(String(b.event.title || ""), "zh");
-    });
-    return candidates[0] || null;
+  function setDays(prefix, parts) {
+    var days = q("[data-love-home-" + prefix + "-days]");
+    var unit = q("[data-love-home-" + prefix + "-unit]");
+    if (days) {
+      days.textContent = parts.value;
+      days.classList.toggle("is-word", !!parts.word);
+      days.classList.toggle("is-past", !!parts.past);
+    }
+    if (unit) unit.textContent = parts.unit || "";
   }
 
-  function loveHref() {
-    var feature = document.querySelector(".home-love-feature");
-    return feature ? feature.getAttribute("href") : "/love/";
-  }
-
-  function renderNext() {
-    var next = findNext(today);
-    var titleNode = document.querySelector("[data-love-home-next-title]");
-    var dateNode = document.querySelector("[data-love-home-next-date]");
-    var daysNode = document.querySelector("[data-love-home-next-days]");
-    var unitNode = document.querySelector("[data-love-home-next-unit]");
-
-    if (!next) {
-      if (titleNode) titleNode.textContent = "还没有新的日子";
-      if (dateNode) dateNode.textContent = "去 Love Story 添一个吧";
-      if (daysNode) { daysNode.textContent = "--"; daysNode.classList.remove("is-word"); }
-      if (unitNode) unitNode.textContent = "";
+  function renderImportant(item) {
+    var kicker = q("[data-love-home-important-kicker]");
+    if (!item || !item.date) {
+      if (kicker) kicker.textContent = "最近的重要日子";
+      setText("[data-love-home-important-title]", "暂时没有计划");
+      setText("[data-love-home-important-date]", "去信息墙添一个重要的日子吧");
+      setDays("important", { value: "--", unit: "" });
       return;
     }
+    var kind = KIND_LABELS[item.kind] || "重要日子";
+    if (kicker) kicker.textContent = "最近的重要日子 · " + kind;
+    setText("[data-love-home-important-title]", item.title || "重要日子");
+    setText("[data-love-home-important-date]", formatDateCN(item.date));
+    setDays("important", countdown(item.date, todayISO()));
+  }
 
-    if (titleNode) titleNode.textContent = next.event.title || "下一个重要日子";
-    if (dateNode) dateNode.textContent = formatDateCN(next.iso) + " · " + repeatLabel(next.event);
-    var diff = diffDays(today, next.iso);
-    if (daysNode) {
-      daysNode.textContent = diff === 0 ? "今天" : (diff === 1 ? "1" : String(diff));
-      daysNode.classList.toggle("is-word", diff === 0);
+  function renderDate(item) {
+    var kicker = q("[data-love-home-date-kicker]");
+    if (!item || !item.date) {
+      if (kicker) kicker.textContent = "下一次约会";
+      setText("[data-love-home-date-title]", "暂时没有计划");
+      setText("[data-love-home-date-date]", "快来一期规划吧");
+      setDays("date", { value: "--", unit: "" });
+      return;
     }
-    if (unitNode) unitNode.textContent = diff === 0 ? "就是今天" : (diff === 1 ? "明天" : "天后");
+    var kind = KIND_LABELS[item.kind] || "约会";
+    if (kicker) kicker.textContent = (item.past ? "上一次约会" : "下一次约会") + " · " + kind;
+    setText("[data-love-home-date-title]", item.title || "约会");
+    setText("[data-love-home-date-date]", formatDateCN(item.date));
+    setDays("date", countdown(item.date, todayISO()));
   }
 
-  function homeRows() {
-    var rows = [];
-    events.forEach(function (event) {
-      if (!event || !event.home) return;
-      var occurrence = nextOccurrence(event, today);
-      var past = pastOccurrence(event, today);
-      rows.push({ event: event, iso: occurrence || past || "9999-99-99", pin: event.pin ? 1 : 0 });
-    });
-    rows.sort(function (a, b) {
-      if (a.pin !== b.pin) return b.pin - a.pin;
-      if (a.iso !== b.iso) return a.iso < b.iso ? -1 : 1;
-      return String(a.event.title || "").localeCompare(String(b.event.title || ""), "zh");
-    });
-    return rows.slice(0, HOME_LIMIT);
+  function renderUnavailable() {
+    var kicker = q("[data-love-home-date-kicker]");
+    if (kicker) kicker.textContent = "下一次约会";
+    setText("[data-love-home-important-title]", "暂时没有计划");
+    setText("[data-love-home-important-date]", "去信息墙看看吧");
+    setDays("important", { value: "--", unit: "" });
+    setText("[data-love-home-date-title]", "暂时没有计划");
+    setText("[data-love-home-date-date]", "去信息墙看看吧");
+    setDays("date", { value: "--", unit: "" });
   }
-
-  function renderRows() {
-    var listNode = document.querySelector(".home-love-list");
-    if (!listNode) return;
-    listNode.innerHTML = "";
-
-    homeRows().forEach(function (rowData) {
-      var event = rowData.event;
-      var occurrence = nextOccurrence(event, today);
-      var past = pastOccurrence(event, today);
-
-      var row = document.createElement("a");
-      row.className = "home-love-row" + (event.pin ? " is-pin" : "");
-      row.href = loveHref();
-      row.setAttribute("data-love-home-event", event.id || "");
-
-      var icon = document.createElement("span");
-      icon.className = "home-love-row-icon";
-      icon.setAttribute("aria-hidden", "true");
-      icon.textContent = event.icon || "♡";
-
-      var copy = document.createElement("span");
-      copy.className = "home-love-row-copy";
-      var titleLine = document.createElement("span");
-      titleLine.className = "home-love-row-title";
-      var title = document.createElement("strong");
-      title.textContent = event.title || "重要日子";
-      titleLine.appendChild(title);
-      if (event.pin) {
-        var pin = document.createElement("span");
-        pin.className = "home-love-row-pin";
-        pin.textContent = "置顶";
-        titleLine.appendChild(pin);
-      }
-      var date = document.createElement("small");
-      date.setAttribute("data-love-home-date", "");
-      date.textContent = eventDateLabel(event);
-      copy.appendChild(titleLine);
-      copy.appendChild(date);
-
-      var days = document.createElement("span");
-      days.className = "home-love-row-days";
-      days.setAttribute("data-love-home-days", "");
-      if (occurrence) days.textContent = countdown(occurrence, today);
-      else if (past) days.textContent = "已过 " + Math.abs(diffDays(past, today)) + " 天";
-      else days.textContent = "待补";
-
-      row.appendChild(icon);
-      row.appendChild(copy);
-      row.appendChild(days);
-      listNode.appendChild(row);
-    });
-  }
-
-  function render() {
-    renderNext();
-    renderRows();
-  }
-
-  /* ---------- 线上最新数据 ---------- */
 
   function apiBases() {
     if (typeof window.LOVE_API_BASE === "string" && window.LOVE_API_BASE) {
@@ -278,21 +148,23 @@
     return ["https://love-api.xm9.asia", "https://xm9.asia/love-api"];
   }
 
-  function loadLatest() {
-    if (typeof window.fetch !== "function") return;
+  function loadHome() {
+    if (typeof window.fetch !== "function") {
+      renderUnavailable();
+      return;
+    }
     var controller = typeof AbortController === "function" ? new AbortController() : null;
     var timer = window.setTimeout(function () {
       if (controller) controller.abort();
     }, 8000);
+    var bases = apiBases();
 
     function finish() {
       window.clearTimeout(timer);
     }
 
-    var bases = apiBases();
-
     function attempt(index) {
-      return window.fetch(bases[index] + "/v1/public", {
+      return window.fetch(bases[index] + "/v1/home", {
         method: "GET",
         headers: { Accept: "application/json" },
         mode: "cors",
@@ -304,13 +176,10 @@
         return response.json();
       }).then(function (payload) {
         if (!payload || !payload.ok || !payload.data) throw new Error("bad payload");
-        var next = payload.data;
-        if (next.version && next.version !== 1) throw new Error("unsupported version");
-        room = next.room || room;
-        events = Array.isArray(next.events) ? next.events : events;
-        TZ = room.timezone || TZ;
-        today = todayISO();
-        render();
+        var data = payload.data;
+        if (data.room && data.room.timezone) TZ = data.room.timezone;
+        renderImportant(data.nextImportant);
+        renderDate(data.nextDate);
       }).catch(function (error) {
         if (index + 1 < bases.length) return attempt(index + 1);
         throw error;
@@ -318,11 +187,11 @@
     }
 
     attempt(0).then(finish, function () {
-      // 连不上后端就保持静态版本，不打扰首页。
+      // 后端暂时连不上时给一个安静的兜底，不把错误显示在首页。
+      renderUnavailable();
       finish();
     });
   }
 
-  render();
-  loadLatest();
+  loadHome();
 })();

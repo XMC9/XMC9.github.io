@@ -657,6 +657,104 @@ html[data-theme="dark"] .l-next-card {
   transform: translateX(3px);
 }
 
+/* ---------- 约会助手入口 ---------- */
+
+.l-assistant-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 19px 24px;
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    radial-gradient(140% 190% at 0% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
+    linear-gradient(118deg, #215F99 0%, #2E75B6 46%, #5B9BD5 100%);
+  color: #FFFFFF;
+  text-decoration: none;
+  box-shadow: 0 16px 36px rgba(24, 62, 96, 0.22);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.l-assistant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 42px rgba(24, 62, 96, 0.28);
+}
+
+.l-assistant-glow {
+  position: absolute;
+  right: -6px;
+  bottom: -46px;
+  color: rgba(255, 255, 255, 0.13);
+  font-family: "Chillax-Variable", serif;
+  font-size: 8.5rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.l-assistant-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.l-assistant-kicker {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.l-assistant-copy strong {
+  color: #FFFFFF;
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.l-assistant-copy > span:last-child {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.l-assistant-go {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 9px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.l-assistant-card:hover .l-assistant-go {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.l-assistant-go span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.l-assistant-card:hover .l-assistant-go span {
+  transform: translateX(3px);
+}
+
 .l-highlight-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1152,7 +1250,34 @@ html[data-theme="dark"] .l-day-foot-heart {
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 0;
+  max-height: 480px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 117, 182, 0.28) transparent;
+}
+
+.l-event-list::-webkit-scrollbar,
+.l-bucket-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.l-event-list::-webkit-scrollbar-thumb,
+.l-bucket-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(46, 117, 182, 0.24);
+}
+
+html[data-theme="dark"] .l-event-list,
+html[data-theme="dark"] .l-bucket-list {
+  scrollbar-color: rgba(127, 178, 229, 0.3) transparent;
+}
+
+html[data-theme="dark"] .l-event-list::-webkit-scrollbar-thumb,
+html[data-theme="dark"] .l-bucket-list::-webkit-scrollbar-thumb {
+  background: rgba(127, 178, 229, 0.28);
 }
 
 .l-event-row {
@@ -1313,6 +1438,12 @@ html[data-theme="dark"] .l-event-tag.is-custom { color: var(--l-muted); }
 .l-bucket-list {
   display: flex;
   flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 117, 182, 0.28) transparent;
 }
 
 .l-bucket-item {
@@ -1669,6 +1800,33 @@ html[data-theme="dark"] .l-event-tag.is-custom { color: var(--l-muted); }
     font-size: 1rem;
   }
 
+  .l-assistant-card {
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 18px;
+  }
+
+  .l-assistant-copy strong {
+    font-size: 1.02rem;
+  }
+
+  .l-assistant-copy > span:last-child {
+    font-size: 0.68rem;
+  }
+
+  .l-assistant-go {
+    padding: 8px 12px;
+    font-size: 0.66rem;
+  }
+
+  .l-event-list {
+    max-height: 360px;
+  }
+
+  .l-bucket-list {
+    max-height: 240px;
+  }
+
   .l-panel {
     padding: 17px 15px;
     border-radius: 18px;
@@ -1772,6 +1930,10 @@ html[data-theme="dark"] .l-event-tag.is-custom { color: var(--l-muted); }
     font-size: 2.6rem;
   }
 
+  .l-assistant-go {
+    display: none;
+  }
+
   .l-cal-actions {
     gap: 3px;
   }
@@ -1812,5 +1974,899 @@ html[data-theme="dark"] .l-event-tag.is-custom { color: var(--l-muted); }
   .l-back span,
   .l-next-jump {
     transition: none;
+  }
+}
+
+/* ============================================================
+   2026-10-27：登录、管理、合并重要日子、AI 录入
+   ============================================================ */
+
+[hidden] { display: none !important; }
+
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+.l-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.l-logout {
+  padding: 6px 12px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: var(--l-panel);
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.l-logout:hover {
+  border-color: var(--l-rose);
+  color: var(--l-rose);
+}
+
+/* ---------- 登录 ---------- */
+
+.l-login {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 190px);
+  padding: 24px 0 40px;
+}
+
+.l-login-card {
+  width: min(100%, 430px);
+  padding: 34px 30px 27px;
+  border: 1px solid var(--l-line);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 90% 4%, rgba(217, 164, 65, 0.13), transparent 42%),
+    var(--l-panel);
+  box-shadow: var(--l-shadow);
+  animation: l-rise 0.6s ease both;
+}
+
+.l-login-title {
+  margin: 0;
+  color: var(--l-ink);
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: clamp(2rem, 7vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.l-login-sub {
+  margin: 12px 0 22px;
+  color: var(--l-muted);
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.l-person-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.l-person-switch label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.l-person-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.l-person-switch span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 11px 8px;
+  border: 1px solid var(--l-line);
+  border-radius: 14px;
+  background: var(--l-panel-soft);
+  color: var(--l-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.l-person-switch input:checked + span {
+  border-color: var(--l-blue);
+  background: rgba(46, 117, 182, 0.09);
+  color: var(--l-blue);
+}
+
+.l-person-switch input:focus-visible + span {
+  outline: 2px solid var(--l-blue);
+  outline-offset: 2px;
+}
+
+.l-login-foot {
+  margin: 18px 0 0;
+  color: var(--l-faint);
+  font-size: 0.62rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* ---------- 通用表单 ---------- */
+
+.l-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 13px;
+}
+
+.l-field > span {
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.l-field input,
+.l-field textarea,
+.l-field select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--l-line);
+  border-radius: 12px;
+  background: var(--l-panel-soft);
+  color: var(--l-ink);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.l-field textarea {
+  resize: vertical;
+}
+
+.l-field input:focus,
+.l-field textarea:focus,
+.l-field select:focus {
+  border-color: var(--l-blue);
+  background: var(--l-panel);
+  box-shadow: 0 0 0 3px rgba(46, 117, 182, 0.1);
+}
+
+.l-field input::placeholder,
+.l-field textarea::placeholder {
+  color: var(--l-faint);
+}
+
+.l-form-error {
+  margin: 4px 0 12px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: rgba(201, 120, 143, 0.12);
+  color: #A9556E;
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+html[data-theme="dark"] .l-form-error {
+  color: var(--l-rose);
+}
+
+.l-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.l-primary,
+.l-ghost,
+.l-danger {
+  padding: 10px 17px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.l-primary {
+  border: 0;
+  background: var(--l-cta-bg);
+  color: var(--l-cta-ink);
+  box-shadow: 0 8px 18px rgba(46, 117, 182, 0.2);
+}
+
+.l-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 22px rgba(46, 117, 182, 0.26);
+}
+
+.l-primary:disabled,
+.l-ghost:disabled,
+.l-danger:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+.l-ghost {
+  border: 1px solid var(--l-line);
+  background: var(--l-panel-soft);
+  color: var(--l-muted);
+}
+
+.l-ghost:hover {
+  border-color: var(--l-line-strong);
+  color: var(--l-ink);
+}
+
+.l-danger {
+  border: 0;
+  background: #B45A72;
+  color: #FFFFFF;
+}
+
+.l-danger:hover {
+  background: #A64C65;
+}
+
+.l-login-card .l-primary {
+  width: 100%;
+}
+
+.l-small {
+  padding: 7px 12px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: var(--l-panel-soft);
+  color: var(--l-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.l-small:hover {
+  border-color: var(--l-line-strong);
+  color: var(--l-ink);
+}
+
+.l-small.is-primary {
+  border-color: transparent;
+  background: var(--l-cta-bg);
+  color: var(--l-cta-ink);
+}
+
+/* ---------- 登录后的会话条 ---------- */
+
+.l-session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  padding: 8px 2px 12px;
+  border-bottom: 1px dashed var(--l-line);
+  color: var(--l-faint);
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+}
+
+.l-session-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.l-session-links a {
+  color: var(--l-muted);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.l-session-links a:hover {
+  color: var(--l-blue);
+}
+
+/* ---------- 面板按钮 / 折叠 ---------- */
+
+.l-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.l-empty {
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 13px;
+  background: var(--l-panel-soft);
+  color: var(--l-faint);
+  font-size: 0.7rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* ---------- 分类标签 ---------- */
+
+.l-day-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 10px;
+}
+
+.l-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--l-muted);
+  font-size: 0.62rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.l-tab b {
+  color: var(--l-faint);
+  font-size: 0.55rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.l-tab:hover {
+  border-color: var(--l-line-strong);
+  color: var(--l-ink);
+}
+
+.l-tab.is-active {
+  border-color: transparent;
+  background: var(--l-cta-bg);
+  color: var(--l-cta-ink);
+}
+
+.l-tab.is-active b {
+  color: inherit;
+  opacity: 0.72;
+}
+
+/* ---------- 合并后的重要日子 ---------- */
+
+.l-days-panel {
+  min-width: 0;
+}
+
+.l-day-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px dashed var(--l-line);
+}
+
+.l-day-row:last-child {
+  border-bottom: 0;
+}
+
+.l-day-row.is-past {
+  opacity: 0.68;
+}
+
+.l-day-open {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 4px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.l-day-open:hover {
+  background: var(--l-panel-soft);
+}
+
+.l-day-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+
+.l-day-row:hover .l-day-actions,
+.l-day-row:focus-within .l-day-actions {
+  opacity: 1;
+}
+
+.l-row-action {
+  padding: 5px 7px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--l-faint);
+  font-size: 0.58rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.l-row-action:hover {
+  background: rgba(46, 117, 182, 0.08);
+  color: var(--l-blue);
+}
+
+.l-row-action.is-danger:hover {
+  background: rgba(201, 120, 143, 0.12);
+  color: var(--l-rose);
+}
+
+.l-dot.is-date { background: #6C93B5; }
+.l-dot.is-milestone { background: var(--l-gold); }
+
+.l-event-tag.is-date {
+  background: rgba(94, 118, 142, 0.1);
+  color: var(--l-muted);
+}
+
+.l-event-tag.is-milestone {
+  background: rgba(217, 164, 65, 0.13);
+  color: #A97720;
+}
+
+html[data-theme="dark"] .l-event-tag.is-milestone {
+  color: var(--l-gold);
+}
+
+/* ---------- 清单的编辑与勾选 ---------- */
+
+.l-bucket-check {
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.l-bucket-check:hover {
+  border-color: var(--l-blue);
+}
+
+.l-bucket-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.l-bucket-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+
+.l-bucket-item:hover .l-bucket-actions,
+.l-bucket-item:focus-within .l-bucket-actions {
+  opacity: 1;
+}
+
+/* ---------- 一句话录入 ---------- */
+
+.l-main-grid {
+  grid-template-areas:
+    "calendar day"
+    "list bucket"
+    "list note"
+    "ai ai";
+}
+
+.l-ai-panel {
+  grid-area: ai;
+}
+
+.l-badge {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(217, 164, 65, 0.14);
+  color: #A97720;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+html[data-theme="dark"] .l-badge {
+  color: var(--l-gold);
+}
+
+.l-ai-form {
+  margin-top: 2px;
+}
+
+.l-ai-message {
+  margin: 2px 0 12px;
+  padding: 10px 13px;
+  border-left: 3px solid var(--l-gold);
+  border-radius: 0 10px 10px 0;
+  background: rgba(217, 164, 65, 0.1);
+  color: var(--l-ink);
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.l-ai-result {
+  margin-top: 4px;
+  padding: 15px 16px;
+  border: 1px solid var(--l-line);
+  border-radius: 16px;
+  background: var(--l-panel-soft);
+}
+
+.l-ai-summary {
+  margin: 0 0 8px;
+  color: var(--l-ink);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.l-ai-clarify {
+  margin: 0 0 9px;
+  color: var(--l-muted);
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
+.l-ai-rejected {
+  margin: 0 0 9px;
+  padding-left: 17px;
+  color: var(--l-rose);
+  font-size: 0.66rem;
+  line-height: 1.65;
+}
+
+.l-ai-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.l-ai-op {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 8px 10px;
+  border: 1px solid var(--l-line);
+  border-radius: 11px;
+  background: var(--l-panel);
+  cursor: pointer;
+}
+
+.l-ai-op input {
+  margin-top: 2px;
+  accent-color: var(--l-blue);
+}
+
+.l-ai-op-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.l-ai-op-body strong {
+  color: var(--l-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.l-ai-op-body small {
+  color: var(--l-faint);
+  font-size: 0.6rem;
+}
+
+.l-ai-note {
+  margin: 11px 0 0;
+  color: var(--l-faint);
+  font-size: 0.61rem;
+  line-height: 1.65;
+}
+
+/* ---------- 弹层 ---------- */
+
+body.has-modal {
+  overflow: hidden;
+}
+
+.l-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.l-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 24, 40, 0.46);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.l-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 520px);
+  max-height: min(86vh, 720px);
+  padding: 21px 23px;
+  overflow-y: auto;
+  border: 1px solid var(--l-line);
+  border-radius: 22px;
+  background: var(--l-panel);
+  box-shadow: 0 26px 70px rgba(8, 24, 40, 0.3);
+  animation: l-rise 0.24s ease both;
+}
+
+.l-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.l-modal-head h2 {
+  margin: 0;
+  color: var(--l-ink);
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.l-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--l-line);
+  border-radius: 50%;
+  background: var(--l-panel-soft);
+  color: var(--l-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.l-icon-button:hover {
+  border-color: var(--l-rose);
+  color: var(--l-rose);
+}
+
+.l-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 12px;
+}
+
+.l-field--wide {
+  grid-column: 1 / -1;
+}
+
+.l-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 3px;
+  color: var(--l-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.l-check input {
+  accent-color: var(--l-blue);
+}
+
+.l-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.l-confirm-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 370px);
+  padding: 22px 23px;
+  border: 1px solid var(--l-line);
+  border-radius: 20px;
+  background: var(--l-panel);
+  box-shadow: 0 26px 70px rgba(8, 24, 40, 0.3);
+  animation: l-rise 0.22s ease both;
+}
+
+.l-confirm-panel h2 {
+  margin: 0 0 8px;
+  color: var(--l-ink);
+  font-family: "Chillax-Variable", "Geist Variable", "PingFang SC", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.l-confirm-panel p {
+  margin: 0;
+  color: var(--l-muted);
+  font-size: 0.76rem;
+  line-height: 1.75;
+}
+
+.l-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 90;
+  max-width: min(90vw, 420px);
+  padding: 11px 18px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: var(--l-panel);
+  color: var(--l-ink);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  box-shadow: 0 14px 34px rgba(8, 24, 40, 0.22);
+  transform: translateX(-50%);
+  animation: l-rise 0.24s ease both;
+}
+
+.l-toast.is-error {
+  border-color: rgba(201, 120, 143, 0.4);
+  color: #A9556E;
+}
+
+html[data-theme="dark"] .l-toast.is-error {
+  color: var(--l-rose);
+}
+
+@media (max-width: 980px) {
+  .l-main-grid {
+    grid-template-areas:
+      "calendar"
+      "day"
+      "list"
+      "bucket"
+      "note"
+      "ai";
+  }
+}
+
+@media (max-width: 760px) {
+  .l-login {
+    min-height: calc(100vh - 150px);
+    padding-top: 8px;
+  }
+
+  .l-login-card {
+    padding: 26px 20px 22px;
+    border-radius: 22px;
+  }
+
+  .l-session-bar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .l-panel-head {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .l-panel-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .l-day-open {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 9px;
+    padding: 10px 2px;
+  }
+
+  .l-day-actions,
+  .l-bucket-actions {
+    opacity: 1;
+  }
+
+  .l-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .l-modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .l-modal-panel {
+    width: 100%;
+    max-height: 88vh;
+    border-radius: 22px 22px 0 0;
+    padding: 20px 17px max(20px, env(safe-area-inset-bottom));
+  }
+
+  .l-confirm {
+    padding: 16px;
+  }
+
+  .l-toast {
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 430px) {
+  .l-day-tabs {
+    gap: 5px;
+  }
+
+  .l-tab {
+    padding: 5px 8px;
+    font-size: 0.58rem;
+  }
+
+  .l-day-actions {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .l-row-action {
+    padding: 3px 6px;
+    font-size: 0.55rem;
   }
 }

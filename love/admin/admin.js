@@ -462,7 +462,7 @@
   /* ---------- 数据加载 ---------- */
 
   function loadAdmin() {
-    return api("/v1/admin").then(function (payload) {
+    return api("/v1/settings").then(function (payload) {
       if (!payload || !payload.data) throw new Error("后端返回的数据不完整");
       state.data = payload.data;
       var room = state.data.room || {};
