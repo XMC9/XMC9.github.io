@@ -117,6 +117,13 @@
   </section>
 
   <section class="card">
+    <div class="name" style="font-weight:600">表单 POST（备用通道）</div>
+    <p class="hint" style="margin:6px 0 0">有些手机浏览器或插件会拦 fetch/XHR，但允许普通表单提交。点一下，看看隐藏 iframe 能不能收到服务器的 405 响应。</p>
+    <button id="formpost" type="button">测试表单 POST /v1/health</button>
+    <div id="form-result" class="meta" style="margin-top:10px"></div>
+  </section>
+
+  <section class="card">
     <div class="name" style="font-weight:600">结果怎么读</div>
     <p class="hint" style="margin:6px 0 0">
       GET/POST 任意一项显示“FAIL + TypeError/Failed to fetch”，说明这个入口在这个手机上被网络或浏览器拦住了；<br>
@@ -297,7 +304,8 @@
     ].concat(results.map(function (item) {
       return "[" + item.state + "] " + item.name + " :: " + item.detail;
     })).concat([
-      "session :: " + (document.getElementById("session-result").textContent || "未测")
+      "session :: " + (document.getElementById("session-result").textContent || "未测"),
+      "form :: " + (document.getElementById("form-result").textContent || "未测")
     ]);
     var text = lines.join("\n");
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -312,8 +320,55 @@
     }
   }
 
+  function formPostTest() {
+    var target = document.getElementById("form-result");
+    target.textContent = "测试中…";
+    var frameName = "diag-form-" + Date.now();
+    var frame = document.createElement("iframe");
+    frame.name = frameName;
+    frame.style.display = "none";
+    document.body.appendChild(frame);
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = SAME + "/v1/health";
+    form.target = frameName;
+    form.style.display = "none";
+    document.body.appendChild(form);
+    var done = false;
+    function cleanup() {
+      window.clearTimeout(timer);
+      try { form.parentNode.removeChild(form); } catch (e) { /* ignore */ }
+      try { frame.parentNode.removeChild(frame); } catch (e) { /* ignore */ }
+    }
+    var timer = window.setTimeout(function () {
+      if (done) return;
+      done = true;
+      cleanup();
+      target.textContent = "超时：iframe 没加载出响应（表单 POST 可能被拦）";
+    }, 12000);
+    frame.onload = function () {
+      if (done) return;
+      var href = "";
+      try { href = frame.contentWindow.location.href; } catch (e) { href = ""; }
+      if (!href || href === "about:blank") return;
+      done = true;
+      var text = "";
+      try {
+        text = frame.contentDocument && frame.contentDocument.body
+          ? frame.contentDocument.body.textContent
+          : "";
+      } catch (e) {
+        text = "(无法读取 iframe)";
+      }
+      cleanup();
+      target.textContent = "iframe 已加载 · " + (text || "(空)").slice(0, 160);
+    };
+    form.submit();
+  }
+
   document.getElementById("rerun").addEventListener("click", runAll);
   document.getElementById("copy").addEventListener("click", copyResults);
+  document.getElementById("formpost").addEventListener("click", formPostTest);
   document.getElementById("session").addEventListener("click", function () {
     var target = document.getElementById("session-result");
     target.textContent = "测试中…（会记 1 次错误）";
