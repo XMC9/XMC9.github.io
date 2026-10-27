@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <script>
+    (function () {
+      var host = location.hostname;
+      var local = host === 'localhost' || host === '127.0.0.1' || host === '::1' ||
+        /^192\.168\./.test(host) || /^10\./.test(host) ||
+        /^172\.(1[6-9]|2\d|3[01])\./.test(host) || /\.local$/.test(host);
+      if (location.protocol === 'http:' && !local) {
+        location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E8F1F8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>约会助手 · 鸡毛鸡和白小白 · 秘密基地</title>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS') || 'null');
+        var dark = stored && typeof stored.isDark !== 'undefined'
+          ? !!stored.isDark
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) { /* 隐私模式下跟随系统 */ }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
+  <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+  <link rel="stylesheet" href="/fonts/Geist/geist.css">
+  <link rel="stylesheet" href="/love/admin/admin.css?v=2026-10-27.7">
+  <link rel="stylesheet" href="/love/assistant/assistant.css?v=2026-10-27.7">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="love-admin-page">
+  <header class="la-top">
+    <a class="la-back" href="/love/"><span aria-hidden="true">←</span> 返回信息墙</a>
+    <div class="la-brand" aria-hidden="true"><span>♡</span>DATE PLANNER</div>
+    <div class="la-top-actions">
+      <a class="la-top-link" href="/love/admin/">管理页</a>
+      <button class="la-theme" type="button" data-theme-toggle aria-label="切换深浅色">
+        <svg data-theme-icon viewBox="0 0 24 24" width="17" height="17" fill="none"
+          stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path class="la-icon-moon" d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5 8.2 8.2 0 1 0 20.5 14.2Z"></path>
+          <g class="la-icon-sun">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+          </g>
+        </svg>
+      </button>
+      <button class="la-logout" type="button" data-logout hidden>退出</button>
+    </div>
+  </header>
+
+  <main class="la-main">
+    <noscript><p class="la-noscript">约会助手需要 JavaScript 才能连接后端。</p></noscript>
+
+    <section class="la-login" data-login-view>
+      <div class="la-login-card">
+        <p class="la-kicker">ONLY FOR US</p>
+        <h1>先确认是谁在问</h1>
+        <p class="la-login-sub">约会助手只给鸡毛鸡和白小白两个人用。密钥只存哈希，连续错 5 次会锁 10 分钟。</p>
+        <form data-login-form novalidate>
+          <div class="la-person-switch" role="radiogroup" aria-label="选择身份">
+            <label>
+              <input type="radio" name="person" value="jmj" checked>
+              <span>🐥 鸡毛鸡</span>
+            </label>
+            <label>
+              <input type="radio" name="person" value="bxb">
+              <span>🐶 白小白</span>
+            </label>
+          </div>
+          <label class="la-field">
+            <span>操作密钥</span>
+            <input type="password" name="key" autocomplete="current-password" placeholder="输入你的那个密钥" required>
+          </label>
+          <p class="la-form-error" data-login-error hidden></p>
+          <button class="la-primary" type="submit" data-login-submit>进入助手</button>
+        </form>
+        <p class="la-login-foot">和 <a href="/love/admin/">管理页</a> 共用登录状态；登录后 2 小时内不用重复输入，关掉标签页就没了。</p>
+      </div>
+    </section>
+
+    <section class="la-app" data-app-view hidden>
+      <div class="la-app-head">
+        <div>
+          <p class="la-kicker">DATE PLANNER</p>
+          <h1>这次想去哪？</h1>
+          <p class="la-app-meta" data-app-meta></p>
+        </div>
+        <a class="la-view-link" href="/love/" target="_blank" rel="noopener">看公开页 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <section class="la-card">
+        <div class="la-card-head">
+          <div>
+            <h2>找几个地方</h2>
+            <p>联网查最近的展览和好去处，再结合两个人的偏好，给具体名字和理由。</p>
+          </div>
+          <span class="la-badge">AI · 联网</span>
+        </div>
+        <form class="la-form" data-plan-form novalidate>
+          <div class="la-grid">
+            <label class="la-field">
+              <span>目的地城市 <em class="la-req">必填</em></span>
+              <input type="text" name="city" maxlength="40" required placeholder="杭州">
+            </label>
+            <label class="la-field">
+              <span>出发地（选填）</span>
+              <input type="text" name="from" maxlength="40" placeholder="跨城市再填，比如上海">
+            </label>
+            <label class="la-field">
+              <span>总预算（选填）</span>
+              <input type="text" name="budget" maxlength="30" placeholder="300-500">
+            </label>
+            <label class="la-field">
+              <span>时长（选填）</span>
+              <select name="duration">
+                <option value="" selected>不限</option>
+                <option value="2-3 小时">2-3 小时</option>
+                <option value="半天">半天</option>
+                <option value="一整天">一整天</option>
+                <option value="一个晚上">一个晚上</option>
+                <option value="两天一夜">两天一夜</option>
+              </select>
+            </label>
+            <label class="la-field">
+              <span>场景（选填）</span>
+              <input type="text" name="scene" list="plan-scenes" maxlength="40" placeholder="日常约会">
+              <datalist id="plan-scenes">
+                <option value="日常约会"></option>
+                <option value="纪念日"></option>
+                <option value="生日"></option>
+                <option value="节日"></option>
+                <option value="见面"></option>
+                <option value="在家一起"></option>
+                <option value="雨天"></option>
+                <option value="想拍照"></option>
+              </datalist>
+            </label>
+            <label class="la-field">
+              <span>日期（选填）</span>
+              <input type="date" name="date">
+            </label>
+          </div>
+          <label class="la-field la-field--wide">
+            <span>补充（选填）</span>
+            <textarea name="notes" rows="2" maxlength="300" placeholder="想看展、不想走太远、想拍照、想安静一点…"></textarea>
+          </label>
+          <p class="la-form-error" data-plan-error hidden></p>
+          <p class="la-ai-message" data-plan-message hidden></p>
+          <div class="la-form-actions">
+            <button class="la-primary" type="submit" data-plan-submit>找几个地方</button>
+          </div>
+        </form>
+        <p class="la-ai-note">会联网搜索公开信息，并把两个人的偏好档案和最近的时间线发给模型；不编造店名和日期，推荐也不会写进任何页面。</p>
+      </section>
+
+      <section class="la-card la-plan" data-plan-result hidden>
+        <div class="lp-head">
+          <div>
+            <p class="la-kicker">YOUR PLAN</p>
+            <h2 data-plan-title></h2>
+            <p class="lp-summary" data-plan-summary></p>
+          </div>
+          <button class="la-icon-button" type="button" data-plan-clear aria-label="收起方案">×</button>
+        </div>
+        <div class="lp-body" data-plan-body></div>
+      </section>
+    </section>
+  </main>
+
+  <div class="la-toast" data-toast role="status" hidden></div>
+
+  <script src="/love/assistant/assistant.js?v=2026-10-27.7" defer></script>
+</body>
+</html>

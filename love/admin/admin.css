@@ -215,6 +215,18 @@ html[data-theme="dark"] .la-icon-sun { display: block; }
   color: var(--l-ink);
 }
 
+.la-top-link {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: var(--l-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.la-top-link:hover { color: var(--l-blue); }
+
 /* ---------- 主布局 ---------- */
 
 .la-main {
@@ -508,6 +520,13 @@ html[data-theme="dark"] .la-field textarea:focus {
 }
 
 .la-view-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.la-app-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 16px;
+}
 
 .la-card {
   margin-bottom: 18px;

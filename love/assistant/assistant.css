@@ -1,0 +1,223 @@
+/* 约会助手：只放方案展示相关的样式，基础布局和表单沿用 admin.css 的 la-* 类。 */
+
+.la-plan {
+  scroll-margin-top: 84px;
+}
+
+.lp-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.lp-head h2 {
+  margin: 6px 0 0;
+  font-family: "Chillax Variable", "Noto Serif SC", serif;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.lp-summary {
+  margin: 10px 0 0;
+  color: var(--l-muted);
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.lp-body {
+  display: grid;
+  gap: 22px;
+}
+
+.lp-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--l-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.lp-section h3::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--l-gold);
+}
+
+/* 推荐列表 */
+
+.lp-picks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.lp-pick {
+  padding: 15px 16px;
+  border: 1px solid var(--l-line);
+  border-radius: 16px;
+  background: var(--l-panel-soft);
+}
+
+.lp-pick-head {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.lp-pick-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.lp-kind {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(201, 158, 84, 0.14);
+  color: var(--l-gold);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.lp-pick-meta {
+  margin: 6px 0 0;
+  color: var(--l-muted);
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.lp-pick-why {
+  margin: 8px 0 0;
+  font-size: 0.76rem;
+  line-height: 1.8;
+}
+
+.lp-pick-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin: 10px 0 0;
+}
+
+.lp-cost {
+  color: var(--l-gold);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.lp-tip {
+  color: var(--l-faint);
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
+.lp-source {
+  color: var(--l-blue);
+  font-size: 0.66rem;
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+}
+
+.lp-source:hover {
+  color: var(--l-gold);
+}
+
+.lp-search {
+  margin: 0;
+  color: var(--l-faint);
+  font-size: 0.68rem;
+  line-height: 1.7;
+}
+
+/* 交通 */
+
+.lp-transport {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  font-size: 0.76rem;
+  line-height: 1.8;
+}
+
+.la-req {
+  margin-left: 4px;
+  color: var(--l-gold);
+  font-size: 0.6rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+
+/* 话题 */
+
+.lp-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-chip {
+  padding: 6px 12px;
+  border: 1px solid var(--l-line);
+  border-radius: 999px;
+  background: var(--l-panel-soft);
+  color: var(--l-ink);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* 预算 / 备用 */
+
+.lp-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lp-meta-item {
+  padding: 13px 15px;
+  border: 1px solid var(--l-line);
+  border-radius: 14px;
+  background: var(--l-panel-soft);
+}
+
+.lp-meta-item h4 {
+  margin: 0 0 6px;
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.lp-meta-item p {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .la-plan { scroll-margin-top: 76px; }
+  .lp-meta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lp-pick { padding: 14px; }
+  .la-top-link { display: none; }
+}
