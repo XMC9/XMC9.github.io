@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#eef5fb">
+  <title>Love API 网络诊断</title>
+  <style>
+    :root {
+      --bg: #eef5fb;
+      --card: #ffffff;
+      --ink: #16324a;
+      --muted: #5b7891;
+      --line: #d5e4f1;
+      --accent: #2f6fa8;
+      --ok: #1f7a4d;
+      --fail: #b23b3b;
+      --warn: #8a5a12;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1526;
+        --card: #122238;
+        --ink: #dbe8f6;
+        --muted: #93aac2;
+        --line: #243b55;
+        --accent: #7fb3e3;
+        --ok: #6fd39d;
+        --fail: #ff9a9a;
+        --warn: #f0c27b;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 24px 16px 48px;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: .01em; }
+    .sub { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 0 0 14px;
+    }
+    .meta { font-size: 12px; color: var(--muted); word-break: break-all; }
+    .meta b { color: var(--ink); font-weight: 600; }
+    .row {
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      border-top: 1px dashed var(--line);
+      font-size: 13px;
+    }
+    .row:first-of-type { border-top: 0; }
+    .badge {
+      flex: 0 0 auto;
+      min-width: 42px;
+      height: 22px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 22px;
+      text-align: center;
+      padding: 0 8px;
+    }
+    .badge.ok { color: #fff; background: var(--ok); }
+    .badge.fail { color: #fff; background: var(--fail); }
+    .badge.wait { color: var(--muted); background: var(--line); }
+    .name { flex: 1 1 auto; font-weight: 600; }
+    .detail { flex: 1 1 100%; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; word-break: break-all; }
+    .row { flex-wrap: wrap; }
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 13px;
+      margin: 4px 6px 0 0;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:active { transform: translateY(1px); }
+    .note { font-size: 12px; color: var(--warn); margin-top: 8px; }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 10px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Love API 网络诊断</h1>
+  <p class="sub">这个页面只做连通性测试，不会登录、不会改数据。测完把结果复制给我就行。</p>
+
+  <section class="card">
+    <div class="meta" id="meta">读取环境…</div>
+    <div id="rows" style="margin-top:10px"></div>
+    <div style="margin-top:12px">
+      <button class="primary" id="rerun" type="button">重新测试</button>
+      <button id="copy" type="button">复制结果</button>
+    </div>
+    <p class="hint">自动测试包括：两个入口的 GET、POST（JSON）、同源 POST（text/plain）、同源 XHR。</p>
+  </section>
+
+  <section class="card">
+    <div class="name" style="font-weight:600">单独测试登录接口</div>
+    <p class="hint" style="margin:6px 0 0">点一次会向 <code>/v1/session</code> 发一次假密钥，只用于判断登录接口本身通不通。<strong>每点一次会记一次错误，连续 5 次会锁 10 分钟，只点一次就好。</strong></p>
+    <button id="session" type="button">测试 POST /v1/session（假密钥）</button>
+    <div id="session-result" class="meta" style="margin-top:10px"></div>
+  </section>
+
+  <section class="card">
+    <div class="name" style="font-weight:600">结果怎么读</div>
+    <p class="hint" style="margin:6px 0 0">
+      GET/POST 任意一项显示“FAIL + TypeError/Failed to fetch”，说明这个入口在这个手机上被网络或浏览器拦住了；<br>
+      如果 GET 有响应、POST 全部 FAIL，说明是 POST 请求被拦（代理、防火墙或浏览器插件）；<br>
+      如果同源 POST FAIL、子域名 POST 有响应，说明是同一个域名下的接口路径被拦。
+    </p>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+
+  var SAME = "https://xm9.asia/love-api";
+  var SUB = "https://love-api.xm9.asia";
+  var rowsEl = document.getElementById("rows");
+  var metaEl = document.getElementById("meta");
+  var results = [];
+
+  function esc(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function addRow(name, state, detail) {
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = '<span class="badge ' + state + '">' +
+      (state === "ok" ? "OK" : state === "fail" ? "FAIL" : "…") +
+      '</span><span class="name">' + esc(name) + '</span>' +
+      '<span class="detail">' + esc(detail || "") + '</span>';
+    rowsEl.appendChild(row);
+    results.push({ name: name, state: state, detail: detail || "" });
+  }
+
+  function setResult(name, state, detail) {
+    for (var i = results.length - 1; i >= 0; i -= 1) {
+      if (results[i].name === name) {
+        results[i].state = state;
+        results[i].detail = detail || "";
+        break;
+      }
+    }
+    var nodes = rowsEl.querySelectorAll(".row");
+    for (var j = 0; j < nodes.length; j += 1) {
+      var nameNode = nodes[j].querySelector(".name");
+      if (nameNode && nameNode.textContent === name) {
+        var badge = nodes[j].querySelector(".badge");
+        badge.className = "badge " + state;
+        badge.textContent = state === "ok" ? "OK" : state === "fail" ? "FAIL" : "…";
+        nodes[j].querySelector(".detail").textContent = detail || "";
+        break;
+      }
+    }
+  }
+
+  function request(url, options, timeoutMs) {
+    var controller = typeof AbortController === "function" ? new AbortController() : null;
+    var timer = window.setTimeout(function () {
+      if (controller) controller.abort();
+    }, timeoutMs || 12000);
+    var opts = Object.assign({
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      signal: controller ? controller.signal : undefined
+    }, options || {});
+    return window.fetch(url, opts).then(function (response) {
+      return response.text().then(function (text) {
+        return "HTTP " + response.status + (text ? " · " + text.slice(0, 160) : "");
+      });
+    }).then(function (detail) {
+      window.clearTimeout(timer);
+      return detail;
+    }, function (error) {
+      window.clearTimeout(timer);
+      throw error;
+    });
+  }
+
+  function probe(name, fn) {
+    addRow(name, "wait", "测试中…");
+    var started = Date.now();
+    return Promise.resolve().then(fn).then(function (detail) {
+      var line = detail + " · " + (Date.now() - started) + "ms";
+      setResult(name, "ok", line);
+      return line;
+    }, function (error) {
+      var line = (error && (error.name + ": " + error.message)) + " · " + (Date.now() - started) + "ms";
+      setResult(name, "fail", line);
+      return line;
+    });
+  }
+
+  function xhrPost(url, body, contentType) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.timeout = 12000;
+      xhr.setRequestHeader("Content-Type", contentType);
+      xhr.onload = function () {
+        resolve("HTTP " + xhr.status + (xhr.responseText ? " · " + xhr.responseText.slice(0, 160) : ""));
+      };
+      xhr.onerror = function () { reject(new Error("xhr network error")); };
+      xhr.ontimeout = function () { reject(new Error("xhr timeout")); };
+      xhr.send(body);
+    });
+  }
+
+  function refreshMeta() {
+    var parts = [
+      "<b>页面</b> " + esc(location.href),
+      "<b>安全上下文</b> " + (window.isSecureContext ? "是" : "否"),
+      "<b>在线</b> " + (navigator.onLine ? "是" : "否"),
+      "<b>浏览器</b> " + esc(navigator.userAgent)
+    ];
+    metaEl.innerHTML = parts.join("<br>");
+  }
+
+  function resetRows() {
+    rowsEl.innerHTML = "";
+    results = [];
+  }
+
+  function runAll() {
+    resetRows();
+    refreshMeta();
+    var chain = Promise.resolve();
+    chain = chain.then(function () {
+      return probe("GET 同源 /v1/health", function () {
+        return request(SAME + "/v1/health", { method: "GET" });
+      });
+    });
+    chain = chain.then(function () {
+      return probe("GET 子域名 /v1/health", function () {
+        return request(SUB + "/v1/health", { method: "GET" });
+      });
+    });
+    chain = chain.then(function () {
+      return probe("POST 同源 /v1/health（JSON，应 405）", function () {
+        return request(SAME + "/v1/health", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ping: true, from: "diag" })
+        });
+      });
+    });
+    chain = chain.then(function () {
+      return probe("POST 子域名 /v1/health（JSON，应 405）", function () {
+        return request(SUB + "/v1/health", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ping: true, from: "diag" })
+        });
+      });
+    });
+    chain = chain.then(function () {
+      return probe("POST 同源 /v1/health（text/plain，应 405）", function () {
+        return request(SAME + "/v1/health", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: "ping"
+        });
+      });
+    });
+    chain = chain.then(function () {
+      return probe("POST 同源 /v1/health（XHR，应 405）", function () {
+        return xhrPost(SAME + "/v1/health", JSON.stringify({ ping: true, from: "xhr" }), "application/json");
+      });
+    });
+    return chain;
+  }
+
+  function copyResults() {
+    var lines = [
+      "Love API 诊断 " + new Date().toISOString(),
+      "页面 " + location.href,
+      "UA " + navigator.userAgent
+    ].concat(results.map(function (item) {
+      return "[" + item.state + "] " + item.name + " :: " + item.detail;
+    })).concat([
+      "session :: " + (document.getElementById("session-result").textContent || "未测")
+    ]);
+    var text = lines.join("\n");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        document.getElementById("copy").textContent = "已复制";
+        window.setTimeout(function () {
+          document.getElementById("copy").textContent = "复制结果";
+        }, 1800);
+      }, function () { window.prompt("复制下面内容：", text); });
+    } else {
+      window.prompt("复制下面内容：", text);
+    }
+  }
+
+  document.getElementById("rerun").addEventListener("click", runAll);
+  document.getElementById("copy").addEventListener("click", copyResults);
+  document.getElementById("session").addEventListener("click", function () {
+    var target = document.getElementById("session-result");
+    target.textContent = "测试中…（会记 1 次错误）";
+    var fake = "diag-" + Date.now() + "-not-a-real-key";
+    request(SAME + "/v1/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: fake })
+    }).then(function (detail) {
+      target.textContent = detail;
+    }, function (error) {
+      target.textContent = (error && (error.name + ": " + error.message)) || "失败";
+    });
+  });
+
+  runAll();
+})();
+</script>
+</body>
+</html>
