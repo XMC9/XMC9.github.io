@@ -15,6 +15,7 @@
   --l-gold-soft: #F0C674;
   --l-rose: #C9788F;
   --l-lilac: #9C8FD4;
+  --l-violet: #6E5AAE;
   --l-cta-bg: #2E75B6;
   --l-cta-ink: #FFFFFF;
   --l-select-bg: #2E75B6;
@@ -44,6 +45,7 @@ html[data-theme="dark"] {
   --l-gold-soft: #F0C674;
   --l-rose: #E5A3B5;
   --l-lilac: #B8A9E8;
+  --l-violet: #D6C2FF;
   --l-cta-bg: #7FB2E5;
   --l-cta-ink: #0B1726;
   --l-select-bg: #2E75B6;
@@ -2438,7 +2440,7 @@ html[data-theme="dark"] .l-form-error {
 }
 
 .l-dot.is-date { background: #6C93B5; }
-.l-dot.is-milestone { background: var(--l-gold); }
+.l-dot.is-milestone { background: var(--l-violet); }
 
 .l-event-tag.is-date {
   background: rgba(94, 118, 142, 0.1);
@@ -2446,12 +2448,13 @@ html[data-theme="dark"] .l-form-error {
 }
 
 .l-event-tag.is-milestone {
-  background: rgba(217, 164, 65, 0.13);
-  color: #A97720;
+  background: rgba(110, 90, 174, 0.12);
+  color: #5E4A99;
 }
 
 html[data-theme="dark"] .l-event-tag.is-milestone {
-  color: var(--l-gold);
+  background: rgba(214, 194, 255, 0.16);
+  color: var(--l-violet);
 }
 
 /* ---------- 清单的编辑与勾选 ---------- */

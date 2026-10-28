@@ -775,13 +775,23 @@
     if (planSummary) planSummary.textContent = plan.summary || "";
     if (planBody) {
       planBody.textContent = "";
-      var note = searchNote(search);
+      var home = plan.mode === "home";
+      var note = home ? null : searchNote(search);
       if (note) planBody.appendChild(note);
-      if (plan.food && plan.food.length) {
-        planBody.appendChild(section("走到哪吃到哪", foodNode(plan.food)));
-      }
-      if (plan.picks && plan.picks.length) {
-        planBody.appendChild(section("可以去的地方", picksNode(plan.picks)));
+      if (home) {
+        if (plan.picks && plan.picks.length) {
+          planBody.appendChild(section("一起做点什么", picksNode(plan.picks)));
+        }
+        if (plan.food && plan.food.length) {
+          planBody.appendChild(section("吃点什么", foodNode(plan.food)));
+        }
+      } else {
+        if (plan.food && plan.food.length) {
+          planBody.appendChild(section("走到哪吃到哪", foodNode(plan.food)));
+        }
+        if (plan.picks && plan.picks.length) {
+          planBody.appendChild(section("可以去的地方", picksNode(plan.picks)));
+        }
       }
       if (plan.transport && plan.transport.length) {
         planBody.appendChild(section("怎么去", transportNode(plan.transport)));

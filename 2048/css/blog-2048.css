@@ -286,6 +286,8 @@ html[data-theme="dark"] .g-icon-sun { display: block; }
 .tile.tile-2048 .tile-inner { background: var(--g-tile-2048); color: #2A1B04; }
 .tile.tile-super .tile-inner { background: var(--g-tile-super); color: var(--g-ink); }
 
+html[data-theme="dark"] .tile.tile-256 .tile-inner,
+html[data-theme="dark"] .tile.tile-512 .tile-inner,
 html[data-theme="dark"] .tile.tile-1024 .tile-inner,
 html[data-theme="dark"] .tile.tile-2048 .tile-inner { color: #13243A; }
 
