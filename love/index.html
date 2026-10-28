@@ -32,7 +32,7 @@
   <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
   <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
   <link rel="stylesheet" href="/fonts/Geist/geist.css">
-  <link rel="stylesheet" href="/love/love.css?v=2026-10-28.2">
+  <link rel="stylesheet" href="/love/love.css?v=2026-10-29.1">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="love-page">
   <header class="l-top">
@@ -140,6 +140,18 @@
         </div>
       </section>
 
+      <section class="l-gap-hint" data-gap-hint hidden aria-live="polite">
+        <span class="l-gap-heart" aria-hidden="true">♡</span>
+        <div class="l-gap-body">
+          <strong data-gap-title>接下来 30 天还没有安排。</strong>
+          <span data-gap-copy></span>
+        </div>
+        <div class="l-gap-actions">
+          <a class="l-gap-go" href="/love/assistant/">让助手出个主意 <span aria-hidden="true">→</span></a>
+          <button class="l-gap-dismiss" type="button" data-gap-dismiss>这周先算了</button>
+        </div>
+      </section>
+
       <a class="l-assistant-card" href="/love/assistant/">
         <span class="l-assistant-glow" aria-hidden="true">♡</span>
         <span class="l-assistant-copy">
@@ -185,6 +197,25 @@
             </div>
           </div>
           <div class="l-day-date" data-love-day-date></div>
+
+          <div class="l-day-moods" data-day-moods>
+            <div class="l-mood-head">
+              <span class="l-mood-title">这一天的心情</span>
+              <button class="l-mood-edit" type="button" data-mood-edit>记录我的心情</button>
+            </div>
+            <div class="l-mood-pair">
+              <div class="l-mood-slot is-jmj" data-mood-slot="jmj">
+                <span class="l-mood-who" data-mood-who="jmj">🐥 鸡毛</span>
+                <span class="l-mood-value" data-mood-value="jmj">—</span>
+              </div>
+              <div class="l-mood-slot is-bxb" data-mood-slot="bxb">
+                <span class="l-mood-who" data-mood-who="bxb">🐶 小白</span>
+                <span class="l-mood-value" data-mood-value="bxb">—</span>
+              </div>
+            </div>
+            <p class="l-mood-note">左边是鸡毛，右边是小白；各记各的，对方没公开的心情不会显示，也看不出有没有记录。</p>
+          </div>
+
           <div class="l-day-events" data-love-day-events></div>
           <p class="l-day-empty" data-love-day-empty>这一天还没有特别的日子。</p>
           <div class="l-day-art" aria-hidden="true">
@@ -387,6 +418,36 @@
         </div>
       </form>
 
+      <form class="l-form" data-mood-form hidden novalidate>
+        <p class="l-mood-modal-date" data-mood-date></p>
+        <div class="l-form-grid">
+          <label class="l-field">
+            <span>我的心情</span>
+            <select name="mood">
+              <option value="">不记录</option>
+              <option value="happy">😄 开心</option>
+              <option value="calm">🙂 平静</option>
+              <option value="okay">😐 一般</option>
+              <option value="tired">😪 有点累</option>
+              <option value="tension">🥲 有点小矛盾</option>
+              <option value="sad">😢 难过</option>
+            </select>
+          </label>
+          <label class="l-field">
+            <span>给谁看</span>
+            <select name="shared">
+              <option value="1">两个人都能看到</option>
+              <option value="0">只有我能看到（AI 仍会参考）</option>
+            </select>
+          </label>
+        </div>
+        <p class="l-form-error" data-mood-error hidden></p>
+        <div class="l-form-actions">
+          <button class="l-ghost" type="button" data-modal-close>取消</button>
+          <button class="l-primary" type="submit" data-mood-submit>保存</button>
+        </div>
+      </form>
+
       <form class="l-form" data-bucket-form hidden novalidate>
         <div class="l-form-grid">
           <label class="l-field l-field--wide">
@@ -430,6 +491,6 @@
 
   <div class="l-toast" data-toast role="status" hidden></div>
 
-  <script src="/love/love.js?v=2026-10-28.2" defer></script>
+  <script src="/love/love.js?v=2026-10-29.1" defer></script>
 </body>
 </html>

@@ -34,6 +34,16 @@
     archive: "归档",
     restore: "恢复"
   };
+  var MOODS = {
+    happy: { emoji: "😄", label: "开心" },
+    calm: { emoji: "🙂", label: "平静" },
+    okay: { emoji: "😐", label: "一般" },
+    tired: { emoji: "😪", label: "有点累" },
+    tension: { emoji: "🥲", label: "有点小矛盾" },
+    sad: { emoji: "😢", label: "难过" }
+  };
+  var GAP_DAYS = 30;
+  var GAP_DISMISS_KEY = "love-gap-dismissed-v1";
   var TABS = [
     { key: "all", label: "全部" },
     { key: "birthday", label: "生日" },
@@ -56,10 +66,12 @@
     aiBusy: false,
     eventBusy: false,
     timelineBusy: false,
-    bucketBusy: false
+    bucketBusy: false,
+    moodBusy: false,
+    moodDate: ""
   };
 
-  var data = { room: {}, people: [], events: [], bucketList: [], timeline: [] };
+  var data = { room: {}, people: [], events: [], bucketList: [], timeline: [], moods: [] };
   var today = "";
   var cal = { y: 0, m: 1, selected: "" };
   var apiBaseCache = "";
@@ -117,6 +129,41 @@
     if (id === "jmj") return "鸡毛鸡";
     if (id === "bxb") return "白小白";
     return id || "";
+  }
+
+  // 心情按天、按人记。服务端只会返回「我自己的」和「对方公开的」，
+  // 所以对方没公开和没记录在这里长得一模一样，都是查不到这一行。
+  function moodRowOf(iso, person) {
+    for (var i = 0; i < data.moods.length; i++) {
+      var row = data.moods[i];
+      if (row && row.date === iso && row.person === person) return row;
+    }
+    return null;
+  }
+
+  function moodMetaOf(row) {
+    if (!row || typeof row.mood !== "string") return null;
+    return MOODS[row.mood] || null;
+  }
+
+  function isMyMood(row) {
+    return !!row && row.person === state.person;
+  }
+
+  function moodSlotText(row) {
+    var meta = moodMetaOf(row);
+    if (!meta) return "";
+    var text = meta.emoji + " " + meta.label;
+    if (isMyMood(row) && row.shared === false) text += " · 只我可见";
+    return text;
+  }
+
+  function moodPersonName(personId) {
+    for (var i = 0; i < data.people.length; i++) {
+      var person = data.people[i];
+      if (person && person.id === personId && person.name) return person.name;
+    }
+    return personLabel(personId);
   }
 
   function toast(message, isError) {
@@ -785,6 +832,71 @@
     }
   }
 
+  /* ---------- 纪念日空窗期提示 ---------- */
+
+  function hasPlansWithin(days) {
+    var last = addDays(today, days);
+    var hasEvent = data.events.some(function (event) {
+      if (!event || event.archived) return false;
+      var iso = nextOccurrence(event, today);
+      return !!iso && iso <= last;
+    });
+    if (hasEvent) return true;
+    return data.timeline.some(function (item) {
+      return !!item && !item.archived && splitISO(item.date)
+        && item.date >= today && item.date <= last;
+    });
+  }
+
+  function nearestWeekend(iso) {
+    var parts = splitISO(iso);
+    if (!parts) return "";
+    var weekday = weekdayOf(parts.y, parts.m, parts.d);
+    if (weekday === 0 || weekday === 6) return iso;
+    return addDays(iso, 6 - weekday);
+  }
+
+  function readGapDismissed() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(GAP_DISMISS_KEY) || "null");
+      return saved && saved.weekend ? String(saved.weekend) : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function dismissGap(weekend) {
+    if (!weekend) return;
+    try {
+      localStorage.setItem(GAP_DISMISS_KEY, JSON.stringify({ weekend: weekend }));
+    } catch (e) { /* 隐私模式就不记，下次刷新还会出现 */ }
+  }
+
+  function renderGapHint() {
+    var box = $("[data-gap-hint]");
+    if (!box) return;
+    var parts = splitISO(today);
+    var weekday = parts ? weekdayOf(parts.y, parts.m, parts.d) : -1;
+    // 只在周三到周六提周末的事，其他日子不弹，免得天天看到。
+    if (weekday < 3 || weekday > 6) {
+      box.hidden = true;
+      return;
+    }
+    if (hasPlansWithin(GAP_DAYS)) {
+      box.hidden = true;
+      return;
+    }
+    var weekend = nearestWeekend(today);
+    if (!weekend || readGapDismissed() === weekend) {
+      box.hidden = true;
+      return;
+    }
+    setText("[data-gap-title]", "接下来 " + GAP_DAYS + " 天还没有安排。");
+    setText("[data-gap-copy]", formatDateCN(weekend, true) + " 还空着，要不要来一次约会？");
+    box.setAttribute("data-weekend", weekend);
+    box.hidden = false;
+  }
+
   function renderCalendar() {
     var calGrid = $("[data-cal-grid]");
     var calMonth = $("[data-cal-month]");
@@ -815,10 +927,31 @@
       cell.setAttribute("aria-pressed", iso === cal.selected ? "true" : "false");
       var names = dayEvents.map(function (event) { return event.title; })
         .concat(dayTimeline.map(function (item) { return item.title; }));
+      var moodNotes = ["jmj", "bxb"].map(function (personId) {
+        var meta = moodMetaOf(moodRowOf(iso, personId));
+        return meta ? moodPersonName(personId) + meta.label : "";
+      }).filter(Boolean);
       cell.setAttribute("aria-label", formatDateCN(iso, true)
-        + (names.length ? "，" + names.join("、") : "，没有安排"));
+        + (names.length ? "，" + names.join("、") : "，没有安排")
+        + (moodNotes.length ? "；心情：" + moodNotes.join("、") : ""));
 
       cell.appendChild(el("span", "l-cal-num", String(date.getUTCDate())));
+
+      if (moodNotes.length) {
+        var moodBox = el("span", "l-cal-moods");
+        moodBox.setAttribute("aria-hidden", "true");
+        ["jmj", "bxb"].forEach(function (personId) {
+          var row = moodRowOf(iso, personId);
+          var meta = moodMetaOf(row);
+          var node = el("span", "l-cal-mood is-" + personId, meta ? meta.emoji : "");
+          if (meta) {
+            node.title = moodPersonName(personId) + "：" + meta.label
+              + (isMyMood(row) && row.shared === false ? "（只我可见）" : "");
+          }
+          moodBox.appendChild(node);
+        });
+        cell.appendChild(moodBox);
+      }
 
       if (dayEvents.length || dayTimeline.length) {
         var dots = el("span", "l-cal-dots");
@@ -883,6 +1016,50 @@
         entry.kind === "milestone" ? "大事记" : "约会啦"));
       dayEvents.appendChild(item);
     });
+
+    renderDayMoods(iso);
+  }
+
+  // 心情：左边固定鸡毛，右边固定小白。没记录、对方没公开都显示「—」。
+  function renderDayMoods(iso) {
+    var peopleById = {};
+    data.people.forEach(function (person) {
+      if (person && person.id) peopleById[person.id] = person;
+    });
+
+    ["jmj", "bxb"].forEach(function (personId) {
+      var slot = $('[data-mood-slot="' + personId + '"]');
+      var valueNode = $('[data-mood-value="' + personId + '"]');
+      var whoNode = $('[data-mood-who="' + personId + '"]');
+      if (!slot || !valueNode) return;
+
+      if (whoNode) {
+        var person = peopleById[personId];
+        if (person && person.name) {
+          whoNode.textContent = (person.emoji ? person.emoji + " " : "") + person.name;
+        }
+      }
+
+      var row = moodRowOf(iso, personId);
+      var meta = moodMetaOf(row);
+      slot.classList.toggle("has-mood", !!meta);
+      slot.classList.toggle("is-mine", personId === state.person);
+      slot.classList.toggle("is-private", !!meta && isMyMood(row) && row.shared === false);
+      if (meta) {
+        valueNode.textContent = moodSlotText(row);
+        valueNode.setAttribute("aria-label", personId === state.person
+          ? "我的心情：" + meta.label
+          : "对方的心情：" + meta.label);
+      } else {
+        valueNode.textContent = "—";
+        valueNode.removeAttribute("aria-label");
+      }
+    });
+
+    var editButton = $("[data-mood-edit]");
+    if (editButton) {
+      editButton.textContent = moodRowOf(iso, state.person) ? "改我的心情" : "记录我的心情";
+    }
   }
 
   function renderTabs(entries) {
@@ -1032,6 +1209,7 @@
     renderHero();
     renderTogether();
     renderNext();
+    renderGapHint();
     renderCalendar();
     renderDay(cal.selected);
     renderEventList();
@@ -1073,7 +1251,8 @@
       people: Array.isArray(value.people) ? value.people : [],
       events: Array.isArray(value.events) ? value.events : [],
       bucketList: Array.isArray(value.bucketList) ? value.bucketList : [],
-      timeline: Array.isArray(value.timeline) ? value.timeline : []
+      timeline: Array.isArray(value.timeline) ? value.timeline : [],
+      moods: Array.isArray(value.moods) ? value.moods : []
     };
     TZ = data.room.timezone || "Asia/Shanghai";
     today = todayISO();
@@ -1105,9 +1284,12 @@
   var eventForm = $("[data-event-form]");
   var timelineForm = $("[data-timeline-form]");
   var bucketForm = $("[data-bucket-form]");
+  var moodForm = $("[data-mood-form]");
+  var moodDateLabel = $("[data-mood-date]");
   var eventError = $("[data-event-error]");
   var timelineError = $("[data-timeline-error]");
   var bucketError = $("[data-bucket-error]");
+  var moodError = $("[data-mood-error]");
   var evDateField = $("[data-ev-date-field]");
   var evDatesField = $("[data-ev-dates-field]");
   var evLunarField = $("[data-ev-lunar-field]");
@@ -1137,9 +1319,12 @@
     if (eventForm) eventForm.hidden = true;
     if (timelineForm) timelineForm.hidden = true;
     if (bucketForm) bucketForm.hidden = true;
+    if (moodForm) moodForm.hidden = true;
     setError(eventError, "");
     setError(timelineError, "");
     setError(bucketError, "");
+    setError(moodError, "");
+    state.moodDate = "";
     syncBodyLock();
   }
 
@@ -1208,6 +1393,7 @@
     if (!eventForm) return;
     if (timelineForm) timelineForm.hidden = true;
     if (bucketForm) bucketForm.hidden = true;
+    if (moodForm) moodForm.hidden = true;
     eventForm.hidden = false;
     openModal(event ? "编辑重要日子" : "新增重要日子");
     fillEventForm(event);
@@ -1313,6 +1499,7 @@
     if (!timelineForm) return;
     if (eventForm) eventForm.hidden = true;
     if (bucketForm) bucketForm.hidden = true;
+    if (moodForm) moodForm.hidden = true;
     timelineForm.hidden = false;
     openModal(item ? "编辑约会 / 大事记" : "新增约会 / 大事记");
     fillTimelineForm(item);
@@ -1327,6 +1514,7 @@
     if (!timelineForm || state.timelineBusy) return;
     setError(timelineError, "");
 
+    var editing = state.editingTimeline;
     var payload = {
       date: valueOf(timelineForm, "date"),
       title: valueOf(timelineForm, "title"),
@@ -1343,7 +1531,6 @@
       return;
     }
 
-    var editing = state.editingTimeline;
     var submit = $("[data-timeline-submit]", timelineForm);
     state.timelineBusy = true;
     setBusy(submit, true);
@@ -1369,6 +1556,71 @@
     });
   }
 
+  /* ---------- 心情表单 ---------- */
+
+  function fillMoodForm(iso) {
+    if (!moodForm) return;
+    state.moodDate = iso;
+    var row = moodRowOf(iso, state.person);
+    named(moodForm, "mood").value = row && MOODS[row.mood] ? row.mood : "";
+    named(moodForm, "shared").value = row && row.shared === false ? "0" : "1";
+    if (moodDateLabel) {
+      moodDateLabel.textContent = formatDateCN(iso, true) + (iso === today ? " · 今天" : "");
+    }
+    setError(moodError, "");
+  }
+
+  function openMoodModal(iso) {
+    if (!moodForm || !splitISO(iso)) return;
+    if (eventForm) eventForm.hidden = true;
+    if (timelineForm) timelineForm.hidden = true;
+    if (bucketForm) bucketForm.hidden = true;
+    moodForm.hidden = false;
+    openModal("记录这一天的心情");
+    fillMoodForm(iso);
+    var focusField = named(moodForm, "mood");
+    if (focusField) {
+      try { focusField.focus(); } catch (e) { /* ignore */ }
+    }
+  }
+
+  function submitMood(evt) {
+    evt.preventDefault();
+    if (!moodForm || state.moodBusy) return;
+    setError(moodError, "");
+    var iso = state.moodDate;
+    if (!splitISO(iso)) {
+      setError(moodError, "先选一个日期。");
+      return;
+    }
+    var payload = {
+      mood: valueOf(moodForm, "mood"),
+      shared: valueOf(moodForm, "shared") !== "0"
+    };
+    var submit = $("[data-mood-submit]", moodForm);
+    state.moodBusy = true;
+    setBusy(submit, true, "正在保存…");
+    api("/v1/moods/" + encodeURIComponent(iso), { method: "PUT", body: payload })
+      .then(function (result) {
+        closeModal();
+        toast(payload.mood ? "这一天的心情已经记下了。" : "这一天的记录已经清掉了。");
+        if (result && result.changed === false) toast("没有改动。");
+        return reload();
+      })
+      .catch(function (error) {
+        if (error && error.status === 401) {
+          closeModal();
+          fail(error);
+          return;
+        }
+        setError(moodError, (error && error.message) || "保存没有成功。");
+      })
+      .then(function () {
+        state.moodBusy = false;
+        setBusy(submit, false, "保存");
+      });
+  }
+
   /* ---------- 共同清单表单 ---------- */
 
   function fillBucketForm(item) {
@@ -1387,6 +1639,7 @@
     if (!bucketForm) return;
     if (eventForm) eventForm.hidden = true;
     if (timelineForm) timelineForm.hidden = true;
+    if (moodForm) moodForm.hidden = true;
     bucketForm.hidden = false;
     openModal(item ? "编辑清单项" : "新增清单项");
     fillBucketForm(item);
@@ -1905,6 +2158,13 @@
     selectDate(today, false);
   });
 
+  var gapDismiss = $("[data-gap-dismiss]");
+  if (gapDismiss) gapDismiss.addEventListener("click", function () {
+    var box = $("[data-gap-hint]");
+    dismissGap(box ? box.getAttribute("data-weekend") : "");
+    if (box) box.hidden = true;
+  });
+
   var nextJump = $("[data-love-next-jump]");
   if (nextJump) nextJump.addEventListener("click", function () {
     var iso = nextJump.getAttribute("data-date");
@@ -1967,6 +2227,8 @@
   if (addTimeline) addTimeline.addEventListener("click", function () { openTimelineModal(null); });
   var addBucket = $("[data-bucket-add]");
   if (addBucket) addBucket.addEventListener("click", function () { openBucketModal(null); });
+  var moodEdit = $("[data-mood-edit]");
+  if (moodEdit) moodEdit.addEventListener("click", function () { openMoodModal(cal.selected); });
 
   $$("[data-modal-close]").forEach(function (node) {
     node.addEventListener("click", closeModal);
@@ -1985,6 +2247,7 @@
   if (eventForm) eventForm.addEventListener("submit", submitEvent);
   if (timelineForm) timelineForm.addEventListener("submit", submitTimeline);
   if (bucketForm) bucketForm.addEventListener("submit", submitBucket);
+  if (moodForm) moodForm.addEventListener("submit", submitMood);
   var repeatField = eventForm ? named(eventForm, "repeat") : null;
   if (repeatField) repeatField.addEventListener("change", syncEventRepeatFields);
 
