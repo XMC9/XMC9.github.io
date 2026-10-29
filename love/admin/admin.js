@@ -418,6 +418,8 @@
     state.person = "";
     state.expiresAt = "";
     state.data = null;
+    clearGiftWishForm();
+    clearGiftPlanResult();
     try { window.sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
   }
 
@@ -467,6 +469,7 @@
       state.data = payload.data;
       var room = state.data.room || {};
       if (appTitle && room.title) appTitle.textContent = room.title;
+    }).then(function () {
       render();
       showApp();
       updateMeta();

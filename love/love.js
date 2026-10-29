@@ -68,10 +68,30 @@
     timelineBusy: false,
     bucketBusy: false,
     moodBusy: false,
-    moodDate: ""
+    moodDate: "",
+    drawBusy: false,
+    drawIdea: null,
+    drawRecent: [],
+    drawRequestSeq: 0,
+    drawTimer: 0,
+    giftWishLoaded: false,
+    giftWishOpen: false,
+    giftWishBusy: false,
+    giftPlan: null,
+    giftPlanOccasion: "",
+    giftPlanBusy: false,
+    giftHintBusy: false,
+    periodEditing: null,
+    periodBusy: false,
+    periodTipCache: {},
+    periodTipTried: {},
+    periodTipLoading: ""
   };
 
-  var data = { room: {}, people: [], events: [], bucketList: [], timeline: [], moods: [] };
+  var data = {
+    room: {}, people: [], events: [], bucketList: [], timeline: [], moods: [],
+    period: { logs: [], summaries: {} }
+  };
   var today = "";
   var cal = { y: 0, m: 1, selected: "" };
   var apiBaseCache = "";
@@ -619,6 +639,19 @@
     state.person = "";
     state.expiresAt = "";
     state.data = null;
+    state.giftWishLoaded = false;
+    state.giftPlan = null;
+    state.giftPlanOccasion = "";
+    state.periodEditing = null;
+    state.periodTipCache = {};
+    state.periodTipTried = {};
+    state.periodTipLoading = "";
+    var wishForm = $("[data-gift-wish-form]");
+    if (wishForm) wishForm.reset();
+    setGiftWishOpen(false);
+    var wishStatus = $("[data-gift-wish-status]");
+    if (wishStatus) wishStatus.textContent = "";
+    clearGiftPlanResult();
     try { window.sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
   }
 
@@ -897,12 +930,32 @@
     box.hidden = false;
   }
 
+  // 已经记录的生理期日子：开始到结束；只填了开始日的，最多往后留 9 天，避免一直标下去。
+  function periodMarkSet() {
+    var marks = {};
+    var logs = data.period && Array.isArray(data.period.logs) ? data.period.logs : [];
+    logs.forEach(function (log) {
+      if (!log || !splitISO(log.start)) return;
+      var end = log.end && log.end >= log.start ? log.end : addDays(log.start, 9);
+      if (!log.end && end > today) end = today;
+      var cursor = log.start;
+      var guard = 0;
+      while (cursor && cursor <= end && guard < 40) {
+        marks[cursor] = true;
+        cursor = addDays(cursor, 1);
+        guard += 1;
+      }
+    });
+    return marks;
+  }
+
   function renderCalendar() {
     var calGrid = $("[data-cal-grid]");
     var calMonth = $("[data-cal-month]");
     if (!calGrid || !calMonth) return;
     calMonth.textContent = cal.y + "年" + cal.m + "月";
     calGrid.innerHTML = "";
+    var periodMarks = periodMarkSet();
 
     var firstWeekday = weekdayOf(cal.y, cal.m, 1);
     var total = daysInMonth(cal.y, cal.m);
@@ -937,34 +990,36 @@
 
       cell.appendChild(el("span", "l-cal-num", String(date.getUTCDate())));
 
-      if (moodNotes.length) {
-        var moodBox = el("span", "l-cal-moods");
-        moodBox.setAttribute("aria-hidden", "true");
-        ["jmj", "bxb"].forEach(function (personId) {
-          var row = moodRowOf(iso, personId);
-          var meta = moodMetaOf(row);
-          var node = el("span", "l-cal-mood is-" + personId, meta ? meta.emoji : "");
-          if (meta) {
-            node.title = moodPersonName(personId) + "：" + meta.label
-              + (isMyMood(row) && row.shared === false ? "（只我可见）" : "");
-          }
-          moodBox.appendChild(node);
-        });
-        cell.appendChild(moodBox);
-      }
+      // 心情放在固定高度的两列里：左鸡毛、右小白，左右对称，数字位置不会跳。
+      var marks = el("span", "l-cal-marks");
+      marks.setAttribute("aria-hidden", "true");
+      ["jmj", "bxb"].forEach(function (personId) {
+        var row = moodRowOf(iso, personId);
+        var meta = moodMetaOf(row);
+        var node = el("span", "l-cal-mood is-" + personId, meta ? meta.emoji : "");
+        if (meta) {
+          node.title = moodPersonName(personId) + "：" + meta.label
+            + (isMyMood(row) && row.shared === false ? "（只我可见）" : "");
+        }
+        marks.appendChild(node);
+      });
+      cell.appendChild(marks);
+      // 生理期用格子右上角的小圆点，不占心情的位置。
+      var periodDot = el("span", "l-cal-period");
+      if (periodMarks[iso]) periodDot.classList.add("is-on");
+      periodDot.setAttribute("aria-hidden", "true");
+      cell.appendChild(periodDot);
 
-      if (dayEvents.length || dayTimeline.length) {
-        var dots = el("span", "l-cal-dots");
-        var seen = {};
-        var tones = dayEvents.map(function (event) { return event.kind || "custom"; })
-          .concat(dayTimeline.map(function (item) { return item.kind === "milestone" ? "milestone" : "date"; }));
-        tones.slice(0, 4).forEach(function (tone) {
-          if (seen[tone]) return;
-          seen[tone] = true;
-          dots.appendChild(el("i", "l-dot is-" + tone));
-        });
-        cell.appendChild(dots);
-      }
+      var dots = el("span", "l-cal-dots");
+      var seen = {};
+      var tones = dayEvents.map(function (event) { return event.kind || "custom"; })
+        .concat(dayTimeline.map(function (item) { return item.kind === "milestone" ? "milestone" : "date"; }));
+      tones.slice(0, 4).forEach(function (tone) {
+        if (seen[tone]) return;
+        seen[tone] = true;
+        dots.appendChild(el("i", "l-dot is-" + tone));
+      });
+      cell.appendChild(dots);
 
       calGrid.appendChild(cell);
     }
@@ -1150,6 +1205,175 @@
     });
   }
 
+  var DRAW_LOADING_LINES = [
+    "翻翻你们的小本本…",
+    "把两个人的喜好放在一起想…",
+    "挑一件最近就能做的小事…"
+  ];
+
+  function stopDrawTimer() {
+    if (state.drawTimer) {
+      clearInterval(state.drawTimer);
+      state.drawTimer = 0;
+    }
+    state.drawBusy = false;
+    var box = $("[data-love-draw]");
+    if (box) box.classList.remove("is-drawing");
+  }
+
+  function setDrawButtonsDisabled(disabled) {
+    $$("[data-draw-again], [data-draw-add]").forEach(function (node) {
+      node.disabled = disabled;
+    });
+  }
+
+  function setDrawError(message) {
+    var node = $("[data-draw-error]");
+    if (!node) return;
+    node.textContent = message || "";
+    node.hidden = !message;
+  }
+
+  function renderDrawAvailability() {
+    var box = $("[data-love-draw]");
+    var hint = $("[data-draw-hint]");
+    var button = $("[data-draw-open]");
+    if (!box || !hint || !button) return;
+    var all = data.bucketList.filter(function (item) { return item && !item.archived; });
+    var candidates = all.filter(function (item) { return !item.done; });
+    if (!all.length) {
+      hint.textContent = "清单还空着——不如让 AI 想一件小事，把「一起做点什么」提上日程。";
+    } else if (!candidates.length) {
+      hint.textContent = "清单都完成啦，厉害。再想一件新的，继续一起打卡。";
+    } else {
+      hint.textContent = "让 AI 想一件清单外的小事。";
+    }
+    button.disabled = false;
+    box.classList.remove("is-empty");
+  }
+
+  function markDrawAdded() {
+    var result = $("[data-draw-result]");
+    if (result) result.setAttribute("data-draw-added", "true");
+    var add = $("[data-draw-add]");
+    if (add) {
+      add.disabled = true;
+      add.textContent = "已加入清单";
+    }
+  }
+
+  function settleDraw(idea) {
+    stopDrawTimer();
+    state.drawIdea = idea;
+    var box = $("[data-love-draw]");
+    var result = $("[data-draw-result]");
+    var button = $("[data-draw-open]");
+    if (result) {
+      result.hidden = false;
+      result.removeAttribute("data-draw-added");
+    }
+    if (box) box.classList.add("is-open");
+    if (button) button.setAttribute("aria-expanded", "true");
+    setText("[data-draw-title]", idea.title || "想一起做的事");
+    var meta = [];
+    if (idea.category) meta.push(idea.category);
+    if (idea.note) meta.push(idea.note);
+    setText("[data-draw-meta]", meta.length ? meta.join(" · ") : "还没写备注");
+    setDrawError("");
+    setDrawButtonsDisabled(false);
+    var add = $("[data-draw-add]");
+    if (add) add.textContent = "加入清单";
+  }
+
+  function drawNewIdea() {
+    var box = $("[data-love-draw]");
+    var result = $("[data-draw-result]");
+    if (!box || !result || state.drawBusy) return;
+    stopDrawTimer();
+    state.drawBusy = true;
+    state.drawIdea = null;
+    setDrawButtonsDisabled(true);
+    setDrawError("");
+    result.hidden = false;
+    result.removeAttribute("data-draw-added");
+    box.classList.add("is-open", "is-drawing");
+    var button = $("[data-draw-open]");
+    if (button) button.setAttribute("aria-expanded", "true");
+    setText("[data-draw-title]", "正在想一件清单外的小事…");
+    setText("[data-draw-meta]", DRAW_LOADING_LINES[0]);
+    var add = $("[data-draw-add]");
+    if (add) add.textContent = "加入清单";
+
+    var tick = 0;
+    state.drawTimer = setInterval(function () {
+      tick = (tick + 1) % DRAW_LOADING_LINES.length;
+      setText("[data-draw-meta]", DRAW_LOADING_LINES[tick]);
+    }, 700);
+
+    var seq = (state.drawRequestSeq || 0) + 1;
+    state.drawRequestSeq = seq;
+    var exclude = state.drawRecent.slice(-3);
+    api("/v1/ai/draw-idea", { method: "POST", body: { exclude: exclude } })
+      .then(function (payload) {
+        if (seq !== state.drawRequestSeq) return;
+        var idea = payload && payload.idea;
+        if (!idea || !idea.title) throw new Error("AI 没有给出点子，请再想一次。");
+        state.drawRecent.push(idea.title);
+        if (state.drawRecent.length > 3) state.drawRecent = state.drawRecent.slice(-3);
+        settleDraw(idea);
+      })
+      .catch(function (error) {
+        if (seq !== state.drawRequestSeq) return;
+        stopDrawTimer();
+        state.drawIdea = null;
+        result.hidden = false;
+        box.classList.remove("is-drawing");
+        box.classList.add("is-open");
+        setText("[data-draw-title]", "这次没想出来");
+        setText("[data-draw-meta]", "");
+        setDrawError((error && error.message) || "这次没有想出来，再试一次。");
+        setDrawButtonsDisabled(false);
+        if (error && error.status === 401) fail(error);
+      });
+  }
+
+  function addDrawIdea() {
+    var idea = state.drawIdea;
+    var result = $("[data-draw-result]");
+    if (!idea || state.drawBusy || !result) return;
+    if (result.getAttribute("data-draw-added") === "true") return;
+
+    var key = String(idea.title || "").trim().toLowerCase();
+    var duplicate = data.bucketList.filter(function (item) {
+      return item && !item.archived && String(item.title || "").trim().toLowerCase() === key;
+    })[0];
+    if (duplicate) {
+      markDrawAdded();
+      toast("清单里已经有「" + duplicate.title + "」了。");
+      return;
+    }
+
+    setDrawButtonsDisabled(true);
+    setDrawError("");
+    api("/v1/bucket", {
+      method: "POST",
+      body: {
+        title: idea.title,
+        category: idea.category || "",
+        done: false,
+        note: idea.note || ""
+      }
+    }).then(function () {
+      markDrawAdded();
+      toast("已经加到共同清单。");
+      return reload();
+    }).catch(function (error) {
+      setDrawButtonsDisabled(false);
+      setDrawError((error && error.message) || "加入清单没有成功。");
+      if (error && error.status === 401) fail(error);
+    });
+  }
+
   function renderBucket() {
     var listNode = $("[data-love-bucket-list]");
     var countNode = $("[data-love-bucket-count]");
@@ -1170,6 +1394,7 @@
     listNode.innerHTML = "";
     ordered.forEach(function (item) {
       var row = el("div", "l-bucket-item" + (item.done ? " is-done" : ""));
+      row.setAttribute("data-bucket-row", item.id);
 
       var check = el("button", "l-bucket-check", item.done ? "✓" : "");
       check.type = "button";
@@ -1203,6 +1428,613 @@
 
       listNode.appendChild(row);
     });
+    renderDrawAvailability();
+  }
+
+  /* ---------- 私密心愿单 ---------- */
+
+  var giftWish = $("[data-gift-wish]");
+  var giftWishForm = $("[data-gift-wish-form]");
+  var giftWishError = $("[data-gift-wish-error]");
+  var giftWishSubmit = $("[data-gift-wish-submit]");
+  var giftWishStatus = $("[data-gift-wish-status]");
+  var giftWishToggle = $("[data-gift-wish-toggle]");
+  var giftWishToggleLabel = $("[data-gift-wish-toggle-label]");
+  var giftWishPreview = $("[data-gift-wish-preview]");
+  var giftWishCollapse = $("[data-gift-wish-collapse]");
+
+  function setGiftWishOpen(open) {
+    state.giftWishOpen = !!open;
+    if (giftWish) giftWish.classList.toggle("is-open", state.giftWishOpen);
+    if (giftWishToggle) giftWishToggle.setAttribute("aria-expanded", state.giftWishOpen ? "true" : "false");
+    if (giftWishToggleLabel) giftWishToggleLabel.textContent = state.giftWishOpen ? "收起" : "展开";
+    if (giftWishPreview) {
+      giftWishPreview.setAttribute("aria-hidden", state.giftWishOpen ? "true" : "false");
+      if (state.giftWishOpen) giftWishPreview.setAttribute("inert", "");
+      else giftWishPreview.removeAttribute("inert");
+    }
+    if (giftWishCollapse) {
+      giftWishCollapse.setAttribute("aria-hidden", state.giftWishOpen ? "false" : "true");
+      if (state.giftWishOpen) giftWishCollapse.removeAttribute("inert");
+      else giftWishCollapse.setAttribute("inert", "");
+    }
+    if (state.giftWishOpen && !state.giftWishLoaded) loadGiftWish();
+  }
+
+  function wishField() {
+    return giftWishForm ? named(giftWishForm, "content") : null;
+  }
+
+  function loadGiftWish() {
+    if (!giftWishForm || state.giftWishBusy) return;
+    state.giftWishLoaded = true;
+    setError(giftWishError, "");
+    if (giftWishStatus) giftWishStatus.textContent = "正在读取…";
+    api("/v1/gift/wish").then(function (payload) {
+      var value = payload && payload.data ? payload.data : {};
+      var field = wishField();
+      if (field) field.value = value.content || "";
+      if (giftWishStatus) {
+        giftWishStatus.textContent = value.content
+          ? "已载入。只有你自己能看到。"
+          : "还是空的。只有你自己能看到。";
+      }
+    }).catch(function (error) {
+      state.giftWishLoaded = false;
+      if (giftWishStatus) giftWishStatus.textContent = "";
+      if (error && error.status === 401) {
+        fail(error);
+        return;
+      }
+      setError(giftWishError, (error && error.message) || "心愿单没有载入，展开重试一次。");
+    });
+  }
+
+  function submitGiftWish(evt) {
+    evt.preventDefault();
+    if (!giftWishForm || state.giftWishBusy) return;
+    setError(giftWishError, "");
+    state.giftWishBusy = true;
+    setBusy(giftWishSubmit, true, "保存中…");
+    api("/v1/gift/wish", {
+      method: "PUT",
+      body: { content: valueOf(giftWishForm, "content") }
+    }).then(function (payload) {
+      var value = payload && payload.data ? payload.data : {};
+      var field = wishField();
+      if (field) field.value = value.content || "";
+      if (giftWishStatus) giftWishStatus.textContent = "已保存。只有你自己能看到。";
+      toast("心愿单已经保存。");
+    }).catch(function (error) {
+      if (error && error.status === 401) {
+        fail(error);
+        return;
+      }
+      setError(giftWishError, (error && error.message) || "保存没有成功。");
+    }).then(function () {
+      state.giftWishBusy = false;
+      setBusy(giftWishSubmit, false, "保存心愿单");
+    });
+  }
+
+  /* ---------- 送礼参谋部 ---------- */
+
+  var giftPlanForm = $("[data-gift-plan-form]");
+  var giftPlanError = $("[data-gift-plan-error]");
+  var giftPlanSubmit = $("[data-gift-plan-submit]");
+  var giftPlanResult = $("[data-gift-plan-result]");
+  var giftPlanSummary = $("[data-gift-plan-summary]");
+  var giftPlanClue = $("[data-gift-plan-clue]");
+  var giftPlanClueText = $("[data-gift-plan-clue-text]");
+  var giftPlanGifts = $("[data-gift-plan-gifts]");
+  var giftPlanAvoid = $("[data-gift-plan-avoid]");
+  var giftHintOpen = $("[data-gift-hint-open]");
+  var giftHintStatus = $("[data-gift-hint-status]");
+
+  function clearGiftPlanResult() {
+    state.giftPlan = null;
+    state.giftPlanOccasion = "";
+    setError(giftPlanError, "");
+    if (giftPlanResult) giftPlanResult.hidden = true;
+    if (giftPlanSummary) giftPlanSummary.textContent = "";
+    if (giftPlanClue) giftPlanClue.hidden = true;
+    if (giftPlanClueText) giftPlanClueText.textContent = "";
+    if (giftPlanGifts) giftPlanGifts.textContent = "";
+    if (giftPlanAvoid) {
+      giftPlanAvoid.textContent = "";
+      giftPlanAvoid.hidden = true;
+    }
+    if (giftHintStatus) giftHintStatus.textContent = "";
+    if (giftHintOpen) {
+      giftHintOpen.disabled = false;
+      giftHintOpen.textContent = "写邮件暗示";
+    }
+  }
+
+  function renderGiftPlan(plan, occasion) {
+    if (!giftPlanResult || !plan) return;
+    state.giftPlan = plan;
+    state.giftPlanOccasion = occasion || "";
+    if (giftPlanSummary) {
+      giftPlanSummary.textContent = plan.summary || "AI 给了三个方向，看看哪个更合适。";
+    }
+    if (giftPlanClue && giftPlanClueText) {
+      var clue = String(plan.clue || "").trim();
+      giftPlanClueText.textContent = clue;
+      giftPlanClue.hidden = !clue;
+    }
+    if (giftPlanGifts) {
+      giftPlanGifts.textContent = "";
+      (plan.gifts || []).forEach(function (item, index) {
+        var li = el("li", "l-gift-item");
+        var head = el("div", "l-gift-item-head");
+        head.appendChild(el("span", "l-gift-index", String(index + 1)));
+        head.appendChild(el("strong", "l-gift-item-title", item.title || "一个方向"));
+        if (item.budget) head.appendChild(el("span", "l-gift-budget", item.budget));
+        li.appendChild(head);
+        if (item.why) li.appendChild(el("p", "l-gift-why", item.why));
+        if (item.how) li.appendChild(el("p", "l-gift-how", item.how));
+        giftPlanGifts.appendChild(li);
+      });
+    }
+    if (giftPlanAvoid) {
+      giftPlanAvoid.textContent = plan.avoid || "";
+      giftPlanAvoid.hidden = !plan.avoid;
+    }
+    if (giftHintStatus) giftHintStatus.textContent = "";
+    giftPlanResult.hidden = false;
+  }
+
+  function submitGiftPlan(evt) {
+    evt.preventDefault();
+    if (!giftPlanForm || state.giftPlanBusy) return;
+    var occasion = valueOf(giftPlanForm, "occasion");
+    if (!occasion) {
+      setError(giftPlanError, "先写一句场合，比如生日、纪念日，或者就是想送。");
+      return;
+    }
+    setError(giftPlanError, "");
+    state.giftPlanBusy = true;
+    setBusy(giftPlanSubmit, true, "AI 正在想…");
+    clearGiftPlanResult();
+    api("/v1/ai/gift-plan", {
+      method: "POST",
+      body: {
+        occasion: occasion,
+        budget: valueOf(giftPlanForm, "budget"),
+        notes: valueOf(giftPlanForm, "notes")
+      }
+    }).then(function (payload) {
+      if (!payload || !payload.plan) throw new Error("AI 这次没有给出完整方案。");
+      renderGiftPlan(payload.plan, occasion);
+    }).catch(function (error) {
+      if (error && error.status === 401) {
+        fail(error);
+        return;
+      }
+      setError(giftPlanError, (error && error.message) || "AI 这次没有给出方案，请再试一次。");
+    }).then(function () {
+      state.giftPlanBusy = false;
+      setBusy(giftPlanSubmit, false, "生成方案");
+    });
+  }
+
+  /* ---------- 邮件暗示 ---------- */
+
+  var giftHintForm = $("[data-gift-hint-form]");
+  var giftHintError = $("[data-gift-hint-error]");
+  var giftHintSend = $("[data-gift-hint-send]");
+  var giftHintTo = $("[data-gift-hint-to]");
+
+  function hintedPerson() {
+    return state.person === "jmj" ? "bxb" : "jmj";
+  }
+
+  function buildGiftHintMessage() {
+    var targetName = personLabel(hintedPerson());
+    var actorName = personLabel(state.person);
+    var occasion = state.giftPlanOccasion || (giftPlanForm ? valueOf(giftPlanForm, "occasion") : "");
+    var plan = state.giftPlan || {};
+    var gifts = Array.isArray(plan.gifts) ? plan.gifts.filter(function (item) { return item && item.title; }) : [];
+    var lines = [targetName + "，打扰一下。", ""];
+    if (occasion) {
+      lines.push(actorName + "最近在为「" + occasion + "」挑礼物，怕猜错，想悄悄问一句：");
+    } else {
+      lines.push(actorName + "最近在挑一份礼物，怕猜错，想悄悄问一句：");
+    }
+    lines.push("最近有没有什么想要的，或者明确不想要的？");
+    if (gifts.length) {
+      lines.push("", "军师给的方向是：" + gifts.map(function (item) { return item.title; }).join("、") + "。");
+      lines.push("但这些都只是猜，还是想听你自己说。");
+    }
+    lines.push("", "不用回这封邮件。看到后直接跟 " + actorName + " 说，或者登录 Love Story 写进自己的私密心愿单：");
+    lines.push("https://xm9.asia/love/");
+    lines.push("", "—— " + actorName + " 悄悄问的");
+    return lines.join("\n");
+  }
+
+  function openGiftHintModal() {
+    if (!giftHintForm) return;
+    prepareModalForm(giftHintForm);
+    openModal("发一封邮件问问 ta");
+    if (giftHintTo) {
+      giftHintTo.textContent = "这封会发给" + personLabel(hintedPerson())
+        + "。内容可以先改，确认后再发；一小时只能发一封。";
+    }
+    var field = named(giftHintForm, "message");
+    if (field) {
+      field.value = buildGiftHintMessage();
+      // 打开时从第一行开始看，不要一上来就停在正文末尾。
+      field.scrollTop = 0;
+    }
+    setError(giftHintError, "");
+  }
+
+  function submitGiftHint(evt) {
+    evt.preventDefault();
+    if (!giftHintForm || state.giftHintBusy) return;
+    var message = valueOf(giftHintForm, "message");
+    if (!message) {
+      setError(giftHintError, "邮件内容不能为空。");
+      return;
+    }
+    setError(giftHintError, "");
+    state.giftHintBusy = true;
+    setBusy(giftHintSend, true, "正在发…");
+    api("/v1/gift/hint", {
+      method: "POST",
+      body: {
+        occasion: state.giftPlanOccasion || (giftPlanForm ? valueOf(giftPlanForm, "occasion") : ""),
+        message: message
+      }
+    }).then(function (payload) {
+      closeModal();
+      var to = payload && payload.to ? payload.to : personLabel(hintedPerson());
+      if (giftHintStatus) giftHintStatus.textContent = "邮件已经发给" + to + "。";
+      if (giftHintOpen) {
+        giftHintOpen.disabled = true;
+        giftHintOpen.textContent = "已经发过一封";
+      }
+      toast("邮件已经发出。");
+    }).catch(function (error) {
+      if (error && error.status === 401) {
+        closeModal();
+        fail(error);
+        return;
+      }
+      if (giftHintStatus) giftHintStatus.textContent = (error && error.message) || "邮件没有发出去。";
+      setError(giftHintError, (error && error.message) || "邮件没有发出去，请稍后再试。");
+    }).then(function () {
+      state.giftHintBusy = false;
+      setBusy(giftHintSend, false, "发出邮件");
+    });
+  }
+
+  /* ---------- 生理周期 ---------- */
+
+  var periodRing = $("[data-period-ring]");
+  var periodSegs = $$("[data-period-seg]");
+  var periodMarker = $("[data-period-marker]");
+  var periodLegend = $("[data-period-legend]");
+  var periodDay = $("[data-period-day]");
+  var periodPhase = $("[data-period-phase]");
+  var periodNext = $("[data-period-next]");
+  var periodOvulation = $("[data-period-ovulation]");
+  var periodTip = $("[data-period-tip]");
+  var periodTipLabel = $("[data-period-tip-label]");
+  var periodSubtitle = $("[data-period-subtitle]");
+  var periodList = $("[data-period-list]");
+  var periodAddButton = $("[data-period-add]");
+  var periodForm = $("[data-period-form]");
+  var periodError = $("[data-period-error]");
+  var periodSubmitButton = $("[data-period-submit]");
+  var RING_LENGTH = 2 * Math.PI * 52;
+
+  // 生理期只属于白小白；鸡毛登录时只看，不出现录入和切换。
+  function periodIsOwner() {
+    return state.person === "bxb";
+  }
+
+  function periodLogs() {
+    return (data.period && Array.isArray(data.period.logs) ? data.period.logs : [])
+      .filter(function (log) { return log && log.person === "bxb"; });
+  }
+
+  function renderPeriodRing(summary) {
+    if (!periodRing) return;
+    var hasData = !!(summary && summary.hasData);
+    periodRing.className = "l-period-ring" + (hasData ? " has-data" : "")
+      + (hasData && summary.phase ? " is-" + summary.phase : "");
+
+    if (!periodSegs.length) return;
+    periodSegs.forEach(function (seg) {
+      seg.removeAttribute("stroke-dasharray");
+      seg.removeAttribute("stroke-dashoffset");
+      seg.classList.remove("is-active");
+    });
+    if (periodMarker) periodMarker.style.opacity = hasData ? "1" : "0";
+    if (periodLegend) periodLegend.hidden = !hasData;
+    if (!hasData) return;
+
+    var cycle = Math.max(1, Number(summary.averageCycle) || 28);
+    var lastStart = summary.lastStart;
+    var periodDays = summary.lastEnd
+      ? Math.max(1, diffDays(lastStart, summary.lastEnd) + 1)
+      : (Number(summary.averagePeriod) || 5);
+    periodDays = Math.min(cycle, Math.max(1, periodDays));
+
+    var fertileStartDay = diffDays(lastStart, summary.fertileStart) + 1;
+    var fertileEndDay = diffDays(lastStart, summary.fertileEnd) + 1;
+    var ovStart = Math.max(periodDays + 1, Math.min(cycle, fertileStartDay));
+    var ovEnd = Math.max(ovStart, Math.min(cycle, fertileEndDay));
+    var segments = {
+      period: [1, periodDays],
+      follicular: [periodDays + 1, ovStart - 1],
+      ovulation: [ovStart, ovEnd],
+      luteal: [ovEnd + 1, cycle]
+    };
+    var activePhase = summary.phase === "late" ? "luteal" : summary.phase;
+    var gap = 0.006;
+
+    periodSegs.forEach(function (seg) {
+      var phase = seg.getAttribute("data-period-seg");
+      var range = segments[phase];
+      if (!range || range[0] > range[1]) return;
+      var from = (range[0] - 1) / cycle + gap / 2;
+      var to = range[1] / cycle - gap / 2;
+      if (to <= from) return;
+      var dash = (to - from) * RING_LENGTH;
+      seg.setAttribute("stroke-dasharray", dash.toFixed(2) + " " + (RING_LENGTH - dash).toFixed(2));
+      seg.setAttribute("stroke-dashoffset", (-from * RING_LENGTH).toFixed(2));
+      seg.classList.toggle("is-active", phase === activePhase);
+    });
+
+    if (periodLegend) {
+      Array.prototype.forEach.call(periodLegend.querySelectorAll("[data-period-legend-item]"), function (item) {
+        item.classList.toggle("is-active", item.getAttribute("data-period-legend-item") === activePhase);
+      });
+    }
+
+    if (periodMarker) {
+      var fraction = Math.max(0, Math.min(0.995, ((Number(summary.cycleDay) || 1) - 0.5) / cycle));
+      var angle = fraction * Math.PI * 2;
+      periodMarker.setAttribute("cx", (60 + 52 * Math.cos(angle)).toFixed(2));
+      periodMarker.setAttribute("cy", (60 + 52 * Math.sin(angle)).toFixed(2));
+    }
+  }
+
+  var PERIOD_FALLBACK_TIPS = {
+    period: "这几天多休息，注意保暖，别硬撑。",
+    follicular: "精力通常在回升，适合把想做的事排上日程。",
+    ovulation: "状态一般不错，记得按时吃饭，别熬夜。",
+    luteal: "临近下一次，情绪和胃口可能会有点波动，对自己宽容一点。",
+    late: "这次比预测晚了些；如果差得久或身体不舒服，去看医生更稳妥。"
+  };
+
+  function shortCN(iso) {
+    var parts = splitISO(iso);
+    return parts ? parts.m + "月" + parts.d + "日" : "";
+  }
+
+  function periodTipKey(person) {
+    return person + ":" + today;
+  }
+
+  function periodTipText(summary) {
+    return PERIOD_FALLBACK_TIPS[summary.phase] || "按自己的节奏来，不舒服就多休息。";
+  }
+
+  function loadPeriodTip(summary, personId) {
+    if (!summary || !summary.hasData || !personId) return;
+    var key = periodTipKey(personId);
+    if (state.periodTipCache[key] || state.periodTipTried[key]) return;
+    state.periodTipTried[key] = true;
+    state.periodTipLoading = key;
+    api("/v1/ai/period-tip", {
+      method: "POST",
+      body: { person: personId }
+    }).then(function (payload) {
+      var tip = payload && payload.tip ? String(payload.tip).trim() : "";
+      if (!tip) return;
+      state.periodTipCache[key] = tip;
+      var current = data.period && data.period.summaries ? data.period.summaries[personId] : null;
+      if (current && periodTip) {
+        periodTip.textContent = tip;
+        if (periodTipLabel) periodTipLabel.textContent = "健康提示 · AI";
+      }
+    }).catch(function (error) {
+      if (error && error.status === 401) fail(error);
+      // AI 没有接上时保留本地兜底提示，不打扰用户。
+    }).then(function () {
+      if (state.periodTipLoading === key) state.periodTipLoading = "";
+    });
+  }
+
+  function renderPeriod() {
+    var summaries = data.period && data.period.summaries ? data.period.summaries : {};
+    var person = "bxb";
+    var summary = summaries[person] || null;
+    var hasData = !!(summary && summary.hasData);
+
+    if (periodAddButton) periodAddButton.hidden = !periodIsOwner();
+
+    renderPeriodRing(summary);
+    if (periodDay) periodDay.textContent = hasData ? "第 " + summary.cycleDay + " 天" : "—";
+    if (periodPhase) periodPhase.textContent = hasData ? (summary.phaseLabel || "周期中") : "还没有记录";
+
+    if (periodSubtitle) {
+      if (!hasData) {
+        periodSubtitle.textContent = "这里只记录白小白的周期；鸡毛登录时只能查看。";
+      } else if (summary.predicted) {
+        periodSubtitle.textContent = "白小白的周期，按最近 " + summary.sampleCount + " 次间隔估算，会随记录越来越准。";
+      } else {
+        periodSubtitle.textContent = "白小白的周期，先按默认 28 天估算，多记几次会更准。";
+      }
+    }
+
+    if (periodNext) {
+      if (!hasData) {
+        periodNext.textContent = "记录一次开始和结束日期，这里会出现大概的下一次时间。";
+      } else {
+        var left = diffDays(today, summary.nextStart);
+        if (summary.lateDays > 0) {
+          periodNext.textContent = "比预测晚了 " + summary.lateDays + " 天（原预计 " + shortCN(summary.nextStart) + "）。";
+        } else if (left <= 0) {
+          periodNext.textContent = "下一次大概就是今天（" + shortCN(summary.nextStart) + "）。";
+        } else {
+          periodNext.textContent = "下一次月经大概在 " + shortCN(summary.nextStart) + "，还有 " + left + " 天。";
+        }
+      }
+    }
+
+    if (periodOvulation) {
+      if (hasData) {
+        periodOvulation.textContent = "排卵期大约在 " + shortCN(summary.fertileStart) + " – " + shortCN(summary.fertileEnd) + "（预测）";
+        periodOvulation.hidden = false;
+      } else {
+        periodOvulation.textContent = "";
+        periodOvulation.hidden = true;
+      }
+    }
+
+    if (periodTip) {
+      var key = periodTipKey(person);
+      var cached = state.periodTipCache[key];
+      if (!hasData) {
+        periodTip.textContent = "记录之后，这里会出现一句健康提示。";
+        if (periodTipLabel) periodTipLabel.textContent = "健康提示";
+      } else if (cached) {
+        periodTip.textContent = cached;
+        if (periodTipLabel) periodTipLabel.textContent = "健康提示 · AI";
+      } else {
+        periodTip.textContent = periodTipText(summary);
+        if (periodTipLabel) periodTipLabel.textContent = "健康提示";
+      }
+    }
+
+    if (periodList) {
+      periodList.innerHTML = "";
+      var logs = periodLogs().slice();
+      logs.sort(function (a, b) { return String(b.start || "").localeCompare(String(a.start || "")); });
+      if (!logs.length) {
+        periodList.appendChild(el(
+          "p",
+          "l-period-empty",
+          periodIsOwner()
+            ? "还没有记录。点上面的「+ 记录小白的生理期」记一次。"
+            : "白小白还没有记录生理期。"
+        ));
+      }
+      logs.forEach(function (log) {
+        var item = el("div", "l-period-item");
+        var main = el("div", "l-period-item-main");
+        var range = shortCN(log.start) + (log.end ? " – " + shortCN(log.end) : " 开始");
+        main.appendChild(el("strong", "", "白小白 · " + range));
+        var meta = [];
+        if (log.end) meta.push("共 " + (diffDays(log.start, log.end) + 1) + " 天");
+        if (log.note) meta.push(log.note);
+        if (meta.length) main.appendChild(el("span", "", meta.join(" · ")));
+        item.appendChild(main);
+        if (periodIsOwner()) {
+          var actions = el("div", "l-period-item-actions");
+          var edit = el("button", "l-row-action", "编辑");
+          edit.type = "button";
+          edit.setAttribute("data-period-edit", log.id);
+          var archive = el("button", "l-row-action is-danger", "归档");
+          archive.type = "button";
+          archive.setAttribute("data-period-archive", log.id);
+          actions.appendChild(edit);
+          actions.appendChild(archive);
+          item.appendChild(actions);
+        }
+        periodList.appendChild(item);
+      });
+    }
+
+    if (hasData) loadPeriodTip(summary, person);
+  }
+
+  function openPeriodModal(log) {
+    if (!periodForm || !periodIsOwner()) return;
+    prepareModalForm(periodForm);
+    openModal(log ? "编辑生理期记录" : "录入生理期");
+    state.periodEditing = log ? log.id : null;
+    named(periodForm, "start").value = log ? log.start || "" : today;
+    named(periodForm, "end").value = log ? log.end || "" : "";
+    named(periodForm, "note").value = log ? log.note || "" : "";
+    setError(periodError, "");
+    var focusField = named(periodForm, "start");
+    if (focusField) {
+      try { focusField.focus(); } catch (e) { /* ignore */ }
+    }
+  }
+
+  function submitPeriod(evt) {
+    evt.preventDefault();
+    if (!periodForm || state.periodBusy) return;
+    setError(periodError, "");
+    var start = valueOf(periodForm, "start");
+    var end = valueOf(periodForm, "end");
+    if (!start) {
+      setError(periodError, "先选一个开始日期。");
+      return;
+    }
+    if (end && end < start) {
+      setError(periodError, "结束日期不能早于开始日期。");
+      return;
+    }
+    var editing = state.periodEditing;
+    state.periodBusy = true;
+    setBusy(periodSubmitButton, true, "保存中…");
+    var request = editing
+      ? api("/v1/period/" + encodeURIComponent(editing), {
+        method: "PUT",
+        body: { start: start, end: end, note: valueOf(periodForm, "note") }
+      })
+      : api("/v1/period", {
+        method: "POST",
+        body: { start: start, end: end, note: valueOf(periodForm, "note") }
+      });
+    request.then(function () {
+      closeModal();
+      state.periodTipCache = {};
+      state.periodTipTried = {};
+      toast(editing ? "记录已经更新。" : "已经记下这次。");
+      return reload();
+    }).catch(function (error) {
+      if (error && error.status === 401) {
+        closeModal();
+        fail(error);
+        return;
+      }
+      setError(periodError, (error && error.message) || "保存没有成功。");
+    }).then(function () {
+      state.periodBusy = false;
+      setBusy(periodSubmitButton, false, "保存");
+    });
+  }
+
+  function archivePeriod(id) {
+    var log = periodLogs().filter(function (row) { return row.id === id; })[0];
+    if (!log || !periodIsOwner()) return;
+    askConfirm({
+      title: "确认归档这条记录？",
+      message: "「" + shortCN(log.start) + "」这条生理期记录会从页面隐藏，不会真正删除。",
+      okLabel: "确认归档"
+    }).then(function (ok) {
+      if (!ok) return;
+      api("/v1/period/" + encodeURIComponent(id) + "/archive", {
+        method: "POST",
+        body: {}
+      }).then(function () {
+        state.periodTipCache = {};
+        state.periodTipTried = {};
+        toast("记录已经归档。");
+        return reload();
+      }).catch(function (error) {
+        fail(error, "归档没有成功。");
+      });
+    });
   }
 
   function renderAll() {
@@ -1214,6 +2046,7 @@
     renderDay(cal.selected);
     renderEventList();
     renderBucket();
+    renderPeriod();
     updateMeta();
   }
 
@@ -1252,7 +2085,11 @@
       events: Array.isArray(value.events) ? value.events : [],
       bucketList: Array.isArray(value.bucketList) ? value.bucketList : [],
       timeline: Array.isArray(value.timeline) ? value.timeline : [],
-      moods: Array.isArray(value.moods) ? value.moods : []
+      moods: Array.isArray(value.moods) ? value.moods : [],
+      period: {
+        logs: value.period && Array.isArray(value.period.logs) ? value.period.logs : [],
+        summaries: value.period && value.period.summaries ? value.period.summaries : {}
+      }
     };
     TZ = data.room.timezone || "Asia/Shanghai";
     today = todayISO();
@@ -1313,18 +2150,26 @@
     syncBodyLock();
   }
 
+  // 同一个弹层里放着几种表单，打开一种时把其它几张贴回去。
+  function prepareModalForm(keep) {
+    [eventForm, timelineForm, bucketForm, moodForm, giftHintForm, periodForm].forEach(function (form) {
+      if (form && form !== keep) form.hidden = true;
+    });
+    if (keep) keep.hidden = false;
+  }
+
   function closeModal() {
     if (!modal) return;
     modal.hidden = true;
-    if (eventForm) eventForm.hidden = true;
-    if (timelineForm) timelineForm.hidden = true;
-    if (bucketForm) bucketForm.hidden = true;
-    if (moodForm) moodForm.hidden = true;
+    prepareModalForm(null);
     setError(eventError, "");
     setError(timelineError, "");
     setError(bucketError, "");
     setError(moodError, "");
+    setError(giftHintError, "");
+    setError(periodError, "");
     state.moodDate = "";
+    state.periodEditing = null;
     syncBodyLock();
   }
 
@@ -1391,10 +2236,7 @@
 
   function openEventModal(event) {
     if (!eventForm) return;
-    if (timelineForm) timelineForm.hidden = true;
-    if (bucketForm) bucketForm.hidden = true;
-    if (moodForm) moodForm.hidden = true;
-    eventForm.hidden = false;
+    prepareModalForm(eventForm);
     openModal(event ? "编辑重要日子" : "新增重要日子");
     fillEventForm(event);
     var focusField = named(eventForm, "title");
@@ -1497,10 +2339,7 @@
 
   function openTimelineModal(item) {
     if (!timelineForm) return;
-    if (eventForm) eventForm.hidden = true;
-    if (bucketForm) bucketForm.hidden = true;
-    if (moodForm) moodForm.hidden = true;
-    timelineForm.hidden = false;
+    prepareModalForm(timelineForm);
     openModal(item ? "编辑约会 / 大事记" : "新增约会 / 大事记");
     fillTimelineForm(item);
     var focusField = named(timelineForm, "title");
@@ -1572,10 +2411,7 @@
 
   function openMoodModal(iso) {
     if (!moodForm || !splitISO(iso)) return;
-    if (eventForm) eventForm.hidden = true;
-    if (timelineForm) timelineForm.hidden = true;
-    if (bucketForm) bucketForm.hidden = true;
-    moodForm.hidden = false;
+    prepareModalForm(moodForm);
     openModal("记录这一天的心情");
     fillMoodForm(iso);
     var focusField = named(moodForm, "mood");
@@ -1637,10 +2473,7 @@
 
   function openBucketModal(item) {
     if (!bucketForm) return;
-    if (eventForm) eventForm.hidden = true;
-    if (timelineForm) timelineForm.hidden = true;
-    if (moodForm) moodForm.hidden = true;
-    bucketForm.hidden = false;
+    prepareModalForm(bucketForm);
     openModal(item ? "编辑清单项" : "新增清单项");
     fillBucketForm(item);
     var focusField = named(bucketForm, "title");
@@ -2227,8 +3060,37 @@
   if (addTimeline) addTimeline.addEventListener("click", function () { openTimelineModal(null); });
   var addBucket = $("[data-bucket-add]");
   if (addBucket) addBucket.addEventListener("click", function () { openBucketModal(null); });
+  var drawOpen = $("[data-draw-open]");
+  if (drawOpen) drawOpen.addEventListener("click", drawNewIdea);
+  var drawAgain = $("[data-draw-again]");
+  if (drawAgain) drawAgain.addEventListener("click", drawNewIdea);
+  var drawAdd = $("[data-draw-add]");
+  if (drawAdd) drawAdd.addEventListener("click", addDrawIdea);
   var moodEdit = $("[data-mood-edit]");
   if (moodEdit) moodEdit.addEventListener("click", function () { openMoodModal(cal.selected); });
+
+  if (giftWishToggle) giftWishToggle.addEventListener("click", function () {
+    setGiftWishOpen(!state.giftWishOpen);
+  });
+  if (giftWishForm) giftWishForm.addEventListener("submit", submitGiftWish);
+  if (giftPlanForm) giftPlanForm.addEventListener("submit", submitGiftPlan);
+  if (giftHintOpen) giftHintOpen.addEventListener("click", openGiftHintModal);
+  if (giftHintForm) giftHintForm.addEventListener("submit", submitGiftHint);
+
+  var periodAdd = $("[data-period-add]");
+  if (periodAdd) periodAdd.addEventListener("click", function () { openPeriodModal(null); });
+  if (periodForm) periodForm.addEventListener("submit", submitPeriod);
+  if (periodList) periodList.addEventListener("click", function (event) {
+    var edit = event.target.closest("[data-period-edit]");
+    if (edit) {
+      var editId = edit.getAttribute("data-period-edit");
+      var editLog = periodLogs().filter(function (row) { return row.id === editId; })[0];
+      if (editLog) openPeriodModal(editLog);
+      return;
+    }
+    var archive = event.target.closest("[data-period-archive]");
+    if (archive) archivePeriod(archive.getAttribute("data-period-archive"));
+  });
 
   $$("[data-modal-close]").forEach(function (node) {
     node.addEventListener("click", closeModal);

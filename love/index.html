@@ -32,7 +32,7 @@
   <link rel="icon" type="image/svg+xml" href="/love/favicon.svg">
   <link rel="stylesheet" href="/fonts/Chillax/chillax.css">
   <link rel="stylesheet" href="/fonts/Geist/geist.css">
-  <link rel="stylesheet" href="/love/love.css?v=2026-10-29.1">
+  <link rel="stylesheet" href="/love/love.css?v=2026-10-30.1">
 <meta name="generator" content="Hexo 7.3.0"></head>
 <body class="love-page">
   <header class="l-top">
@@ -254,6 +254,26 @@
             </div>
           </div>
           <div class="l-progress" aria-hidden="true"><i data-love-bucket-bar></i></div>
+          <div class="l-draw" data-love-draw>
+            <div class="l-draw-bar">
+              <span class="l-draw-gift" aria-hidden="true">🎁</span>
+              <span class="l-draw-copy">
+                <strong>清单盲盒</strong>
+                <span data-draw-hint>让 AI 想一件清单外的小事。</span>
+              </span>
+              <button class="l-small l-draw-btn" type="button" data-draw-open aria-controls="l-draw-result" aria-expanded="false">想一个</button>
+            </div>
+            <div class="l-draw-result" id="l-draw-result" data-draw-result hidden aria-live="polite">
+              <p class="l-draw-kicker">清单外的新点子</p>
+              <strong class="l-draw-title" data-draw-title></strong>
+              <span class="l-draw-meta" data-draw-meta></span>
+              <p class="l-draw-error" data-draw-error hidden></p>
+              <div class="l-draw-actions">
+                <button class="l-small" type="button" data-draw-again>再想一个</button>
+                <button class="l-small is-primary" type="button" data-draw-add>加入清单</button>
+              </div>
+            </div>
+          </div>
           <div class="l-bucket-list" data-love-bucket-list tabindex="0" aria-label="共同清单列表"></div>
         </section>
 
@@ -261,6 +281,87 @@
           <span class="l-note-heart" aria-hidden="true">♡</span>
           <p><span data-love-note>这里记录我们两个人的小事。</span></p>
         </section>
+
+        <div class="l-gift-grid">
+          <section class="l-panel l-wish-panel" aria-labelledby="l-wish-title">
+            <div class="l-wish" data-gift-wish>
+              <button class="l-wish-summary" type="button" data-gift-wish-toggle aria-expanded="false" aria-controls="l-wish-body">
+                <span class="l-wish-lock" aria-hidden="true">🔒</span>
+                <span class="l-wish-copy">
+                  <strong id="l-wish-title">私密心愿单</strong>
+                  <small>只有你自己能看到</small>
+                </span>
+                <span class="l-wish-toggle" data-gift-wish-toggle-label>展开</span>
+              </button>
+              <div class="l-wish-preview" data-gift-wish-preview aria-hidden="false">
+                <figure class="l-wish-meme">
+                  <img src="/image/theme/love-lie.gif" alt="两只小狗守着一个秘密" loading="lazy">
+                  <figcaption>悄悄写，只有你看得见。</figcaption>
+                </figure>
+              </div>
+              <div class="l-wish-collapse" id="l-wish-body" data-gift-wish-collapse aria-hidden="true" inert>
+                <div class="l-wish-body">
+                  <p class="l-wish-note">写下想要的、最近缺的、舍不得买的。对方不会直接看到；给你出礼物主意时，AI 只会把它当线索。</p>
+                  <form class="l-wish-form" data-gift-wish-form novalidate>
+                    <label class="l-field">
+                      <span>我的心愿</span>
+                      <textarea name="content" rows="4" maxlength="1000" placeholder="比如：想要一台咖啡机，但一直没舍得买"></textarea>
+                    </label>
+                    <p class="l-form-error" data-gift-wish-error hidden></p>
+                    <div class="l-form-actions">
+                      <button class="l-primary" type="submit" data-gift-wish-submit>保存心愿单</button>
+                      <span class="l-wish-status" data-gift-wish-status></span>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="l-panel l-gift-plan-panel" aria-labelledby="l-gift-plan-title">
+            <div class="l-panel-head">
+              <div>
+                <h2 id="l-gift-plan-title">送礼参谋部</h2>
+                <p>说个场合和预算，AI 会结合两个人的偏好和对方留下的线索，给三个方向。</p>
+              </div>
+              <span class="l-badge">AI 军师</span>
+            </div>
+            <form class="l-gift-form" data-gift-plan-form novalidate>
+              <div class="l-gift-fields">
+                <label class="l-field">
+                  <span>场合</span>
+                  <input type="text" name="occasion" maxlength="60" required placeholder="生日、纪念日，或者就是想送">
+                </label>
+                <label class="l-field">
+                  <span>预算</span>
+                  <input type="text" name="budget" maxlength="60" placeholder="300 元以内">
+                </label>
+              </div>
+              <label class="l-field">
+                <span>备注（可选）</span>
+                <textarea name="notes" rows="2" maxlength="300" placeholder="比如：她最近总说睡不好，想送点实用的"></textarea>
+              </label>
+              <p class="l-form-error" data-gift-plan-error hidden></p>
+              <div class="l-form-actions">
+                <button class="l-primary" type="submit" data-gift-plan-submit>生成方案</button>
+              </div>
+            </form>
+            <div class="l-gift-plan" data-gift-plan-result hidden>
+              <p class="l-gift-summary" data-gift-plan-summary></p>
+              <div class="l-gift-clue" data-gift-plan-clue hidden>
+                <span>悄悄给你一条线索</span>
+                <p data-gift-plan-clue-text></p>
+              </div>
+              <ol class="l-gift-list" data-gift-plan-gifts></ol>
+              <p class="l-gift-avoid" data-gift-plan-avoid hidden></p>
+              <div class="l-gift-hint-row">
+                <button class="l-ghost" type="button" data-gift-hint-open>写邮件暗示</button>
+                <span class="l-gift-hint-status" data-gift-hint-status></span>
+              </div>
+              <p class="l-gift-note">方案只在这个页面给你看；邮件内容会先让你改，确认后才发。一小时只能发一次。</p>
+            </div>
+          </section>
+        </div>
 
         <section class="l-panel l-ai-panel" aria-labelledby="l-ai-title">
           <div class="l-panel-head">
@@ -292,6 +393,55 @@
             </div>
           </div>
           <p class="l-ai-note">AI 只做事实整理。预览 10 分钟内有效，同一个预览只能执行一次。</p>
+        </section>
+
+        <section class="l-panel l-period-panel" aria-labelledby="l-period-title">
+          <div class="l-panel-head">
+            <div>
+              <h2 id="l-period-title">白小白的生理周期</h2>
+              <p data-period-subtitle>记录一次，就能大概算出下一次。</p>
+            </div>
+            <div class="l-panel-actions">
+              <button class="l-small is-primary" type="button" data-period-add>+ 记录小白的生理期</button>
+            </div>
+          </div>
+          <div class="l-period-main">
+            <div class="l-period-ring-wrap">
+              <div class="l-period-ring" data-period-ring>
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="l-period-track" cx="60" cy="60" r="52"></circle>
+                  <circle class="l-period-seg is-period" data-period-seg="period" cx="60" cy="60" r="52"></circle>
+                  <circle class="l-period-seg is-follicular" data-period-seg="follicular" cx="60" cy="60" r="52"></circle>
+                  <circle class="l-period-seg is-ovulation" data-period-seg="ovulation" cx="60" cy="60" r="52"></circle>
+                  <circle class="l-period-seg is-luteal" data-period-seg="luteal" cx="60" cy="60" r="52"></circle>
+                  <circle class="l-period-marker" data-period-marker cx="60" cy="8" r="4.2"></circle>
+                </svg>
+                <div class="l-period-ring-copy">
+                  <strong data-period-day>—</strong>
+                  <span data-period-phase>还没有记录</span>
+                </div>
+              </div>
+              <div class="l-period-legend" data-period-legend hidden>
+                <span data-period-legend-item="period"><i class="is-period"></i>经期</span>
+                <span data-period-legend-item="follicular"><i class="is-follicular"></i>卵泡期</span>
+                <span data-period-legend-item="ovulation"><i class="is-ovulation"></i>排卵期</span>
+                <span data-period-legend-item="luteal"><i class="is-luteal"></i>黄体期</span>
+              </div>
+            </div>
+            <div class="l-period-copy">
+              <p class="l-period-next" data-period-next>记录一次开始和结束日期，这里会出现大概的下一次时间。</p>
+              <p class="l-period-ovulation" data-period-ovulation hidden></p>
+              <div class="l-period-tip">
+                <span class="l-period-tip-label" data-period-tip-label>健康提示</span>
+                <p data-period-tip>记录之后，这里会出现一句健康提示。</p>
+              </div>
+              <p class="l-period-disclaimer">预测只是生活参考，不是医疗建议。</p>
+            </div>
+          </div>
+          <details class="l-period-history" data-period-history>
+            <summary>历史记录</summary>
+            <div class="l-period-list" data-period-list></div>
+          </details>
         </section>
       </div>
 
@@ -474,6 +624,42 @@
           <button class="l-primary" type="submit" data-bucket-submit>保存</button>
         </div>
       </form>
+
+      <form class="l-form" data-gift-hint-form hidden novalidate>
+        <p class="l-form-note" data-gift-hint-to>发给 ta，先看看内容再发。</p>
+        <label class="l-field">
+          <span>邮件内容</span>
+          <textarea name="message" rows="10" maxlength="1000" required></textarea>
+        </label>
+        <p class="l-form-error" data-gift-hint-error hidden></p>
+        <div class="l-form-actions">
+          <button class="l-ghost" type="button" data-modal-close>取消</button>
+          <button class="l-primary" type="submit" data-gift-hint-send>发出邮件</button>
+        </div>
+      </form>
+
+      <form class="l-form" data-period-form hidden novalidate>
+        <p class="l-form-note">记一次开始的日期；结束日期不确定可以先不填，之后再来补。双方都能看到这条记录。</p>
+        <div class="l-form-grid">
+          <label class="l-field">
+            <span>开始日期</span>
+            <input type="date" name="start" required>
+          </label>
+          <label class="l-field">
+            <span>结束日期（可不填）</span>
+            <input type="date" name="end">
+          </label>
+          <label class="l-field l-field--wide">
+            <span>备注（只给我们看）</span>
+            <textarea name="note" rows="2" maxlength="120"></textarea>
+          </label>
+        </div>
+        <p class="l-form-error" data-period-error hidden></p>
+        <div class="l-form-actions">
+          <button class="l-ghost" type="button" data-modal-close>取消</button>
+          <button class="l-primary" type="submit" data-period-submit>保存</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -491,6 +677,6 @@
 
   <div class="l-toast" data-toast role="status" hidden></div>
 
-  <script src="/love/love.js?v=2026-10-29.1" defer></script>
+  <script src="/love/love.js?v=2026-10-30.1" defer></script>
 </body>
 </html>

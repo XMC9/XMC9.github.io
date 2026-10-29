@@ -1172,17 +1172,20 @@ html[data-theme="dark"] .l-cal-cell:hover {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  height: 5px;
+  height: 10px;
   margin-top: 3px;
 }
 
+/* 生日、纪念日、情人节、约会啦、大事记统一用爱心形状，颜色不变。 */
 .l-dot {
   display: inline-block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+  width: 10px;
+  height: 9.5px;
+  border-radius: 0;
   background: var(--l-muted);
   flex: 0 0 auto;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21s-9-5.7-9-12.2C3 4.9 6 3 8.4 3c1.9 0 3.1 1.1 3.6 2.1C12.5 4.1 13.7 3 15.6 3 18 3 21 4.9 21 8.8 21 15.3 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21s-9-5.7-9-12.2C3 4.9 6 3 8.4 3c1.9 0 3.1 1.1 3.6 2.1C12.5 4.1 13.7 3 15.6 3 18 3 21 4.9 21 8.8 21 15.3 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .l-dot.is-birthday { background: var(--l-gold); }
@@ -1214,8 +1217,8 @@ html[data-theme="dark"] .l-cal-cell:hover {
 }
 
 .l-cal-legend .l-dot {
-  width: 5px;
-  height: 5px;
+  width: 10px;
+  height: 9.5px;
 }
 
 /* ---------- 这一天 ---------- */
@@ -1600,22 +1603,44 @@ html[data-theme="dark"] .l-mood-slot {
   font-weight: 600;
 }
 
-/* 日历格子里的心情：左边鸡毛，右边小白，两格固定宽度，缺一边也留位。 */
-.l-cal-moods {
+/* 日历格子里的标记行：左鸡毛、右小白，两格等宽、整体居中。
+   两枚 emoji 靠近一点，但左右顺序和对称关系不变。
+   整行固定高度，有没有心情都不会挪动上面的日期数字。 */
+.l-cal-marks {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1px;
-  margin-top: 2px;
+  width: 100%;
+  height: 0.78rem;
+  margin-top: 1px;
   line-height: 1;
 }
 
 .l-cal-mood {
   display: inline-block;
-  width: 1rem;
-  font-size: 0.66rem;
-  line-height: 1;
+  width: 0.62rem;
+  height: 0.78rem;
+  font-size: 0.6rem;
+  line-height: 0.78rem;
   text-align: center;
+}
+
+/* 生理期用格子右上角的小圆点标记，不和心情抢中间的位置。 */
+.l-cal-period {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--l-rose);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.l-cal-period.is-on {
+  opacity: 1;
 }
 
 .l-form-note {
@@ -1661,6 +1686,129 @@ html[data-theme="dark"] .l-mood-slot {
   border-radius: inherit;
   background: linear-gradient(90deg, var(--l-blue-soft), var(--l-blue));
   transition: width 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- 清单盲盒 ---------- */
+
+.l-draw {
+  margin: -1px 0 13px;
+  padding: 10px 12px;
+  border: 1px dashed var(--l-line-strong);
+  border-radius: 16px;
+  background: rgba(46, 117, 182, 0.05);
+}
+
+html[data-theme="dark"] .l-draw {
+  background: rgba(127, 178, 229, 0.07);
+}
+
+.l-draw-bar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.l-draw-gift {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  line-height: 1;
+  transform-origin: 50% 80%;
+}
+
+.l-draw.is-drawing .l-draw-gift {
+  animation: l-draw-shake 0.9s ease-in-out infinite;
+}
+
+.l-draw.is-drawing .l-draw-title {
+  color: var(--l-blue);
+}
+
+.l-draw-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.l-draw-copy strong {
+  color: var(--l-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.l-draw-copy span {
+  overflow: hidden;
+  color: var(--l-faint);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.l-draw-btn {
+  flex: 0 0 auto;
+}
+
+.l-draw-result {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--l-line);
+}
+
+.l-draw-kicker {
+  margin: 0 0 3px;
+  color: var(--l-blue);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.l-draw-title {
+  display: block;
+  color: var(--l-ink);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.l-draw-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--l-muted);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.l-draw-error {
+  margin: 6px 0 0;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: rgba(201, 120, 143, 0.12);
+  color: #A9556E;
+  font-size: 0.64rem;
+  line-height: 1.55;
+}
+
+html[data-theme="dark"] .l-draw-error {
+  background: rgba(201, 120, 143, 0.18);
+  color: #E5A8B8;
+}
+
+.l-draw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+@keyframes l-draw-shake {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  20% { transform: rotate(-9deg) scale(1.08); }
+  45% { transform: rotate(7deg) scale(1.04); }
+  70% { transform: rotate(-4deg) scale(1.02); }
 }
 
 .l-bucket-list {
@@ -2486,6 +2634,12 @@ html[data-theme="dark"] .l-form-error {
   transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
 }
 
+.l-small:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
 .l-small:hover {
   border-color: var(--l-line-strong);
   color: var(--l-ink);
@@ -2735,7 +2889,9 @@ html[data-theme="dark"] .l-event-tag.is-milestone {
     "calendar day"
     "list bucket"
     "list note"
-    "ai ai";
+    "gift gift"
+    "ai ai"
+    "period period";
 }
 
 .l-ai-panel {
@@ -3024,7 +3180,9 @@ html[data-theme="dark"] .l-toast.is-error {
       "list"
       "bucket"
       "note"
-      "ai";
+      "gift"
+      "ai"
+      "period";
   }
 }
 
@@ -3110,4 +3268,624 @@ html[data-theme="dark"] .l-toast.is-error {
     padding: 3px 6px;
     font-size: 0.55rem;
   }
+}
+
+/* ---------- 礼物：私密心愿单 + 送礼参谋 ---------- */
+
+.l-gift-grid {
+  grid-area: gift;
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.l-wish-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.l-wish-summary {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 18px 20px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+
+.l-wish.is-open .l-wish-summary {
+  border-bottom: 1px dashed var(--l-line);
+}
+
+.l-wish-summary:focus-visible {
+  outline: 2px solid var(--l-blue);
+  outline-offset: -4px;
+}
+
+.l-wish-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: rgba(46, 117, 182, 0.09);
+  font-size: 0.95rem;
+}
+
+.l-wish-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.l-wish-copy strong {
+  color: var(--l-ink);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.l-wish-copy small {
+  color: var(--l-muted);
+  font-size: 0.62rem;
+}
+
+.l-wish-toggle {
+  margin-left: auto;
+  color: var(--l-blue);
+  font-size: 0.62rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* 折叠时露一张小狗表情包，展开后换成表单；两段都用 grid 行高过渡。 */
+.l-wish-preview {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.34s ease, opacity 0.24s ease;
+}
+
+.l-wish-preview > .l-wish-meme {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.l-wish.is-open .l-wish-preview {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.34s ease, opacity 0.18s ease;
+}
+
+.l-wish-meme {
+  margin: 0;
+  padding: 4px 20px 18px;
+  text-align: center;
+  transition: padding 0.34s ease;
+}
+
+/* 内边距也要一起收掉，否则折叠后会留下 22px 的空白条。 */
+.l-wish.is-open .l-wish-meme {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.l-wish-meme img {
+  display: block;
+  width: min(176px, 62%);
+  height: auto;
+  margin: 0 auto 6px;
+  border-radius: 16px;
+}
+
+.l-wish-meme figcaption {
+  color: var(--l-faint);
+  font-size: 0.6rem;
+  line-height: 1.6;
+}
+
+.l-wish-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 0.34s ease, opacity 0.24s ease, visibility 0s linear 0.34s;
+}
+
+.l-wish-collapse > .l-wish-body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.l-wish.is-open .l-wish-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition: grid-template-rows 0.34s ease, opacity 0.24s ease 0.06s, visibility 0s;
+}
+
+.l-wish-body {
+  padding: 15px 20px 20px;
+  transition: padding 0.34s ease;
+}
+
+/* 收起时同样把上下内边距归零，避免在标题下留一条空白。 */
+.l-wish:not(.is-open) .l-wish-body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.l-wish-note {
+  margin: 0 0 12px;
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  line-height: 1.7;
+}
+
+.l-wish-form textarea {
+  min-height: 92px;
+}
+
+.l-wish-status {
+  margin-left: 10px;
+  color: var(--l-muted);
+  font-size: 0.62rem;
+}
+
+.l-gift-plan-panel .l-panel-head {
+  align-items: flex-start;
+}
+
+.l-gift-form {
+  margin-top: 2px;
+}
+
+.l-gift-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.l-gift-plan {
+  margin-top: 15px;
+  padding: 15px 16px;
+  border: 1px solid var(--l-line);
+  border-radius: 16px;
+  background: var(--l-panel-soft);
+}
+
+.l-gift-summary {
+  margin: 0 0 10px;
+  color: var(--l-ink);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.l-gift-clue {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(201, 120, 143, 0.09);
+}
+
+.l-gift-clue span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--l-rose);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.l-gift-clue p {
+  margin: 0;
+  color: var(--l-ink);
+  font-size: 0.68rem;
+  line-height: 1.65;
+}
+
+.l-gift-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.l-gift-item {
+  padding: 11px 13px;
+  border: 1px solid var(--l-line);
+  border-radius: 13px;
+  background: var(--l-panel);
+}
+
+.l-gift-item-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.l-gift-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(217, 164, 65, 0.18);
+  color: #A97720;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.l-gift-item-title {
+  color: var(--l-ink);
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.l-gift-budget {
+  margin-left: auto;
+  color: var(--l-gold);
+  font-size: 0.6rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.l-gift-why,
+.l-gift-how {
+  margin: 5px 0 0;
+  color: var(--l-muted);
+  font-size: 0.64rem;
+  line-height: 1.65;
+}
+
+.l-gift-how::before {
+  content: "怎么找：";
+  color: var(--l-faint);
+}
+
+.l-gift-avoid {
+  margin: 11px 0 0;
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: rgba(201, 120, 143, 0.08);
+  color: var(--l-rose);
+  font-size: 0.64rem;
+  line-height: 1.6;
+}
+
+.l-gift-avoid::before {
+  content: "注意：";
+  font-weight: 700;
+}
+
+.l-gift-hint-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.l-gift-hint-status {
+  color: var(--l-muted);
+  font-size: 0.62rem;
+}
+
+.l-gift-note {
+  margin: 12px 0 0;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: rgba(46, 117, 182, 0.06);
+  color: var(--l-muted);
+  font-size: 0.6rem;
+  line-height: 1.65;
+}
+
+/* ---------- 生理周期 ---------- */
+
+.l-period-panel {
+  grid-area: period;
+}
+
+.l-period-main {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: 4px;
+}
+
+.l-period-ring-wrap {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.l-period-ring {
+  position: relative;
+  width: 124px;
+  height: 124px;
+}
+
+.l-period-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.l-period-track,
+.l-period-seg {
+  fill: none;
+  stroke-width: 8;
+}
+
+.l-period-track {
+  stroke: var(--l-line);
+}
+
+/* 四种颜色同时画在圆环上：经期、卵泡期、排卵期、黄体期。 */
+.l-period-seg {
+  stroke-linecap: butt;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+.l-period-seg.is-period { stroke: var(--l-rose); }
+.l-period-seg.is-follicular { stroke: var(--l-blue); }
+.l-period-seg.is-ovulation { stroke: var(--l-gold); }
+.l-period-seg.is-luteal { stroke: var(--l-lilac); }
+
+.l-period-seg.is-active {
+  opacity: 1;
+  stroke-width: 9.5;
+}
+
+.l-period-marker {
+  fill: var(--l-ink);
+  stroke: var(--l-panel);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.l-period-ring.has-data .l-period-marker {
+  opacity: 1;
+}
+
+.l-period-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 8px;
+  max-width: 150px;
+  color: var(--l-muted);
+  font-size: 0.52rem;
+  line-height: 1.5;
+}
+
+.l-period-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.l-period-legend span.is-active {
+  color: var(--l-ink);
+  font-weight: 700;
+}
+
+.l-period-legend i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.l-period-legend i.is-period { background: var(--l-rose); }
+.l-period-legend i.is-follicular { background: var(--l-blue); }
+.l-period-legend i.is-ovulation { background: var(--l-gold); }
+.l-period-legend i.is-luteal { background: var(--l-lilac); }
+
+.l-period-legend span.is-active i {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+.l-period-ring-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.l-period-ring-copy strong {
+  color: var(--l-ink);
+  font-family: "Chillax-Variable", "Geist Variable", sans-serif;
+  font-size: 1.18rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.l-period-ring-copy span {
+  color: var(--l-muted);
+  font-size: 0.6rem;
+}
+
+.l-period-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.l-period-next {
+  margin: 0 0 6px;
+  color: var(--l-ink);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.l-period-ovulation {
+  margin: 0 0 9px;
+  color: var(--l-muted);
+  font-size: 0.66rem;
+  line-height: 1.6;
+}
+
+.l-period-tip {
+  padding: 10px 12px;
+  border-left: 3px solid var(--l-rose);
+  border-radius: 0 10px 10px 0;
+  background: rgba(201, 120, 143, 0.07);
+}
+
+.l-period-tip-label {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--l-rose);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.l-period-tip p {
+  margin: 0;
+  color: var(--l-ink);
+  font-size: 0.68rem;
+  line-height: 1.65;
+}
+
+.l-period-disclaimer {
+  margin: 8px 0 0;
+  color: var(--l-faint);
+  font-size: 0.58rem;
+  line-height: 1.5;
+}
+
+.l-period-history {
+  margin-top: 13px;
+  border-top: 1px dashed var(--l-line);
+  padding-top: 10px;
+}
+
+.l-period-history summary {
+  color: var(--l-muted);
+  font-size: 0.64rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.l-period-history summary::-webkit-details-marker {
+  display: none;
+}
+
+.l-period-history summary::before {
+  content: "▸ ";
+  color: var(--l-faint);
+}
+
+.l-period-history[open] summary::before {
+  content: "▾ ";
+}
+
+.l-period-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.l-period-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--l-line);
+  border-radius: 10px;
+  background: var(--l-panel-soft);
+  font-size: 0.62rem;
+}
+
+.l-period-item-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.l-period-item-main strong {
+  display: block;
+  color: var(--l-ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.l-period-item-main span {
+  color: var(--l-muted);
+}
+
+.l-period-item-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.l-period-empty {
+  margin: 9px 0 0;
+  color: var(--l-muted);
+  font-size: 0.64rem;
+  line-height: 1.7;
+}
+
+.l-period-empty-hint {
+  color: var(--l-faint);
+}
+
+@media (max-width: 980px) {
+  .l-gift-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .l-gift-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .l-period-main {
+    gap: 16px;
+  }
+
+  .l-period-ring {
+    width: 108px;
+    height: 108px;
+  }
+
+  .l-period-item {
+    align-items: flex-start;
+  }
+}
+
+/* 邮件内容默认很长，弹窗里一次多显示几行，方便改完再发。 */
+[data-gift-hint-form] textarea {
+  min-height: 260px;
 }
