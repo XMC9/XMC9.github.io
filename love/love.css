@@ -1627,16 +1627,29 @@ html[data-theme="dark"] .l-mood-slot {
 }
 
 /* 生理期用格子右上角的小圆点标记，不和心情抢中间的位置。 */
+.l-cal-num-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .l-cal-period {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  left: 50%;
+  bottom: 100%;
   width: 0.28rem;
   height: 0.28rem;
+  margin-bottom: 1px;
   border-radius: 50%;
   background: var(--l-rose);
   opacity: 0;
+  transform: translateX(-50%);
   pointer-events: none;
+}
+
+.l-cal-period.is-ovulation {
+  background: var(--l-gold);
 }
 
 .l-cal-period.is-on {

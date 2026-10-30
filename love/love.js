@@ -931,21 +931,27 @@
   }
 
   // 已经记录的生理期日子：开始到结束；只填了开始日的，最多往后留 9 天，避免一直标下去。
+  // 日历只标两类：实际经期（小白）和预测排卵日。
   function periodMarkSet() {
     var marks = {};
     var logs = data.period && Array.isArray(data.period.logs) ? data.period.logs : [];
     logs.forEach(function (log) {
-      if (!log || !splitISO(log.start)) return;
+      if (!log || log.person !== "bxb" || !splitISO(log.start)) return;
       var end = log.end && log.end >= log.start ? log.end : addDays(log.start, 9);
       if (!log.end && end > today) end = today;
       var cursor = log.start;
       var guard = 0;
       while (cursor && cursor <= end && guard < 40) {
-        marks[cursor] = true;
+        if (!marks[cursor]) marks[cursor] = "period";
         cursor = addDays(cursor, 1);
         guard += 1;
       }
     });
+    var summaries = data.period && data.period.summaries ? data.period.summaries : {};
+    var summary = summaries.bxb;
+    if (summary && summary.hasData && summary.ovulation && !marks[summary.ovulation]) {
+      marks[summary.ovulation] = "ovulation";
+    }
     return marks;
   }
 
@@ -984,11 +990,24 @@
         var meta = moodMetaOf(moodRowOf(iso, personId));
         return meta ? moodPersonName(personId) + meta.label : "";
       }).filter(Boolean);
+      var periodMark = periodMarks[iso];
+      var periodText = periodMark === "ovulation" ? "，预测排卵日" : periodMark === "period" ? "，经期" : "";
       cell.setAttribute("aria-label", formatDateCN(iso, true)
         + (names.length ? "，" + names.join("、") : "，没有安排")
-        + (moodNotes.length ? "；心情：" + moodNotes.join("、") : ""));
+        + (moodNotes.length ? "；心情：" + moodNotes.join("、") : "")
+        + periodText);
 
-      cell.appendChild(el("span", "l-cal-num", String(date.getUTCDate())));
+      // 小圆点放在日期数字正上方一点点；经期玫红、排卵日金色。
+      var numWrap = el("span", "l-cal-num-wrap");
+      var periodDot = el("span", "l-cal-period");
+      if (periodMark) {
+        periodDot.classList.add("is-on", "is-" + periodMark);
+        periodDot.title = periodMark === "ovulation" ? "预测排卵日" : "经期";
+      }
+      periodDot.setAttribute("aria-hidden", "true");
+      numWrap.appendChild(periodDot);
+      numWrap.appendChild(el("span", "l-cal-num", String(date.getUTCDate())));
+      cell.appendChild(numWrap);
 
       // 心情放在固定高度的两列里：左鸡毛、右小白，左右对称，数字位置不会跳。
       var marks = el("span", "l-cal-marks");
@@ -1004,11 +1023,6 @@
         marks.appendChild(node);
       });
       cell.appendChild(marks);
-      // 生理期用格子右上角的小圆点，不占心情的位置。
-      var periodDot = el("span", "l-cal-period");
-      if (periodMarks[iso]) periodDot.classList.add("is-on");
-      periodDot.setAttribute("aria-hidden", "true");
-      cell.appendChild(periodDot);
 
       var dots = el("span", "l-cal-dots");
       var seen = {};
