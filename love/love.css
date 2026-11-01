@@ -1216,9 +1216,27 @@ html[data-theme="dark"] .l-cal-cell:hover {
   gap: 5px;
 }
 
+.l-cal-legend span[hidden] {
+  display: none;
+}
+
 .l-cal-legend .l-dot {
   width: 10px;
   height: 9.5px;
+}
+
+/* 日历圆点图例：经期玫红、预测排卵日金色，和日期上方的小圆点同一套颜色。 */
+.l-cal-legend .l-cal-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--l-rose);
+}
+
+.l-cal-legend .l-cal-dot.is-ovulation {
+  background: var(--l-gold);
 }
 
 /* ---------- 这一天 ---------- */

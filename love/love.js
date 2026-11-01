@@ -962,6 +962,13 @@
     calMonth.textContent = cal.y + "年" + cal.m + "月";
     calGrid.innerHTML = "";
     var periodMarks = periodMarkSet();
+    var periodSummary = data.period && data.period.summaries ? data.period.summaries.bxb : null;
+    var showPeriodLegend = !!(periodSummary && periodSummary.hasData);
+    var showOvulationLegend = !!(showPeriodLegend && periodSummary.ovulation);
+    $$("[data-cal-period-legend]").forEach(function (node) {
+      var kind = node.getAttribute("data-cal-period-legend");
+      node.hidden = kind === "ovulation" ? !showOvulationLegend : !showPeriodLegend;
+    });
 
     var firstWeekday = weekdayOf(cal.y, cal.m, 1);
     var total = daysInMonth(cal.y, cal.m);
