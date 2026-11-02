@@ -585,12 +585,28 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   letter-spacing: -0.02em;
 }
 
-.aviation-dashboard .avn-sub {
-  max-width: 560px;
-  margin: 10px 0 0;
-  color: #B7D4EC;
-  font-size: 0.9rem;
-  line-height: 1.7;
+/* 板块小标题：Power Plant / Air Framer，后面拖一条细线把整行填满。 */
+.aviation-dashboard .avn-block {
+  margin: 24px 0 0;
+}
+
+.aviation-dashboard .avn-block-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--mkt-ink);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.aviation-dashboard .avn-block-title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--mkt-line);
 }
 
 .aviation-dashboard .avn-hero-meta {
@@ -616,7 +632,7 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin: 18px 0 6px;
+  margin: 12px 0 0;
 }
 
 .aviation-dashboard .avn-col {
@@ -690,9 +706,14 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   border-bottom: 0;
 }
 
+/* 标题栏是 flex 的，主列必须 min-width: 0，否则多行截断（line-clamp）不生效。 */
+.aviation-dashboard .avn-item-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .aviation-dashboard .avn-item-title {
   display: -webkit-box;
-  flex: 1 1 auto;
   overflow: hidden;
   color: var(--mkt-ink);
   font-size: 0.88rem;
@@ -702,6 +723,19 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   transition: color 0.2s ease;
+}
+
+/* 英文原题下面这句中文释义，字号比标题小一档，但要比日期更显眼一点：
+   它是给人看懂这条新闻用的，不是装饰。 */
+.aviation-dashboard .avn-item-zh {
+  margin: 5px 0 0;
+  color: #45607A;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+html.dark .aviation-dashboard .avn-item-zh {
+  color: #A9C1DA;
 }
 
 .aviation-dashboard .avn-item-title:hover {
