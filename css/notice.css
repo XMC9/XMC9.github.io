@@ -786,3 +786,396 @@ html.dark .aviation-dashboard .avn-item-zh {
     padding: 14px 15px 10px;
   }
 }
+
+/* ------------------------------------------------------------
+ * Operator 板块（2026-11-02）
+ * 民航局月度统计 + 上市航司运营/财报。两张卡片上下排，
+ * 表格里「数值 + 同比」两行，手机上两张表也并排放得下。
+ * 所有颜色走 --mkt-* 变量，深色模式是藏青底色，背景都显式写了。
+ * ---------------------------------------------------------- */
+
+.aviation-dashboard .avn-block-operator .avn-op-grid {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 0;
+}
+
+.aviation-dashboard .avn-op-card {
+  padding: 20px 22px 18px;
+  border: 1px solid var(--mkt-line);
+  border-radius: 16px;
+  background: var(--mkt-card);
+}
+
+.aviation-dashboard .avn-op-head {
+  display: block;
+}
+
+.aviation-dashboard .avn-op-kicker {
+  margin: 0 0 7px;
+  color: var(--mkt-blue);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.aviation-dashboard .avn-op-title {
+  margin: 0;
+  color: var(--mkt-ink);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.aviation-dashboard .avn-op-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 8px 0 0;
+  color: var(--mkt-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.aviation-dashboard .avn-op-period {
+  color: var(--mkt-ink);
+  font-weight: 700;
+}
+
+.aviation-dashboard .avn-op-flag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--mkt-soft);
+  box-shadow: inset 0 0 0 1px var(--mkt-line);
+  font-size: 0.64rem;
+}
+
+.aviation-dashboard .avn-op-link {
+  margin-left: auto;
+  color: var(--mkt-blue);
+  text-decoration: none;
+}
+
+.aviation-dashboard .avn-op-link:hover {
+  text-decoration: none;
+  color: var(--mkt-blue-deep);
+}
+
+/* ---- 民航局四个指标 ---- */
+
+.aviation-dashboard .avn-op-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.aviation-dashboard .avn-op-metric {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--mkt-soft);
+  box-shadow: inset 0 0 0 1px var(--mkt-line);
+}
+
+.aviation-dashboard .avn-op-label {
+  display: block;
+  color: var(--mkt-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+}
+
+.aviation-dashboard .avn-op-value {
+  display: block;
+  margin: 4px 0 2px;
+  color: var(--mkt-ink);
+  font-size: 1.34rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.aviation-dashboard .avn-op-value em {
+  margin-left: 3px;
+  color: var(--mkt-muted);
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.aviation-dashboard .avn-op-delta {
+  display: block;
+  color: var(--mkt-blue-deep);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.aviation-dashboard .avn-op-ytd {
+  display: block;
+  margin-top: 3px;
+  color: var(--mkt-muted);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- 摘要与「值得关注」 ---- */
+
+.aviation-dashboard .avn-op-summary {
+  margin: 16px 0 0;
+  color: var(--mkt-ink);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.aviation-dashboard .avn-op-watchlabel {
+  margin: 16px 0 7px;
+  color: var(--mkt-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.aviation-dashboard .avn-op-watch {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aviation-dashboard .avn-op-watch li {
+  position: relative;
+  padding-left: 15px;
+  color: var(--mkt-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.aviation-dashboard .avn-op-watch li::before {
+  content: "";
+  position: absolute;
+  top: 0.62em;
+  left: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mkt-blue);
+}
+
+/* ---- 航司两张表 ---- */
+
+.aviation-dashboard .avn-op-tables {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 20px;
+  margin: 16px 0 0;
+}
+
+.aviation-dashboard .avn-op-caption {
+  margin: 0 0 8px;
+  color: var(--mkt-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.aviation-dashboard .avn-op-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.aviation-dashboard .avn-op-table thead th {
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--mkt-line);
+  color: var(--mkt-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.aviation-dashboard .avn-op-table thead th:first-child {
+  text-align: left;
+}
+
+.aviation-dashboard .avn-op-table thead th span {
+  display: block;
+  margin-top: 1px;
+  color: var(--mkt-muted);
+  font-size: 0.58rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.aviation-dashboard .avn-op-table tbody th {
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--mkt-line);
+  color: var(--mkt-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.aviation-dashboard .avn-op-table tbody td {
+  padding: 9px 0 9px 6px;
+  border-bottom: 1px dashed var(--mkt-line);
+  color: var(--mkt-ink);
+  font-size: 0.78rem;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.aviation-dashboard .avn-op-table tbody tr:last-child th,
+.aviation-dashboard .avn-op-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* 财务表只有 3 列：航司列定宽，免得手机上数字全挤到最右边。 */
+.aviation-dashboard .avn-op-table-fin {
+  table-layout: fixed;
+}
+
+.aviation-dashboard .avn-op-table-fin thead th:first-child {
+  width: 44%;
+}
+
+.aviation-dashboard .avn-op-table td strong {
+  display: block;
+  color: var(--mkt-ink);
+  font-weight: 700;
+}
+
+.aviation-dashboard .avn-op-table td span {
+  display: block;
+  margin-top: 1px;
+  color: var(--mkt-muted);
+  font-size: 0.64rem;
+}
+
+.aviation-dashboard .avn-op-name {
+  display: block;
+}
+
+.aviation-dashboard .avn-op-code {
+  display: block;
+  margin-top: 1px;
+  color: var(--mkt-muted);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.aviation-dashboard .avn-op-sub {
+  display: block;
+  margin-top: 1px;
+  color: var(--mkt-muted);
+  font-size: 0.6rem;
+  font-weight: 500;
+}
+
+.aviation-dashboard .avn-op-tbd {
+  color: var(--mkt-muted);
+  font-size: 0.72rem;
+}
+
+.aviation-dashboard .avn-op-loss {
+  color: #B4657A;
+}
+
+html.dark .aviation-dashboard .avn-op-loss {
+  color: #E0A0B4;
+}
+
+/* ---- 原文链接与声明 ---- */
+
+.aviation-dashboard .avn-op-sources {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--mkt-line);
+}
+
+.aviation-dashboard .avn-op-sources p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+}
+
+.aviation-dashboard .avn-op-sources p:last-child {
+  margin-bottom: 0;
+}
+
+.aviation-dashboard .avn-op-srclabel {
+  color: var(--mkt-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+}
+
+.aviation-dashboard .avn-op-sources a {
+  color: var(--mkt-blue);
+  text-decoration: none;
+}
+
+.aviation-dashboard .avn-op-sources a:hover {
+  text-decoration: underline;
+}
+
+.aviation-dashboard .avn-op-srcdot {
+  color: var(--mkt-line);
+}
+
+.aviation-dashboard .avn-op-note {
+  margin: 10px 0 0;
+  color: var(--mkt-muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.aviation-dashboard .avn-op-disclaimer {
+  margin: 12px 0 0;
+  color: var(--mkt-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  /* 卡片本身窄了，两张表再并排就挤成两行字，提前改成上下叠。 */
+  .aviation-dashboard .avn-op-tables {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 860px) {
+  .aviation-dashboard .avn-op-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .aviation-dashboard .avn-op-card {
+    padding: 16px 15px 14px;
+  }
+
+  .aviation-dashboard .avn-op-title {
+    font-size: 1rem;
+  }
+
+  .aviation-dashboard .avn-op-table thead th,
+  .aviation-dashboard .avn-op-table tbody th {
+    font-size: 0.72rem;
+  }
+
+  .aviation-dashboard .avn-op-table tbody td {
+    font-size: 0.72rem;
+    padding-left: 4px;
+  }
+}
