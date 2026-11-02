@@ -477,3 +477,278 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
     grid-template-columns: 1fr;
   }
 }
+
+/* ------------------------------------------------------------
+ * 日报顶部去 Aviation News Center 的小链接
+ * 放在统计行下面、正文之前，是一条轻量的横条，不抢天气卡的位置。
+ * ---------------------------------------------------------- */
+
+.news-dashboard .ntc-crosslink {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 9px 14px;
+  border: 1px solid rgba(150, 198, 238, 0.26);
+  border-radius: 12px;
+  background: rgba(92, 158, 214, 0.12);
+  color: #DDEBFA;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.news-dashboard .ntc-crosslink:hover {
+  background: rgba(92, 158, 214, 0.22);
+  border-color: rgba(150, 198, 238, 0.48);
+  transform: translateX(2px);
+  text-decoration: none;
+}
+
+.news-dashboard .ntc-crosslink-kicker {
+  flex: 0 0 auto;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.news-dashboard .ntc-crosslink-text {
+  flex: 1 1 auto;
+  color: inherit;
+  line-height: 1.5;
+}
+
+.news-dashboard .ntc-crosslink-arrow {
+  flex: 0 0 auto;
+  color: #9FC6E8;
+}
+
+/* ------------------------------------------------------------
+ * Aviation News Center（2026-11-02）
+ * 三家 OEM 的通稿看板。hero 与日报同款深海军蓝，
+ * 正文是三栏等高卡片；颜色全部走 --mkt-* 变量，
+ * 深色模式由 marketing-dashboard.css 里那套覆盖自动接管。
+ * ---------------------------------------------------------- */
+
+.aviation-dashboard .avn-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 26px 30px 22px;
+  border: 1px solid rgba(150, 198, 238, 0.2);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0D2540 0%, #163F63 56%, #1D4E7A 100%);
+  box-shadow: 0 18px 45px var(--mkt-shadow);
+  color: #F4F9FF;
+}
+
+.aviation-dashboard .avn-hero::after {
+  content: "";
+  position: absolute;
+  top: -110px;
+  right: -80px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 166, 220, 0.24) 0%, rgba(107, 166, 220, 0) 70%);
+  pointer-events: none;
+}
+
+.aviation-dashboard .avn-hero-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 26px;
+}
+
+.aviation-dashboard .avn-eyebrow {
+  margin: 0 0 8px;
+  color: #9FC6E8;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.aviation-dashboard .avn-title {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.aviation-dashboard .avn-sub {
+  max-width: 560px;
+  margin: 10px 0 0;
+  color: #B7D4EC;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.aviation-dashboard .avn-hero-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 0 0 auto;
+  color: #9FC6E8;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.aviation-dashboard .avn-hero-meta strong {
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.aviation-dashboard .avn-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 6px;
+}
+
+.aviation-dashboard .avn-col {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 12px;
+  border: 1px solid var(--mkt-line);
+  border-radius: 16px;
+  background: var(--mkt-card);
+}
+
+.aviation-dashboard .avn-col-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--mkt-line);
+}
+
+.aviation-dashboard .avn-col-name {
+  margin: 0;
+  color: var(--mkt-ink);
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* 抓取失败沿用上一份时给个小标记，避免把旧闻当成今天的。 */
+.aviation-dashboard .avn-col-flag {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--mkt-soft);
+  box-shadow: inset 0 0 0 1px var(--mkt-line);
+  color: var(--mkt-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+
+.aviation-dashboard .avn-col-home {
+  margin-left: auto;
+  color: var(--mkt-muted);
+  font-size: 0.72rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.aviation-dashboard .avn-col-home:hover {
+  color: var(--mkt-blue);
+  text-decoration: none;
+}
+
+.aviation-dashboard .avn-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aviation-dashboard .avn-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--mkt-line);
+}
+
+.aviation-dashboard .avn-item:last-child {
+  padding-bottom: 4px;
+  border-bottom: 0;
+}
+
+.aviation-dashboard .avn-item-title {
+  display: -webkit-box;
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: var(--mkt-ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  transition: color 0.2s ease;
+}
+
+.aviation-dashboard .avn-item-title:hover {
+  color: var(--mkt-blue);
+  text-decoration: none;
+}
+
+.aviation-dashboard .avn-item-date {
+  flex: 0 0 auto;
+  padding-top: 2px;
+  color: var(--mkt-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.aviation-dashboard .avn-empty {
+  margin: 14px 0 6px;
+  color: var(--mkt-muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 860px) {
+  .aviation-dashboard .avn-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .aviation-dashboard .avn-hero {
+    padding: 20px 18px 18px;
+    border-radius: 18px;
+  }
+
+  .aviation-dashboard .avn-hero-head {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .aviation-dashboard .avn-hero-meta {
+    align-items: baseline;
+    flex-direction: row;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .aviation-dashboard .avn-col {
+    padding: 14px 15px 10px;
+  }
+}
