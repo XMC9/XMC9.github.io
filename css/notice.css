@@ -202,6 +202,89 @@
   font-style: normal;
 }
 
+/* 明日天气：和今日卡分开的一条，18:30 只刷新这里。 */
+.news-dashboard .ntc-weather-tomorrow {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.news-dashboard .ntc-weather-tomorrow-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.news-dashboard .ntc-weather-tomorrow-title {
+  color: #EAF4FF;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.news-dashboard .ntc-weather-tomorrow-stamp {
+  color: #9FBBD6;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.news-dashboard .ntc-weather-tomorrow-list {
+  display: grid;
+  gap: 7px;
+}
+
+.news-dashboard .ntc-weather-tomorrow-row {
+  display: grid;
+  grid-template-columns: 2.9em 1.2em auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.news-dashboard .ntc-weather-tomorrow-city {
+  color: #EAF4FF;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.news-dashboard .ntc-weather-tomorrow-icon {
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.news-dashboard .ntc-weather-tomorrow-weather {
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.news-dashboard .ntc-weather-tomorrow-range {
+  color: #B7D4EC;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.news-dashboard .ntc-weather-tomorrow-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  color: #C9E0F3;
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.news-dashboard .ntc-weather-tomorrow-tip i {
+  flex: 0 0 auto;
+  font-style: normal;
+}
+
 /* ---------- 预警 / 统计 ---------- */
 
 .news-dashboard .ntc-alerts {
@@ -475,6 +558,16 @@ html.dark .news-dashboard .page-template-content > blockquote mark.ntc-mark {
 @media (max-width: 560px) {
   .news-dashboard .ntc-weather {
     grid-template-columns: 1fr;
+  }
+
+  /* 手机上的明日天气：穿衣建议换到第二行。 */
+  .news-dashboard .ntc-weather-tomorrow-row {
+    grid-template-columns: 2.9em 1.2em auto minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .news-dashboard .ntc-weather-tomorrow-tip {
+    grid-column: 1 / -1;
   }
 }
 

@@ -653,6 +653,111 @@ body.navbar-shrink .navbar-container {
   line-height: 1.65;
 }
 
+/* 明日天气：今日卡下面的一条独立小板块，18:30 只刷新这里。 */
+.custom-home .home-weather-tomorrow {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(46, 117, 182, 0.28);
+  border-radius: 14px;
+  background: rgba(232, 244, 255, 0.55);
+}
+
+.custom-home .home-weather-tomorrow-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.custom-home .home-weather-tomorrow-title {
+  color: #1B4C77;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.custom-home .home-weather-tomorrow-stamp {
+  color: #92AEC6;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.custom-home .home-weather-tomorrow-list {
+  display: grid;
+  gap: 7px;
+}
+
+.custom-home .home-weather-tomorrow-row {
+  display: grid;
+  grid-template-columns: 2.9em 1.2em auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.custom-home .home-weather-tomorrow-city {
+  color: #12324F;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.custom-home .home-weather-tomorrow-icon {
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.custom-home .home-weather-tomorrow-weather {
+  color: #1B4C77;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.custom-home .home-weather-tomorrow-range {
+  color: #4A6C88;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.custom-home .home-weather-tomorrow-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  color: #3E6485;
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.custom-home .home-weather-tomorrow-tip i {
+  flex: 0 0 auto;
+  font-style: normal;
+}
+
+html.dark .custom-home .home-weather-tomorrow {
+  /* 显式背景色：深色模式下只改文字色会糊进页面底色。 */
+  border-color: rgba(127, 178, 229, 0.24);
+  background: rgba(20, 38, 61, 0.72);
+}
+
+html.dark .custom-home .home-weather-tomorrow-title,
+html.dark .custom-home .home-weather-tomorrow-city {
+  color: #D6E8FA;
+}
+
+html.dark .custom-home .home-weather-tomorrow-stamp {
+  color: #7590AC;
+}
+
+html.dark .custom-home .home-weather-tomorrow-weather {
+  color: #FFFFFF;
+}
+
+html.dark .custom-home .home-weather-tomorrow-range,
+html.dark .custom-home .home-weather-tomorrow-tip {
+  color: #A6C3DE;
+}
+
 html.dark .custom-home .home-weather-card {
   border-color: rgba(127, 178, 229, 0.18);
   background: linear-gradient(160deg, #16283F 0%, #1B3552 100%);
@@ -738,6 +843,16 @@ html.dark .custom-home .home-weather-alert {
 @media (max-width: 560px) {
   .custom-home .home-weather-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* 手机上「明日」的穿衣建议换到第二行，别把城市和温度挤成一团。 */
+  .custom-home .home-weather-tomorrow-row {
+    grid-template-columns: 2.9em 1.2em auto minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .custom-home .home-weather-tomorrow-tip {
+    grid-column: 1 / -1;
   }
 }
 
