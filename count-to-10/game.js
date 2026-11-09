@@ -104,8 +104,160 @@
     return min + Math.floor(Math.random() * (max - min + 1));
   }
 
-  function makeBoard() {
-    var board = [];
+  /* ---------- 棋盘生成：组合种子 + 质量筛选 ----------
+   * 纯随机棋盘里 4 格以上的组合平均只有 5 个左右，而且很难被看见。
+   * 现在的做法是：先埋 2 块“凑十块”（1 块 4 格 + 1 块 5/6 格），
+   * 其余格子保持随机；再生成最多 4 块候选棋盘，够 9 个“4 格以上组合”就收。
+   * 种子只占 6% 左右的格子，避免每局都变成一模一样的送分题。
+   */
+
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i];
+      list[i] = list[j];
+      list[j] = tmp;
+    }
+    return list;
+  }
+
+  // 把 total 随机拆成 parts 个正整数，例如 10 → [1, 2, 3, 4] 的某个顺序。
+  // total = 10 且 parts ≥ 2 时，每份天然 ≤ 9，不用额外校验。
+  function randomComposition(total, parts) {
+    var cuts = [];
+    for (var i = 1; i < total; i++) cuts.push(i);
+    for (var i = 0; i < parts - 1; i++) {
+      var j = i + Math.floor(Math.random() * (cuts.length - i));
+      var tmp = cuts[i];
+      cuts[i] = cuts[j];
+      cuts[j] = tmp;
+    }
+    var chosen = cuts.slice(0, parts - 1).sort(function (a, b) { return a - b; });
+    var values = [];
+    var prev = 0;
+    for (var i = 0; i < chosen.length; i++) {
+      values.push(chosen[i] - prev);
+      prev = chosen[i];
+    }
+    values.push(total - prev);
+    return shuffle(values);
+  }
+
+  function pickShape(shapes) {
+    return shapes[Math.floor(Math.random() * shapes.length)];
+  }
+
+  function placeSeed(board, used, shape, values) {
+    for (var attempt = 0; attempt < 50; attempt++) {
+      var top = randInt(0, ROWS - shape.h);
+      var left = randInt(0, COLS - shape.w);
+      var fits = true;
+      for (var r = top; r < top + shape.h && fits; r++) {
+        for (var c = left; c < left + shape.w; c++) {
+          if (used[r][c]) { fits = false; break; }
+        }
+      }
+      if (!fits) continue;
+
+      var index = 0;
+      for (var r = top; r < top + shape.h; r++) {
+        for (var c = left; c < left + shape.w; c++) {
+          board[r][c] = values[index++];
+          used[r][c] = true;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  // 2 块种子：1 块 4 格 + 1 块 5/6 格，约占 6% 的格子。
+  // 4 格种子有一半概率是 1-2-3-4，其余用随机拆分，避免每局都长一样。
+  function seedCombos(board) {
+    var used = [];
+    for (var r = 0; r < ROWS; r++) {
+      used[r] = [];
+      for (var c = 0; c < COLS; c++) used[r][c] = false;
+    }
+
+    var count = 2;
+    for (var i = 0; i < count; i++) {
+      var shape;
+      if (i === 0) {
+        shape = pickShape([{ h: 2, w: 2 }, { h: 1, w: 4 }, { h: 4, w: 1 }]);
+      } else {
+        shape = pickShape([
+          { h: 1, w: 5 }, { h: 5, w: 1 },
+          { h: 2, w: 3 }, { h: 3, w: 2 }
+        ]);
+      }
+
+      var area = shape.h * shape.w;
+      var values;
+      if (i === 0 && Math.random() < 0.5) {
+        values = [1, 2, 3, 4];
+      } else {
+        values = randomComposition(TARGET, area);
+      }
+      shuffle(values);
+      placeSeed(board, used, shape, values);
+    }
+  }
+
+  function buildPrefixes(board) {
+    var sums = [];
+    var counts = [];
+    for (var r = 0; r <= ROWS; r++) {
+      sums[r] = [];
+      counts[r] = [];
+      for (var c = 0; c <= COLS; c++) {
+        sums[r][c] = 0;
+        counts[r][c] = 0;
+      }
+    }
+
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var value = board[r][c];
+        var filled = value > 0 ? 1 : 0;
+        sums[r + 1][c + 1] = value + sums[r][c + 1] + sums[r + 1][c] - sums[r][c];
+        counts[r + 1][c + 1] = filled + counts[r][c + 1] + counts[r + 1][c] - counts[r][c];
+      }
+    }
+    return { sums: sums, counts: counts };
+  }
+
+  // 统计整块棋盘：可以消除的矩形总数、4 格以上、5 格以上各有多少。
+  function scanBoard(board) {
+    var prefixes = buildPrefixes(board);
+    var sums = prefixes.sums;
+    var counts = prefixes.counts;
+    var stats = { total: 0, big: 0, huge: 0 };
+
+    for (var r1 = 0; r1 < ROWS; r1++) {
+      for (var r2 = r1; r2 < ROWS; r2++) {
+        for (var c1 = 0; c1 < COLS; c1++) {
+          for (var c2 = c1; c2 < COLS; c2++) {
+            var sum = sums[r2 + 1][c2 + 1] - sums[r1][c2 + 1] - sums[r2 + 1][c1] + sums[r1][c1];
+            if (sum === TARGET) {
+              var count = counts[r2 + 1][c2 + 1] - counts[r1][c2 + 1] - counts[r2 + 1][c1] + counts[r1][c1];
+              if (count > 0) {
+                stats.total += 1;
+                if (count >= 4) stats.big += 1;
+                if (count >= 5) stats.huge += 1;
+              }
+            } else if (sum > TARGET) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    return stats;
+  }
+
+  function makeFallbackBoard() {
+    var board = null;
     for (var attempt = 0; attempt < 40; attempt++) {
       board = [];
       for (var r = 0; r < ROWS; r++) {
@@ -113,10 +265,39 @@
         for (var c = 0; c < COLS; c++) row.push(randInt(1, 9));
         board.push(row);
       }
-      // 极少数情况下棋盘会一个 10 都凑不出来，换一块。
       if (hasMove(board)) return board;
     }
     return board;
+  }
+
+  function makeBoard() {
+    var closest = null;
+    var closestGap = Infinity;
+
+    // 最多试 4 块。够 9 个“4 格以上组合”就收，不再挑最多的那块，
+    // 避免筛出那种一眼看过去全是送分题的棋盘。
+    for (var attempt = 0; attempt < 4; attempt++) {
+      var board = [];
+      for (var r = 0; r < ROWS; r++) {
+        var row = [];
+        for (var c = 0; c < COLS; c++) row.push(randInt(1, 9));
+        board.push(row);
+      }
+      seedCombos(board);
+
+      var stats = scanBoard(board);
+      if (stats.total === 0) continue;
+      if (stats.big >= 9) return board;
+
+      // 都没到 9 的话，留最接近 9 的一块，而不是留最夸张的一块。
+      var gap = 9 - stats.big;
+      if (gap < closestGap) {
+        closest = board;
+        closestGap = gap;
+      }
+    }
+
+    return closest || makeFallbackBoard();
   }
 
   function sumRect(board, r1, c1, r2, c2) {
@@ -132,15 +313,22 @@
     return { sum: sum, count: count, top: top, bottom: bottom, left: left, right: right };
   }
 
-  // 棋盘上是否还至少存在一个和为 10 的矩形。16×10 最多约 7500 个矩形，很快。
+  // 棋盘上是否还至少存在一个和为 10 的矩形。用前缀和，比逐个格子累加快。
   function hasMove(board) {
+    var prefixes = buildPrefixes(board);
+    var sums = prefixes.sums;
+    var counts = prefixes.counts;
     for (var r1 = 0; r1 < ROWS; r1++) {
       for (var r2 = r1; r2 < ROWS; r2++) {
         for (var c1 = 0; c1 < COLS; c1++) {
           for (var c2 = c1; c2 < COLS; c2++) {
-            var result = sumRect(board, r1, c1, r2, c2);
-            if (result.sum === TARGET && result.count > 0) return true;
-            if (result.sum > TARGET) break; // 数字都是正的，再往右只会更大
+            var sum = sums[r2 + 1][c2 + 1] - sums[r1][c2 + 1] - sums[r2 + 1][c1] + sums[r1][c1];
+            if (sum === TARGET) {
+              var count = counts[r2 + 1][c2 + 1] - counts[r1][c2 + 1] - counts[r2 + 1][c1] + counts[r1][c1];
+              if (count > 0) return true;
+            } else if (sum > TARGET) {
+              break; // 数字都是非负的，再往右只会更大
+            }
           }
         }
       }
@@ -672,6 +860,7 @@
     makeBoard: makeBoard,
     sumRect: sumRect,
     hasMove: hasMove,
+    scanBoard: scanBoard,
     setBoard: function (board) {
       state.board = board.map(function (row) { return row.slice(); });
       paintBoard();
