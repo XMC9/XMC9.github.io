@@ -2507,14 +2507,6 @@ html.dark .home-sidebar-note p {
   white-space: nowrap;
 }
 
-.home-sidebar-updates-note {
-  margin: 7px 0 0;
-  color: #92AEC6;
-  font-size: 0.6rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
 html.dark .home-sidebar-updates {
   border-color: rgba(127, 178, 229, 0.18);
   background: linear-gradient(180deg, #16283F 0%, #1B3552 100%);
@@ -2534,10 +2526,6 @@ html.dark .home-sidebar-updates-list span {
 
 html.dark .home-sidebar-updates-list em {
   color: #9DB7D2;
-}
-
-html.dark .home-sidebar-updates-note {
-  color: #7590AC;
 }
 
 /* 侧边栏内容比视口高时（笔记本 768 / 900 高度很常见），
